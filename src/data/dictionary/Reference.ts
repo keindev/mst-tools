@@ -20,20 +20,19 @@ const ReferenceModel = SessionDataSourceModel.named('ReferenceModel')
     get label(): string {
       return (
         {
-          [ReferenceType.CommissionTaskType]: 'Все поручения',
-          [ReferenceType.TaskType]: 'Все задачи',
+          [ReferenceType.X]: 'Все X',
+          [ReferenceType.Y]: 'Все Y',
         }[self.type] ?? ''
       );
     },
     get items(): IReferenceItemModel[] {
       return self._items.filter(item => item.id !== uninitializedReference(self.type));
     },
-    // TODO: создать задачу на переименование поля types в taskTypes
     get name(): string {
       return (
         {
-          [ReferenceType.DocumentType]: 'documentTypes',
-          [ReferenceType.TaskType]: 'types',
+          [ReferenceType.X]: 'X',
+          [ReferenceType.T]: 'T',
         }[self.type] ?? self.type
       );
     },
