@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Core effects Compose models with effects 1`] = `
+Array [
+  Array [
+    "Start C effect action",
+    Object {
+      "field": "default value",
+      "isModelALoaded": false,
+      "isModelALoading": false,
+      "isModelBLoaded": false,
+      "isModelBLoading": false,
+      "isModelCLoaded": false,
+      "isModelCLoading": false,
+    },
+  ],
+  Array [
+    "Effect in process (begin)",
+    Object {
+      "field": "default value",
+      "isModelALoaded": false,
+      "isModelALoading": false,
+      "isModelBLoaded": false,
+      "isModelBLoading": false,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "Effect A in process (begin)",
+    Object {
+      "field": "default value",
+      "isModelALoaded": false,
+      "isModelALoading": true,
+      "isModelBLoaded": false,
+      "isModelBLoading": false,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "Effect A in process (end)",
+    Object {
+      "field": "default value",
+      "isModelALoaded": false,
+      "isModelALoading": true,
+      "isModelBLoaded": false,
+      "isModelBLoading": false,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "Effect B in process (begin)",
+    Object {
+      "field": "default value",
+      "isModelALoaded": true,
+      "isModelALoading": false,
+      "isModelBLoaded": false,
+      "isModelBLoading": true,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "Effect B in process (end)",
+    Object {
+      "field": "default value",
+      "isModelALoaded": true,
+      "isModelALoading": false,
+      "isModelBLoaded": false,
+      "isModelBLoading": true,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "Effect in process (end)",
+    Object {
+      "field": "effect value",
+      "isModelALoaded": true,
+      "isModelALoading": false,
+      "isModelBLoaded": true,
+      "isModelBLoading": false,
+      "isModelCLoaded": false,
+      "isModelCLoading": true,
+    },
+  ],
+  Array [
+    "End C effect action",
+    Object {
+      "field": "effect value",
+      "isModelALoaded": true,
+      "isModelALoading": false,
+      "isModelBLoaded": true,
+      "isModelBLoading": false,
+      "isModelCLoaded": true,
+      "isModelCLoading": false,
+    },
+  ],
+]
+`;
+
+exports[`Core effects Create model with effects 1`] = `
+Array [
+  Array [
+    "Start effect action",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": false,
+    },
+  ],
+  Array [
+    "Effect in process (begin)",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "Effect in process (end)",
+    Object {
+      "field": "effect value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "End effect action",
+    Object {
+      "field": "effect value",
+      "isLoaded": true,
+      "isLoading": false,
+    },
+  ],
+]
+`;
+
+exports[`Core effects Extend model effects with "props" with "named" 1`] = `
+Array [
+  Array [
+    "Start effect action",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": false,
+    },
+  ],
+  Array [
+    "Effect in process (begin)",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "Effect in process (end)",
+    Object {
+      "field": "effect value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "End effect action",
+    Object {
+      "field": "effect value",
+      "isLoaded": true,
+      "isLoading": false,
+    },
+  ],
+]
+`;
+
+exports[`Core effects Extend model effects with "props" without "named" 1`] = `
+Array [
+  Array [
+    "Start effect action",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": false,
+    },
+  ],
+  Array [
+    "Effect in process (begin)",
+    Object {
+      "field": "default value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "Effect in process (end)",
+    Object {
+      "field": "effect value",
+      "isLoaded": false,
+      "isLoading": true,
+    },
+  ],
+  Array [
+    "End effect action",
+    Object {
+      "field": "effect value",
+      "isLoaded": true,
+      "isLoading": false,
+    },
+  ],
+]
+`;
