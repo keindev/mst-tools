@@ -1,13 +1,13 @@
 /*
-import { applySnapshot, flow, getSnapshot, IAnyModelType, Instance, SnapshotIn, types } from 'mobx-state-tree';
+import { applySnapshot, flow, getSnapshot, IAnyModelType, Instance, SnapshotIn } from 'mobx-state-tree';
 
-import { EMPTY_ID } from '../../types/globals';
-import RequestModel from '../api/Request';
+import types from '../../core/types';
+import BaseModel from '../base/BaseModel';
 
-const DataSourceModel = RequestModel.named('DataSourceModel')
+const DataSourceModel = BaseModel.named('DataSourceModel')
   .props({
-    isLoading: types.optional(types.boolean, false),
-    isLoaded: types.optional(types.boolean, false),
+    isLoading: types.flag,
+    isLoaded: types.flag,
   })
   .views(self => ({
     get isEmpty(): boolean {
@@ -36,6 +36,7 @@ const DataSourceModel = RequestModel.named('DataSourceModel')
     load: flow(function* (...params: any[]) {
       if (!self.isEmpty) {
         if (!self.isInitialized) applySnapshot(self, yield self._initialize(self.id));
+        // ---------------------------------------------
         if (!self.isLoaded && !self.isLoading) {
           try {
             self._startLoading();
@@ -44,6 +45,7 @@ const DataSourceModel = RequestModel.named('DataSourceModel')
             self._endLoading();
           }
         }
+        // ---------------------------------------------
       }
     }),
     apply(snapshot: SnapshotIn<IAnyModelType>) {
