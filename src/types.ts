@@ -1,6 +1,6 @@
 import {
-    _NotCustomized, IAnyModelType, IModelType as IOriginalModelType, Instance, IOptionalIType, ISimpleType,
-    ModelActions, ModelProperties, ModelPropertiesDeclaration, ModelPropertiesDeclarationToProperties,
+    _NotCustomized, IModelType as IOriginalModelType, Instance, IOptionalIType, ISimpleType, ModelActions,
+    ModelProperties, ModelPropertiesDeclaration, ModelPropertiesDeclarationToProperties,
 } from 'mobx-state-tree';
 import { ConditionalKeys } from 'type-fest';
 
@@ -11,27 +11,32 @@ export type IEmptyObject = {};
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type IObject = Object;
 
-export type IProperties<P extends ModelPropertiesDeclaration = IEmptyObject> =
-  ModelPropertiesDeclarationToProperties<P>;
+export type IProperties<PROPS extends ModelPropertiesDeclaration = IEmptyObject> =
+  ModelPropertiesDeclarationToProperties<PROPS>;
 
-export type IEffectFlags<PROPS> = {
+export type IFlags<PROPS> = {
   [key in ConditionalKeys<PROPS, IOptionalIType<ISimpleType<boolean>, [undefined]>>]: boolean;
 };
 
-export type IEffectFunction<INSTANCE, PROPS, EFFECT> = (self: Instance<INSTANCE>, flags: IEffectFlags<PROPS>) => EFFECT;
+export type IEffectFunction<INSTANCE, PROPS, R> = (self: Instance<INSTANCE>, flags: IFlags<PROPS>) => R;
+export type ISwitchFunction<R> = () => R;
 
-export interface IEffectFlagsMap {
+export interface IFlagsMap {
   [key: string]: boolean;
 }
 
-export interface IModelEffects {
-  [key: string]: readonly [IFunction, IEffectFlagsMap];
+export interface IModelEffect {
+  [key: string]: readonly [IFunction, IFlagsMap];
+}
+
+export interface IModelSwitch<PROPS extends ModelProperties> {
+  [key: string]: IFlags<IProperties<PROPS>>;
 }
 
 export interface IModelType<PROPS extends ModelProperties, OTHERS, CustomC = _NotCustomized, CustomS = _NotCustomized>
   extends IOriginalModelType<PROPS, OTHERS, CustomC, CustomS> {
   actions<A extends ModelActions>(fn: (self: Instance<this>) => A): IModelType<PROPS, OTHERS & A, CustomC, CustomS>;
-  effects<E extends IModelEffects>(
+  effects<E extends IModelEffect>(
     fn: IEffectFunction<this, PROPS, E>
   ): IModelType<PROPS, OTHERS & { [key in keyof E]: E[key][0] }, CustomC, CustomS>;
   extend<A extends ModelActions = IEmptyObject, V extends IObject = IEmptyObject, VS extends IObject = IEmptyObject>(
@@ -41,14 +46,13 @@ export interface IModelType<PROPS extends ModelProperties, OTHERS, CustomC = _No
   props<PROPS2 extends ModelPropertiesDeclaration>(
     props: PROPS2
   ): IModelType<PROPS & IProperties<PROPS2>, OTHERS, CustomC, CustomS>;
-  props<PROPS2 extends ModelPropertiesDeclaration>(
-    props: PROPS2
-  ): IModelType<PROPS & IProperties<PROPS2>, OTHERS, CustomC, CustomS>;
+  switch<E extends IModelSwitch<PROPS>>(
+    fn: ISwitchFunction<E>
+  ): IModelType<PROPS, OTHERS & { [key in keyof E]: () => void }, CustomC, CustomS>;
   views<V extends IObject>(fn: (self: Instance<this>) => V): IModelType<PROPS, OTHERS & V, CustomC, CustomS>;
   volatile<TP extends object>(fn: (self: Instance<this>) => TP): IModelType<PROPS, OTHERS & TP, CustomC, CustomS>;
 }
 
-export type IModelTypeInstance<T> = {
-  cloneAndEnhance(opts: { initializers?: ReadonlyArray<(instance: Instance<T>) => Instance<T>> }): IAnyModelType;
-  instantiateActions(self: Instance<T>, actions: ModelActions): void;
-};
+export interface IEnvironment {
+  version?: string;
+}

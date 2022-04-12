@@ -1,10 +1,10 @@
 import { isOptionalType, ModelPropertiesDeclaration, types } from 'mobx-state-tree';
 
-import { IEffectFlags, IEmptyObject, IProperties } from '../../types';
+import { IEmptyObject, IFlags, IProperties } from '../../types';
 
-export const getFlags = <P extends ModelPropertiesDeclaration = IEmptyObject>(
-  properties?: P
-): IEffectFlags<IProperties<P>> =>
+export const getFlags = <PROPS extends ModelPropertiesDeclaration = IEmptyObject>(
+  properties?: PROPS
+): IFlags<IProperties<PROPS>> =>
   Object.entries(properties ?? {})
     .filter(
       ([, propertyType]) =>
@@ -13,4 +13,4 @@ export const getFlags = <P extends ModelPropertiesDeclaration = IEmptyObject>(
         isOptionalType(propertyType) &&
         propertyType.name === types.boolean.name
     )
-    .reduce((acc, [propertyName]) => ({ ...acc, [propertyName]: false }), {} as IEffectFlags<IProperties<P>>);
+    .reduce((acc, [propertyName]) => ({ ...acc, [propertyName]: false }), {} as IFlags<IProperties<PROPS>>);

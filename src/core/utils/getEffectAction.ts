@@ -1,10 +1,10 @@
 import { flow } from 'mobx-state-tree';
 
-import { IEffectFlagsMap, IFunction } from '../../types';
+import { IFlagsMap, IFunction } from '../../types';
 
-export const getAction = (
+export const getEffectAction = (
   state: Record<string, boolean>,
-  [field, [action, flags]]: [string, readonly [IFunction, IEffectFlagsMap]]
+  [field, [action, flags]]: [string, readonly [IFunction, IFlagsMap]]
 ): [string, IFunction] => {
   const [isLoadingFlag, isLoadedFlag] = Object.getOwnPropertyNames(flags);
 
