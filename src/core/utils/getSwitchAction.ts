@@ -6,5 +6,5 @@ export const getSwitchAction = (
 ): [string, IFunction] => {
   const keys = Object.getOwnPropertyNames(flags);
 
-  return [field, () => keys.forEach(key => typeof state[key] !== 'undefined' && (state[key] = !!flags[key]))];
+  return [field, () => keys.forEach(key => (state[key] = !!flags[key]))];
 };
