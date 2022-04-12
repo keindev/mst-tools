@@ -8,8 +8,8 @@ import types from '../core/types';
 
 const suite = new Benchmark.Suite();
 
-console.log(colors.underline('Test perf:'));
-suite.add(colors.green('Mobx-state-tree (original Model creation)'), () => {
+console.log(colors.underline('Test perf (model creation):'));
+suite.add(colors.green('[mobx-state-tree]'), () => {
   const A = _types.model('A', { a: _types.string, b: _types.boolean, c: _types.array(_types.string) });
   const B = _types.model('B', { a: _types.boolean, b: _types.number, c: _types.array(_types.boolean) });
   const model = _types
@@ -35,7 +35,7 @@ suite.add(colors.green('Mobx-state-tree (original Model creation)'), () => {
   model.create(castToSnapshot({}));
 });
 
-suite.add(colors.green('mst-tools (Model creation)'), () => {
+suite.add(colors.green('[mst-tools]'), () => {
   const A = types.model('A', { a: types.string, b: types.boolean, c: types.array(types.string) });
   const B = types.model('B', { a: types.boolean, b: types.number, c: types.array(types.boolean) });
   const model = types

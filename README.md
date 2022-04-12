@@ -50,10 +50,10 @@ npm run benchmark
 
 ---
 
-Test perf:
-Mobx-state-tree (original Model creation) x 7,523 ops/sec ±2.31% (90 runs sampled)
-mst-tools (Model creation) x 7,203 ops/sec ±0.30% (93 runs sampled)
-# Fastest is Mobx-state-tree (original Model creation)
+Test perf (model creation):
+[mobx-state-tree] x 7,843 ops/sec ±0.28% (92 runs sampled)
+[mst-tools] x 7,141 ops/sec ±0.31% (93 runs sampled)
+# Fastest is [mobx-state-tree]
 
 ---
 
