@@ -5,11 +5,22 @@ import types from '../../core/types';
 import { IFunction } from '../../types';
 
 const process = async (functions: (IFunction | undefined)[], parallel = true): Promise<unknown[]> => {
-  const promises = functions.map(fn => fn && fn());
   let result = [];
 
-  if (parallel) result = await Promise.all(promises);
-  else for (const promise of promises) result.push(promise instanceof Promise ? await promise : promise);
+  if (parallel) {
+    result = await Promise.all(functions.map(fn => fn && fn()));
+  } else {
+    let promise;
+
+    for (const fn of functions) {
+      if (fn) {
+        promise = fn();
+        result.push(promise instanceof Promise ? await promise : promise);
+      } else {
+        result.push(fn);
+      }
+    }
+  }
 
   return result;
 };
