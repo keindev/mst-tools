@@ -10,7 +10,7 @@ import { compose, model } from './methods';
 
 export { getFlags } from './utils/getFlags';
 
-const uid = _types.optional(_types.string, nanoid());
+const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
 const empty = _types.optional(_types.string, EMPTY_VALUE);
 const flag = _types.optional(_types.boolean, false);
 

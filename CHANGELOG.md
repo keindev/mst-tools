@@ -1,6 +1,6 @@
-# :fire: Improvements
+# BREAKING CHANGES
 
-- Add detach to `BaseModel` [`8e0948c`](https://github.com/keindev/mst-tools/commit/8e0948c80bf01134ec374d8623969dc9049b5e50)
+- Fix `types.uid` [`b3f5998`](https://github.com/keindev/mst-tools/commit/b3f59981f0786a41f7834f202550c7d6a72cf085)
 
 ---
 
