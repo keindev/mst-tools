@@ -1,6 +1,6 @@
-# :fire: Improvements
+# :bug: Bug Fixes
 
-- Add unique and `uniqueRef` types [`bc7bf4e`](https://github.com/keindev/mst-tools/commit/bc7bf4e0d59d4a905f985a94c2e2e007b4663842)
+- Fix async and sync actions in `BaseModel`.pipe [`0916d1b`](https://github.com/keindev/mst-tools/commit/0916d1b313ae2bf2dc33fc40b1100f7c5fc3288f)
 
 ---
 
