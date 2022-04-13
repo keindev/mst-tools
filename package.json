@@ -20,7 +20,7 @@
   "exports": {
     ".": "./lib/index.js",
     "./lib/types": "./lib/types.js",
-    "./lib/models/**/*": "./lib/models/*.js"
+    "./lib/models/*": "./lib/models/**/*.js"
   },
   "repository": {
     "type": "git",
