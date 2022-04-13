@@ -1,10 +1,6 @@
-# :bug: Bug Fixes
+# :fire: Improvements
 
-- Change uid field in `BaseModel` to id [`fb29c25`](https://github.com/keindev/mst-tools/commit/fb29c258a97f1b8f5444a1949c2daa397574ab61)
-
-# :wrench: Code Refactoring
-
-- Fix exports [`548eaec`](https://github.com/keindev/mst-tools/commit/548eaec8c918e0cfed7a25da8a48971eba610264)
+- Add unique and `uniqueRef` types [`bc7bf4e`](https://github.com/keindev/mst-tools/commit/bc7bf4e0d59d4a905f985a94c2e2e007b4663842)
 
 ---
 
