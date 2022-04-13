@@ -27,9 +27,9 @@ const SessionModel = DataSourceModel.named('SessionModel')
       sessionStorage.setItem(self.__sessionId, JSON.stringify(getSnapshot(self)));
     },
   }))
-  .actions(self => ({
+  .actions(({ restore, pipe, save, _load }) => ({
     load: flow(function* (...params) {
-      if (!self.restore()) yield self.pipe.async([self.load.bind(self, ...(params as unknown[])), self.save]);
+      if (!restore()) yield pipe.async([_load.bind(self, ...(params as unknown[])), save]);
     }),
   }));
 
