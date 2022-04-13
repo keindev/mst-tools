@@ -29,7 +29,7 @@ const process = async (functions: (IFunction | undefined)[], parallel = true): P
 
 const BaseModel = types
   .model('BaseModel', {
-    id: types.uid,
+    id: types.uid(),
   })
   .volatile(() => ({
     pipe: {
