@@ -19,8 +19,7 @@
   "type": "module",
   "exports": {
     ".": "./lib/index.js",
-    "./lib/types": "./lib/types.js",
-    "./lib/models/*": "./lib/models/**/*.js"
+    "./lib/types": "./lib/types.js"
   },
   "repository": {
     "type": "git",
