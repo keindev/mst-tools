@@ -43,7 +43,7 @@ await store.load();
 
 ## Benchmark
 
-The toolkit adds additional code to implement new features. Welcome - if you are willing to pay for the speed of development with the speed of work.
+The toolkit adds additional code to implement new features. Welcome - if you are willing to pay for the speed of development time to create a model.
 
 ```console
 npm run benchmark

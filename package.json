@@ -1,6 +1,6 @@
 {
   "name": "mst-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Toolset for efficient development with MobX-State-Tree",
   "license": "MIT",
   "homepage": "https://github.com/keindev/mst-tools#readme",
@@ -17,7 +17,11 @@
   "bugs": "https://github.com/keindev/mst-tools/issues",
   "types": "./lib/index.d.ts",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/types": "./lib/types.js",
+    "./lib/models/*": "./lib/models/**/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keindev/mst-tools.git"
