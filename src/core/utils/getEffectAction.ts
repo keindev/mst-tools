@@ -1,10 +1,10 @@
-import { flow } from 'mobx-state-tree';
+import { flow, ModelProperties } from 'mobx-state-tree';
 
-import { IFlagsMap, IFunction } from '../../types';
+import { IFlags, IFunction } from '../../types';
 
-export const getEffectAction = (
+export const getEffectAction = <P extends ModelProperties>(
   state: Record<string, boolean>,
-  [field, [action, flags]]: [string, readonly [IFunction, IFlagsMap]]
+  [field, [action, flags]]: [string, readonly [IFunction, IFlags<P>]]
 ): [string, IFunction] => {
   const [isLoadingFlag, isLoadedFlag] = Object.getOwnPropertyNames(flags);
 

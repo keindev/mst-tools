@@ -14,29 +14,28 @@ export type IObject = Object;
 export type IProperties<PROPS extends ModelPropertiesDeclaration = IEmptyObject> =
   ModelPropertiesDeclarationToProperties<PROPS>;
 
-export type IFlags<PROPS> = {
-  [key in ConditionalKeys<PROPS, IOptionalIType<ISimpleType<boolean>, [undefined]>>]: boolean;
+export type IFlags<PROPS extends ModelProperties> = {
+  [key in ConditionalKeys<PROPS, IOptionalIType<ISimpleType<boolean>, [undefined]>>]?: boolean;
 };
 
-export type IEffectFunction<INSTANCE, PROPS, R> = (self: Instance<INSTANCE>, flags: IFlags<PROPS>) => R;
+export type IEffectFunction<INSTANCE, PROPS extends ModelProperties, R> = (
+  self: Instance<INSTANCE>,
+  flags: Required<IFlags<PROPS>>
+) => R;
 export type ISwitchFunction<R> = () => R;
 
-export interface IFlagsMap {
-  [key: string]: boolean;
-}
-
-export interface IModelEffect {
-  [key: string]: readonly [IFunction, IFlagsMap];
+export interface IModelEffect<PROPS extends ModelProperties> {
+  [key: string]: readonly [IFunction, IFlags<PROPS>];
 }
 
 export interface IModelSwitch<PROPS extends ModelProperties> {
-  [key: string]: IFlags<IProperties<PROPS>>;
+  [key: string]: IFlags<PROPS>;
 }
 
 export interface IModelType<PROPS extends ModelProperties, OTHERS, CustomC = _NotCustomized, CustomS = _NotCustomized>
   extends IOriginalModelType<PROPS, OTHERS, CustomC, CustomS> {
   actions<A extends ModelActions>(fn: (self: Instance<this>) => A): IModelType<PROPS, OTHERS & A, CustomC, CustomS>;
-  effects<E extends IModelEffect>(
+  effects<E extends IModelEffect<PROPS>>(
     fn: IEffectFunction<this, PROPS, E>
   ): IModelType<PROPS, OTHERS & { [key in keyof E]: E[key][0] }, CustomC, CustomS>;
   extend<A extends ModelActions = IEmptyObject, V extends IObject = IEmptyObject, VS extends IObject = IEmptyObject>(

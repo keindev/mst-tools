@@ -1,6 +1,6 @@
-# :bug: Bug Fixes
+# :memo: Internal changes
 
-- Fix `SessionModel`.load [`e13f652`](https://github.com/keindev/mst-tools/commit/e13f6523df30b62fef3e90e7debd5456a4feb37c)
+- Fix effect and switch actions typings [`230886c`](https://github.com/keindev/mst-tools/commit/230886cdc93f4707564f2f922948e5595c61653f)
 
 ---
 
