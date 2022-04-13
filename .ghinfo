@@ -1,6 +1,6 @@
 {
   "name": "mst-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Toolset for efficient development with MobX-State-Tree",
   "keywords": [
     "mobx",
@@ -15,5 +15,8 @@
     "git": "https://github.com/keindev/mst-tools",
     "npm": "https://www.npmjs.com/package/mst-tools"
   },
-  "files": {}
+  "files": {
+    "banner": "media/banner.svg",
+    "logo": "media/logo.svg"
+  }
 }
