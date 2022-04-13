@@ -16,7 +16,7 @@ const process = async (functions: (IFunction | undefined)[], parallel = true): P
 
 const BaseModel = types
   .model('BaseModel', {
-    uid: types.uid,
+    id: types.uid,
   })
   .volatile(() => ({
     pipe: {
@@ -26,7 +26,7 @@ const BaseModel = types
   }))
   .views(self => ({
     get isEmpty(): boolean {
-      return self.uid === EMPTY_VALUE;
+      return self.id === EMPTY_VALUE;
     },
     get isInitialized(): boolean {
       return !this.isEmpty;

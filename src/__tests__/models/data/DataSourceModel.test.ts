@@ -7,7 +7,7 @@ describe('DataSourceModel', () => {
   it('Actions', async () => {
     const model = DataSourceModel.named('MyDataSourceModel')
       .props({
-        uid: types.empty,
+        id: types.empty,
         a: types.optional(types.string, 'default'),
         b: types.optional(types.string, 'default'),
         c: types.optional(types.string, 'default'),
@@ -15,7 +15,7 @@ describe('DataSourceModel', () => {
       })
       .actions(self => ({
         _init: flow(function* () {
-          return yield Promise.resolve({ uid: '0', b: 'initialized' });
+          return yield Promise.resolve({ id: '0', b: 'initialized' });
         }),
         _load: flow(function* () {
           self.d = yield Promise.resolve('loaded');

@@ -1,6 +1,10 @@
-# :memo: Internal changes
+# :bug: Bug Fixes
 
-- Fix description [`e86d930`](https://github.com/keindev/mst-tools/commit/e86d930af11e5b53027d7115aec96ff1e341a92d)
+- Change uid field in `BaseModel` to id [`fb29c25`](https://github.com/keindev/mst-tools/commit/fb29c258a97f1b8f5444a1949c2daa397574ab61)
+
+# :wrench: Code Refactoring
+
+- Fix exports [`548eaec`](https://github.com/keindev/mst-tools/commit/548eaec8c918e0cfed7a25da8a48971eba610264)
 
 ---
 
