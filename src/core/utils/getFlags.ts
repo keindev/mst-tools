@@ -4,7 +4,7 @@ import { IEmptyObject, IFlags, IProperties } from '../../types';
 
 export const getFlags = <PROPS extends ModelPropertiesDeclaration = IEmptyObject>(
   properties?: PROPS
-): IFlags<IProperties<PROPS>> =>
+): Required<IFlags<IProperties<PROPS>>> =>
   Object.entries(properties ?? {})
     .filter(
       ([, propertyType]) =>
@@ -13,4 +13,4 @@ export const getFlags = <PROPS extends ModelPropertiesDeclaration = IEmptyObject
         isOptionalType(propertyType) &&
         propertyType.name === types.boolean.name
     )
-    .reduce((acc, [propertyName]) => ({ ...acc, [propertyName]: false }), {} as IFlags<IProperties<PROPS>>);
+    .reduce((acc, [propertyName]) => ({ ...acc, [propertyName]: false }), {} as Required<IFlags<IProperties<PROPS>>>);

@@ -43,7 +43,7 @@ const defineEffects = <P extends Declaration, O = IEmptyObject>(store: Raw<P, O>
   Object.defineProperty(store, 'effects', {
     configurable: true,
     writable: true,
-    value<E extends IModelEffect>(fn: IEffectFunction<typeof store, IProperties<P>, E>) {
+    value<E extends IModelEffect<IProperties<P>>>(fn: IEffectFunction<typeof store, IProperties<P>, E>) {
       const flags = getFlags(getPropertyMembers(store).properties as P);
 
       return store.actions(self =>
