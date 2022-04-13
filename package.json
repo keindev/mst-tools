@@ -17,7 +17,11 @@
   "bugs": "https://github.com/keindev/mst-tools/issues",
   "types": "./lib/index.d.ts",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./lib/types": "./lib/types.js",
+    "./lib/models/**/*": "./lib/models/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keindev/mst-tools.git"
