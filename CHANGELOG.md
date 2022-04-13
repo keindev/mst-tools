@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix async and sync actions in `BaseModel`.pipe [`0916d1b`](https://github.com/keindev/mst-tools/commit/0916d1b313ae2bf2dc33fc40b1100f7c5fc3288f)
+- Fix `SessionModel`.load [`e13f652`](https://github.com/keindev/mst-tools/commit/e13f6523df30b62fef3e90e7debd5456a4feb37c)
 
 ---
 
