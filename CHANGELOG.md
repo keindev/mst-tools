@@ -1,6 +1,6 @@
-# :memo: Internal changes
+# :fire: Improvements
 
-- Fix effect and switch actions typings [`230886c`](https://github.com/keindev/mst-tools/commit/230886cdc93f4707564f2f922948e5595c61653f)
+- Add detach to `BaseModel` [`8e0948c`](https://github.com/keindev/mst-tools/commit/8e0948c80bf01134ec374d8623969dc9049b5e50)
 
 ---
 

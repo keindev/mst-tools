@@ -1,4 +1,6 @@
-import { applySnapshot, getSnapshot, Instance, SnapshotIn, SnapshotOut } from 'mobx-state-tree';
+import {
+    applySnapshot, detach, getSnapshot, IAnyModelType, IMSTArray, Instance, SnapshotIn, SnapshotOut,
+} from 'mobx-state-tree';
 
 import { EMPTY_VALUE } from '../../constants';
 import types from '../../core/types';
@@ -46,6 +48,12 @@ const BaseModel = types
   .actions(self => ({
     patch(snapshot: Partial<SnapshotIn<Instance<typeof self>>>) {
       applySnapshot(self, { ...getSnapshot(self), ...snapshot });
+    },
+    detach: (lists: IMSTArray<IAnyModelType>[]) => () => {
+      lists.forEach(list => {
+        list.forEach(item => detach(item));
+        list.clear();
+      });
     },
   }));
 
