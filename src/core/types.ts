@@ -83,7 +83,7 @@ export const context = <NAME extends string, V extends IObject>(
   } as IContextName<NAME> & IContextModel<NAME, V> & IContextWrapper<NAME>;
 };
 
-const types = {
+export const types = {
   ..._types,
   compose,
   context,
@@ -97,5 +97,3 @@ const types = {
   uniqueRef,
   zero,
 };
-
-export default types;

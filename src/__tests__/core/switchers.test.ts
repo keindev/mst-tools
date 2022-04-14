@@ -1,5 +1,4 @@
-import switcher from '../../core/switcher';
-import { types } from '../../index';
+import { switcher, types } from '../../index';
 
 describe('Core switchers', () => {
   it('Create model with switchers', () => {
