@@ -26,5 +26,6 @@ jest.config.js
 media/
 node_modules/
 src/
+tmp/
 tsconfig.json
 typings/

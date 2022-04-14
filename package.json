@@ -17,10 +17,7 @@
   "bugs": "https://github.com/keindev/mst-tools/issues",
   "types": "./lib/index.d.ts",
   "type": "module",
-  "exports": {
-    ".": "./lib/index.js",
-    "./lib/types": "./lib/types.js"
-  },
+  "main": "lib/mst-tools.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keindev/mst-tools.git"
@@ -31,7 +28,7 @@
   "scripts": {
     "benchmark": "node --experimental-specifier-resolution=node --loader ts-node/esm src/__benchmark__/benchmark.ts",
     "build": "npm-run-all build:*",
-    "build:ts": "rimraf lib && tsc --extendedDiagnostics",
+    "build:ts": "rimraf lib tmp && tsc --extendedDiagnostics --importHelpers && rollup -c && rimraf tmp",
     "generate": "npm-run-all generate:*",
     "generate:changelog": "node --experimental-specifier-resolution=node node_modules/.bin/changelog generate --bump",
     "generate:ghinfo": "node --experimental-specifier-resolution=node node_modules/.bin/ghinfo generate -d media -t utils",
@@ -40,7 +37,7 @@
     "lint:eslint": "rimraf coverage && eslint src --ext .ts",
     "lint:spell": "cspell -c .vscode/cspell.json --no-summary \"**/*.{js,ts,tsx,md,yml,json}\"",
     "prepare": "npm-run-all prepare:*",
-    "prepare:config": "node --experimental-specifier-resolution=node node_modules/.bin/ts-package-shared-config",
+    "prepare:config": "node --experimental-specifier-resolution=node node_modules/.bin/ts-library-shared-config",
     "prepare:docs": "node --experimental-specifier-resolution=node node_modules/.bin/docs-shared-config",
     "prepare:husky": "husky install",
     "prepare:vscode": "node --experimental-specifier-resolution=node node_modules/.bin/vscode-shared-config",
@@ -49,12 +46,13 @@
     "test:jest": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.0",
     "@tagproject/docs-shared-config": "^1.0.4",
-    "@tagproject/ts-package-shared-config": "^8.0.2",
-    "@tagproject/vscode-shared-config": "^1.2.6",
+    "@tagproject/ts-library-shared-config": "^1.0.2",
+    "@tagproject/vscode-shared-config": "^1.2.7",
     "@types/benchmark": "^2.1.1",
     "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.23",
+    "@types/node": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "benchmark": "^2.1.4",
@@ -78,6 +76,10 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
+    "rollup": "^2.70.1",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-filesize": "^9.1.2",
+    "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "type-fest": "^2.12.2",
