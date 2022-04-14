@@ -1,5 +1,6 @@
 import { flow } from 'mobx-state-tree';
 
+import { EMPTY_VALUE } from '../../../constants';
 import types from '../../../core/types';
 import DataSourceModel from '../../../models/data/DataSourceModel';
 
@@ -7,7 +8,7 @@ describe('DataSourceModel', () => {
   it('Actions', async () => {
     const model = DataSourceModel.named('MyDataSourceModel')
       .props({
-        id: types.empty(),
+        id: types.empty(EMPTY_VALUE),
         a: types.optional(types.string, 'default'),
         b: types.optional(types.string, 'default'),
         c: types.optional(types.string, 'default'),

@@ -4,7 +4,6 @@ import {
 } from 'mobx-state-tree';
 import { nanoid } from 'nanoid';
 
-import { EMPTY_VALUE } from '../constants';
 import { IContext, IContextModel, IContextName, IContextWrapper, IEmptyObject, IObject } from '../types';
 import { compose, model } from './methods';
 
@@ -16,8 +15,7 @@ const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optio
 
 const reserve = <M extends IAnyModelType>(type: M): IOptionalIType<M, [undefined]> => _types.optional(type, {});
 
-const empty = (value = EMPTY_VALUE): IOptionalIType<ISimpleType<string>, [undefined]> =>
-  _types.optional(_types.string, value);
+const empty = (value = ''): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, value);
 
 const zero = (value = 0): IOptionalIType<ISimpleType<number>, [undefined]> => _types.optional(_types.number, value);
 
