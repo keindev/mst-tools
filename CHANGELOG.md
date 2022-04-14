@@ -1,6 +1,6 @@
-# :fire: Improvements
+# :bug: Bug Fixes
 
-- Add model context [`dd4454a`](https://github.com/keindev/mst-tools/commit/dd4454a21502070fbe1c7b0ad172c675e5590959)
+- Add `ContextName` to context function [`57aa255`](https://github.com/keindev/mst-tools/commit/57aa255b3693a6eaeef54260a6a66b984a08d0aa)
 
 ---
 
