@@ -47,7 +47,7 @@ const BaseModel = types
     },
   }))
   .actions(self => ({
-    patch<T extends IAnyModelType>(snapshot: Partial<SnapshotIn<Instance<T>>>) {
+    patch<T extends IAnyModelType>(snapshot: SnapshotIn<Instance<T>>) {
       applySnapshot(self, { ...getSnapshot(self), ...snapshot });
     },
     detach: (lists: IMSTArray<IAnyModelType>[]) => () => {
