@@ -1,6 +1,6 @@
-# :bug: Bug Fixes
+# :tada: Features
 
-- Fix context typings [`bf8acd1`](https://github.com/keindev/mst-tools/commit/bf8acd1a6c755b702b7261b9be23fd2e2bd7b553)
+- Add `types.reserve` [`3363b7d`](https://github.com/keindev/mst-tools/commit/3363b7d75d97780342d21a2fa7f71a8c12e03ea6)
 
 ---
 

@@ -7,7 +7,7 @@ describe('DataSourceModel', () => {
   it('Actions', async () => {
     const model = DataSourceModel.named('MyDataSourceModel')
       .props({
-        id: types.empty,
+        id: types.empty(),
         a: types.optional(types.string, 'default'),
         b: types.optional(types.string, 'default'),
         c: types.optional(types.string, 'default'),

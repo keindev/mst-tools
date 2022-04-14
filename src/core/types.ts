@@ -1,6 +1,6 @@
 import {
-    getParent, hasParent, IModelType, Instance, IOptionalIType, IReferenceType, ISimpleType, isRoot, ModelProperties,
-    OptionalDefaultValueOrFunction, SnapshotIn, types as _types,
+    getParent, hasParent, IAnyModelType, IModelType, Instance, IOptionalIType, IReferenceType, ISimpleType, isRoot,
+    ModelProperties, OptionalDefaultValueOrFunction, SnapshotIn, types as _types,
 } from 'mobx-state-tree';
 import { nanoid } from 'nanoid';
 
@@ -10,9 +10,11 @@ import { compose, model } from './methods';
 
 export { getFlags } from './utils/getFlags';
 
-const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
-const empty = _types.optional(_types.string, EMPTY_VALUE);
 const flag = _types.optional(_types.boolean, false);
+const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
+const reserve = <M extends IAnyModelType>(type: M): IOptionalIType<M, [undefined]> => _types.optional(type, {});
+const empty = (value = EMPTY_VALUE): IOptionalIType<ISimpleType<string>, [undefined]> =>
+  _types.optional(_types.string, value);
 
 const dispatcher = <T extends IModelType<{ type: ISimpleType<string> }, IEmptyObject>>(
   defaultType: T,
@@ -83,6 +85,7 @@ const types = {
   context,
   dispatcher,
   empty,
+  reserve,
   flag,
   model,
   uid,
