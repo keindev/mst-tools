@@ -15,7 +15,8 @@ const DataSourceModel = BaseModel.named('DataSourceModel')
     _init: () => {
       throw fail('DataSourceModel initialization action (_init) for empty models must be overridden.');
     },
-    _load: (..._params: unknown[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    _load: (..._params: any[]) => {
       throw fail();
     },
     _clear() {
@@ -30,20 +31,23 @@ const DataSourceModel = BaseModel.named('DataSourceModel')
       { isInitializing }
     ),
     __loadEffect: effect(
-      function* (...params: unknown[]) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      function* (...params: any[]) {
         return yield self._load(...params);
       },
       { isLoading, isLoaded }
     ),
   }))
   .actions(self => ({
-    load: flow(function* (...params: unknown[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    load: flow(function* (...params: any[]) {
       if (!self.isInitialized) self.patch(yield self.__initEffect());
       if (!self.isEmpty) yield self.__loadEffect(...params);
     }),
   }))
   .actions(self => ({
-    refresh: flow(function* (...params: unknown[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    refresh: flow(function* (...params: any[]) {
       if (!self.isLoading) {
         self.isLoaded = false;
         yield self.pipe.sync([self._clear, self.load.bind(self, ...params)]);

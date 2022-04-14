@@ -164,7 +164,8 @@ export function compose<PA extends ModelProperties, OA, FCA, FSA, PB extends Mod
 /* eslint-enable max-len */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function compose(...args: any[]): any {
-  return define(_types.compose.apply<null, typeof args, unknown>(null, args) as IModelType<IProperties, IEmptyObject>);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return define(_types.compose.apply<null, typeof args, any>(null, args) as IModelType<IProperties, IEmptyObject>);
 }
 
 export const model = <P extends Declaration, O = IEmptyObject>(name: string, properties?: P): Extended<P, O> =>
