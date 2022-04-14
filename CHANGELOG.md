@@ -1,6 +1,6 @@
-# :memo: Internal changes
+# :fire: Improvements
 
-- Fix effect generator return type [`a222c93`](https://github.com/keindev/mst-tools/commit/a222c930af60654fe4194775852d4497a78215d0)
+- Add `types.zero` [`96e4cd1`](https://github.com/keindev/mst-tools/commit/96e4cd15cf12a2a31a33578ddd79b78f64dd42b0)
 
 ---
 
