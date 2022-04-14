@@ -1,6 +1,6 @@
 # :memo: Internal changes
 
-- Fix functions typings, change unknown to any [`1e7f649`](https://github.com/keindev/mst-tools/commit/1e7f649404780f4a29cda06687bf5a124b1ddcbb)
+- Fix effect generator return type [`a222c93`](https://github.com/keindev/mst-tools/commit/a222c930af60654fe4194775852d4497a78215d0)
 
 ---
 
