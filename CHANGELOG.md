@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Add `ContextName` to context function [`57aa255`](https://github.com/keindev/mst-tools/commit/57aa255b3693a6eaeef54260a6a66b984a08d0aa)
+- Fix context typings [`bf8acd1`](https://github.com/keindev/mst-tools/commit/bf8acd1a6c755b702b7261b9be23fd2e2bd7b553)
 
 ---
 

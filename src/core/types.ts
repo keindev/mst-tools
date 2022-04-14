@@ -39,10 +39,10 @@ export const uniqueRef = <P extends ModelProperties, O extends IEmptyObject>(
 ): IOptionalIType<IReferenceType<IModelType<P, O>>, [undefined]> =>
   types.optional(types.reference(type), value ?? type.name);
 
-export const context = <NAME extends string>(
+export const context = <NAME extends string, V extends IObject>(
   name: NAME,
-  views: (self: Instance<IContext>) => IObject
-): IContextName<NAME> & IContextModel<NAME> & IContextWrapper<NAME> => {
+  views: (self: Instance<IContext<IObject>>) => V
+): IContextName<NAME> & IContextModel<NAME, V> & IContextWrapper<NAME> => {
   const field = Symbol(`_contextModel_${nanoid()}`);
   const wrapper = Symbol(`_contextWrapper_${name}`);
 
@@ -74,7 +74,7 @@ export const context = <NAME extends string>(
         [wrapper]: types.optional(types.string, name),
       })
       .named(name),
-  } as IContextName<NAME> & IContextModel<NAME> & IContextWrapper<NAME>;
+  } as IContextName<NAME> & IContextModel<NAME, V> & IContextWrapper<NAME>;
 };
 
 const types = {
