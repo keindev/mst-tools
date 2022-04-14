@@ -56,14 +56,14 @@ export interface IEnvironment {
   version?: string;
 }
 
-export type IContext = IModelType<ModelProperties, { _getContext<T>(): T | undefined }>;
+export type IContext<V> = IModelType<ModelProperties, { _getContext<T>(): T | undefined } & V>;
 
 export type IContextName<NAME extends string> = {
   [key in `${NAME}Name`]: string;
 };
 
-export type IContextModel<NAME extends string> = {
-  [key in `${NAME}Context`]: IContext;
+export type IContextModel<NAME extends string, V extends IObject> = {
+  [key in `${NAME}Context`]: IContext<V>;
 };
 
 export type IContextWrapper<NAME extends string> = {
