@@ -1,8 +1,6 @@
 import { flow } from 'mobx-state-tree';
 
-import { EMPTY_VALUE } from '../../../constants';
-import types from '../../../core/types';
-import DataSourceModel from '../../../models/data/DataSourceModel';
+import { DataSourceModel, EMPTY_VALUE, types } from '../../../index';
 
 describe('DataSourceModel', () => {
   it('Actions', async () => {

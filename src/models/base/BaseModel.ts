@@ -3,7 +3,7 @@ import {
 } from 'mobx-state-tree';
 
 import { EMPTY_VALUE } from '../../constants';
-import types from '../../core/types';
+import { types } from '../../core/types';
 import { IFunction } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +28,7 @@ const process = async (functions: (IFunction | undefined)[], parallel = true): P
   return result;
 };
 
-const BaseModel = types
+export const BaseModel = types
   .model('BaseModel', {
     id: types.uid(),
   })
@@ -61,4 +61,3 @@ const BaseModel = types
 export interface IBaseModel extends Instance<typeof BaseModel> {}
 export interface IBaseModelSnapshotIn extends SnapshotIn<IBaseModel> {}
 export interface IBaseModelSnapshotOut extends SnapshotOut<IBaseModel> {}
-export default BaseModel;

@@ -1,8 +1,7 @@
 import { toJS } from 'mobx';
 import { flow } from 'mobx-state-tree';
 
-import types from '../../../core/types';
-import BaseModel from '../../../models/base/BaseModel';
+import { BaseModel, types } from '../../../index';
 
 describe('BaseModel', () => {
   const model = BaseModel.named('BaseModel')

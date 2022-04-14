@@ -1,7 +1,6 @@
 import { flow, getSnapshot, IAnyModelType, SnapshotIn } from 'mobx-state-tree';
 
-import effect from '../../core/effect';
-import { types } from '../../index';
+import { effect, types } from '../../index';
 
 describe('Core effects', () => {
   it('Create model with effects', async () => {

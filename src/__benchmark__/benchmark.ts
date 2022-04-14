@@ -3,8 +3,7 @@ import Benchmark from 'benchmark';
 import colors from 'colors';
 import { castToSnapshot, flow, types as _types } from 'mobx-state-tree';
 
-import effect from '../core/effect';
-import types from '../core/types';
+import { effect, types } from '../index';
 
 const suite = new Benchmark.Suite();
 

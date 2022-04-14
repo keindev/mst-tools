@@ -2,8 +2,7 @@
  * @jest-environment jsdom
  */
 
-import types from '../../../core/types';
-import SessionModel from '../../../models/data/SessionModel';
+import { SessionModel, types } from '../../../index';
 
 describe('SessionModel', () => {
   const ID = 'test';

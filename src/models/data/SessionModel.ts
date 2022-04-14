@@ -2,9 +2,9 @@ import { flow, getEnv, getIdentifier, getSnapshot, Instance, SnapshotIn, Snapsho
 
 import { IEnvironment } from '../../types';
 import { fail } from '../../utils';
-import DataSourceModel from './DataSourceModel';
+import { DataSourceModel } from './DataSourceModel';
 
-const SessionModel = DataSourceModel.named('SessionModel')
+export const SessionModel = DataSourceModel.named('SessionModel')
   .views(self => ({
     get __sessionId(): string {
       const id = getIdentifier(self);
@@ -37,4 +37,3 @@ const SessionModel = DataSourceModel.named('SessionModel')
 export interface ISessionModel extends Instance<typeof SessionModel> {}
 export interface ISessionModelSnapshotIn extends SnapshotIn<ISessionModel> {}
 export interface ISessionModelSnapshotOut extends SnapshotOut<ISessionModel> {}
-export default SessionModel;
