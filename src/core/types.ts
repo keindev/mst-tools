@@ -67,7 +67,8 @@ export const context = <NAME extends string, V extends IObject>(
             }
           }
 
-          return result as unknown as T;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return result as any as T;
         },
       }))
       .views(views),

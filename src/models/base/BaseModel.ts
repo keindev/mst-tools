@@ -6,7 +6,8 @@ import { EMPTY_VALUE } from '../../constants';
 import types from '../../core/types';
 import { IFunction } from '../../types';
 
-const process = async (functions: (IFunction | undefined)[], parallel = true): Promise<unknown[]> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const process = async (functions: (IFunction | undefined)[], parallel = true): Promise<any[]> => {
   let result = [];
 
   if (parallel) {

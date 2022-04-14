@@ -1,6 +1,6 @@
-# :tada: Features
+# :memo: Internal changes
 
-- Add `types.reserve` [`3363b7d`](https://github.com/keindev/mst-tools/commit/3363b7d75d97780342d21a2fa7f71a8c12e03ea6)
+- Fix functions typings, change unknown to any [`1e7f649`](https://github.com/keindev/mst-tools/commit/1e7f649404780f4a29cda06687bf5a124b1ddcbb)
 
 ---
 
