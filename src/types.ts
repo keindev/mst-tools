@@ -55,3 +55,13 @@ export interface IModelType<PROPS extends ModelProperties, OTHERS, CustomC = _No
 export interface IEnvironment {
   version?: string;
 }
+
+export type IContext = IModelType<ModelProperties, { _getContext<T>(): T | undefined }>;
+
+export type IContextModel<NAME extends string> = {
+  [key in `${NAME}Context`]: IContext;
+};
+
+export type IContextWrapper<NAME extends string> = {
+  [key in `${NAME}ContextWrapper`]: IModelType<ModelProperties, IEmptyObject>;
+};
