@@ -1,6 +1,6 @@
 # :memo: Internal changes
 
-- Fix `BaseModel`.patch typings [`d2591bc`](https://github.com/keindev/mst-tools/commit/d2591bca6c9192662ed9ab5a304df79d0ff36bf3)
+- Fix `BaseModel`.patch function [`48ad042`](https://github.com/keindev/mst-tools/commit/48ad042a440c2b4c3d235e657302c59a4ca688b1)
 
 ---
 
