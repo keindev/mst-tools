@@ -5,7 +5,7 @@ import {
 import { nanoid } from 'nanoid';
 
 import { EMPTY_VALUE } from '../constants';
-import { IContext, IContextModel, IContextWrapper, IEmptyObject, IObject } from '../types';
+import { IContext, IContextModel, IContextName, IContextWrapper, IEmptyObject, IObject } from '../types';
 import { compose, model } from './methods';
 
 export { getFlags } from './utils/getFlags';
@@ -42,11 +42,12 @@ export const uniqueRef = <P extends ModelProperties, O extends IEmptyObject>(
 export const context = <NAME extends string>(
   name: NAME,
   views: (self: Instance<IContext>) => IObject
-): IContextModel<NAME> & IContextWrapper<NAME> => {
+): IContextName<NAME> & IContextModel<NAME> & IContextWrapper<NAME> => {
   const field = Symbol(`_contextModel_${nanoid()}`);
   const wrapper = Symbol(`_contextWrapper_${name}`);
 
   return {
+    [`${name}Name`]: name,
     [`${name}Context`]: types
       .model(name, {
         [field]: types.frozen(name),
@@ -73,7 +74,7 @@ export const context = <NAME extends string>(
         [wrapper]: types.optional(types.string, name),
       })
       .named(name),
-  } as IContextModel<NAME> & IContextWrapper<NAME>;
+  } as IContextName<NAME> & IContextModel<NAME> & IContextWrapper<NAME>;
 };
 
 const types = {
