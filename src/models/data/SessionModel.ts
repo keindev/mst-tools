@@ -27,10 +27,10 @@ export const SessionModel = DataSourceModel.named('SessionModel')
       sessionStorage.setItem(self.__sessionId, JSON.stringify(getSnapshot(self)));
     },
   }))
-  .actions(({ restore, pipe, save, _load }) => ({
+  .actions(({ restore, pipe, save, load }) => ({
     load: flow(function* (...params) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (!restore()) yield pipe.async([_load.bind(self, ...(params as any[])), save]);
+      if (!restore()) yield pipe.async([load.bind(self, ...(params as any[])), save]);
     }),
   }));
 
