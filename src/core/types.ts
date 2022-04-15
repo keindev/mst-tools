@@ -62,7 +62,7 @@ export const context = <NAME extends string, V extends IObject>(
           let result;
 
           if (hasParent(self)) {
-            let node = getParent<{ [wrapper]: string | undefined }>(self);
+            let node = self as unknown as { [wrapper]?: string };
 
             while (hasParent(node) && !result && !isRoot(node)) {
               if (wrapper in node && node[wrapper] === self[field]) result = node;
