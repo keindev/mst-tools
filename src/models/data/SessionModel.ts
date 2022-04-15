@@ -30,7 +30,7 @@ export const SessionModel = DataSourceModel.named('SessionModel')
   .actions(({ restore, pipe, save, load }) => ({
     load: flow(function* (...params) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (!restore()) yield pipe.async([load.bind(self, ...(params as any[])), save]);
+      if (!restore()) yield pipe.sync([load.bind(self, ...(params as any[])), save]);
     }),
   }));
 
