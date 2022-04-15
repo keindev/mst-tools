@@ -1,6 +1,6 @@
 {
   "name": "mst-tools",
-  "version": "2.3.9",
+  "version": "2.3.10",
   "description": "Toolset for efficient development with MobX-State-Tree",
   "keywords": [
     "mobx",

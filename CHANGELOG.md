@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix `SessionModel` load [`effbd75`](https://github.com/keindev/mst-tools/commit/effbd75a978d81ec22d7ec212cae0f3e91c9b9e7)
+- Fix _`getContext`, now start search from self [`87d3341`](https://github.com/keindev/mst-tools/commit/87d3341ab3c8aa589506b57814b93774823f0cbf)
 
 ---
 
