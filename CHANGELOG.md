@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix `SessionModel`.load and `DictionaryModel`.name [`d79149b`](https://github.com/keindev/mst-tools/commit/d79149befd0bb628d312689f9025651ea82c7240)
+- Fix `SessionModel` load [`effbd75`](https://github.com/keindev/mst-tools/commit/effbd75a978d81ec22d7ec212cae0f3e91c9b9e7)
 
 ---
 
