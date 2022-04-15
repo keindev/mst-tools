@@ -1,6 +1,13 @@
-# :memo: Internal changes
+# Important Changes
 
-- Fix typings and imports [`837f5e0`](https://github.com/keindev/mst-tools/commit/837f5e07a58a610b179550229837fabfb210cee8)
+## Dependencies
+
+<details>
+<summary>Dev Dependencies</summary>
+
+- Changed **[@tagproject/ts-library-shared-config](https://www.npmjs.com/package/@tagproject/ts-library-shared-config)** from `^1.0.2` to `^1.0.3`
+
+</details>
 
 ---
 
