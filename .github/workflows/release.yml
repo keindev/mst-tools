@@ -35,7 +35,7 @@ jobs:
           echo Node: $(node -v)
           echo NPM: $(npm -v)
           npm i semver --no-package-lock
-          CONFIG=$(node ./.github/scripts/config.js | sed 's/ //g')
+          CONFIG=$(node ./.github/scripts/config.mjs | sed 's/ //g')
           echo "::set-output name=config::$CONFIG"
           echo $CONFIG
 

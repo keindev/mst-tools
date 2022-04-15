@@ -5,7 +5,7 @@
 <details>
 <summary>Dev Dependencies</summary>
 
-- Changed **[@tagproject/ts-library-shared-config](https://www.npmjs.com/package/@tagproject/ts-library-shared-config)** from `^1.0.2` to `^1.0.3`
+- Changed **[@tagproject/ts-library-shared-config](https://www.npmjs.com/package/@tagproject/ts-library-shared-config)** from `^1.0.3` to `^1.0.4`
 
 </details>
 
