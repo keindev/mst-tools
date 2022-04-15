@@ -16,7 +16,7 @@
   ],
   "bugs": "https://github.com/keindev/mst-tools/issues",
   "types": "./lib/index.d.ts",
-  "type": "module",
+  "type": "commonjs",
   "main": "lib/mst-tools.js",
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.2.0",
     "@tagproject/docs-shared-config": "^1.0.4",
-    "@tagproject/ts-library-shared-config": "^1.0.2",
+    "@tagproject/ts-library-shared-config": "^1.0.3",
     "@tagproject/vscode-shared-config": "^1.2.7",
     "@types/benchmark": "^2.1.1",
     "@types/jest": "^27.4.1",
