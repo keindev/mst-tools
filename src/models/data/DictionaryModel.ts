@@ -6,7 +6,7 @@ import { SessionModel } from './SessionModel';
 
 export const DictionaryModel = SessionModel.named('ReferenceModel').props({
   items: types.array(DictionaryItemModel),
-  name: types.frozen(types.string),
+  name: types.empty(),
   type: types.identifier,
 });
 
