@@ -1,13 +1,6 @@
-# Important Changes
+# :bug: Bug Fixes
 
-## Dependencies
-
-<details>
-<summary>Dev Dependencies</summary>
-
-- Changed **[@tagproject/ts-library-shared-config](https://www.npmjs.com/package/@tagproject/ts-library-shared-config)** from `^1.0.3` to `^1.0.4`
-
-</details>
+- Fix `SessionModel`.load and `DictionaryModel`.name [`d79149b`](https://github.com/keindev/mst-tools/commit/d79149befd0bb628d312689f9025651ea82c7240)
 
 ---
 
