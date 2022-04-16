@@ -1,8 +1,8 @@
-import { flow, getEnv, getIdentifier, getSnapshot, Instance, SnapshotIn, SnapshotOut } from 'mobx-state-tree';
+import { flow, getEnv, getIdentifier, getSnapshot, Instance } from 'mobx-state-tree';
 
 import { IEnvironment } from '../../types';
 import { fail } from '../../utils';
-import { DataSourceModel } from './DataSourceModel';
+import { DataSourceModel } from './DataSource';
 
 export const SessionModel = DataSourceModel.named('SessionModel')
   .views(self => ({
@@ -35,5 +35,3 @@ export const SessionModel = DataSourceModel.named('SessionModel')
   }));
 
 export interface ISessionModel extends Instance<typeof SessionModel> {}
-export interface ISessionModelSnapshotIn extends SnapshotIn<ISessionModel> {}
-export interface ISessionModelSnapshotOut extends SnapshotOut<ISessionModel> {}
