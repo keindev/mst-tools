@@ -1,6 +1,4 @@
-import {
-    applySnapshot, detach, getSnapshot, IAnyModelType, IMSTArray, Instance, SnapshotIn, SnapshotOut,
-} from 'mobx-state-tree';
+import { applySnapshot, detach, getSnapshot, IAnyModelType, IMSTArray, Instance, SnapshotIn } from 'mobx-state-tree';
 
 import { EMPTY_VALUE } from '../../constants';
 import { types } from '../../core/types';
@@ -59,5 +57,3 @@ export const BaseModel = types
   }));
 
 export interface IBaseModel extends Instance<typeof BaseModel> {}
-export interface IBaseModelSnapshotIn extends SnapshotIn<IBaseModel> {}
-export interface IBaseModelSnapshotOut extends SnapshotOut<IBaseModel> {}

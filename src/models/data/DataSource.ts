@@ -1,9 +1,9 @@
-import { flow, Instance, SnapshotIn, SnapshotOut } from 'mobx-state-tree';
+import { flow, Instance } from 'mobx-state-tree';
 
 import effect from '../../core/effect';
 import { types } from '../../core/types';
 import { fail } from '../../utils';
-import { BaseModel } from '../base/BaseModel';
+import { BaseModel } from '../base/Base';
 
 export const DataSourceModel = BaseModel.named('DataSourceModel')
   .props({
@@ -56,5 +56,3 @@ export const DataSourceModel = BaseModel.named('DataSourceModel')
   }));
 
 export interface IDataSourceModel extends Instance<typeof DataSourceModel> {}
-export interface IDataSourceModelSnapshotIn extends SnapshotIn<IDataSourceModel> {}
-export interface IDataSourceModelSnapshotOut extends SnapshotOut<IDataSourceModel> {}

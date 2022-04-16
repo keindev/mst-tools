@@ -56,7 +56,7 @@ export interface IEnvironment {
   version?: string;
 }
 
-export type IContext<V> = IModelType<ModelProperties, { _getContext<T>(): T | undefined } & V>;
+export type IContext<V> = IModelType<ModelProperties, IEmptyObject & V>;
 
 export type IContextName<NAME extends string> = {
   [key in `${NAME}Name`]: string;

@@ -44,42 +44,32 @@ export const uniqueRef = <P extends ModelProperties, O extends IEmptyObject>(
 ): IOptionalIType<IReferenceType<IModelType<P, O>>, [undefined]> =>
   types.optional(types.reference(type), value ?? type.name);
 
+// eslint-disable-next-line max-lines-per-function
 export const context = <NAME extends string, V extends IObject>(
   name: NAME,
-  views: (self: Instance<IContext<IObject>>) => V
+  views: (self: Instance<IContext<IObject>>, context: <T>() => T | undefined) => V
 ): IContextName<NAME> & IContextModel<NAME, V> & IContextWrapper<NAME> => {
-  const field = Symbol(`_contextModel_${nanoid()}`);
-  const wrapper = Symbol(`_contextWrapper_${name}`);
+  const wrapper = `__${name}ContextWrapper`;
 
   return {
     [`${name}Name`]: name,
-    [`${name}Context`]: types
-      .model(name, {
-        [field]: types.frozen(name),
-      })
-      .views(self => ({
-        _getContext<T>(): T {
+    [`${name}Context`]: types.model('ContextModel', {}).views(
+      (self: Instance<IContext<IEmptyObject>>): V =>
+        views(self, <T>() => {
+          let node = self;
           let result;
 
-          if (hasParent(self)) {
-            let node = self as unknown as { [wrapper]?: string };
-
-            while (hasParent(node) && !result && !isRoot(node)) {
-              if (wrapper in node && node[wrapper] === self[field]) result = node;
-              else node = getParent(node);
-            }
+          while (hasParent(node) && !result) {
+            if (wrapper in node && node[wrapper]) result = node;
+            else node = getParent(node);
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          return result as any as T;
-        },
-      }))
-      .views(views),
-    [`${name}ContextWrapper`]: types
-      .model(`${name}ContextWrapper`, {
-        [wrapper]: types.optional(types.string, name),
-      })
-      .named(name),
+          if (isRoot(node) && wrapper in node && node[wrapper]) result = node;
+
+          return result as unknown as T;
+        })
+    ),
+    [`${name}ContextWrapper`]: types.model(`${name}ContextWrapper`, { [wrapper]: types.frozen(true) }).named(name),
   } as IContextName<NAME> & IContextModel<NAME, V> & IContextWrapper<NAME>;
 };
 
