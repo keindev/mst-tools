@@ -1,6 +1,6 @@
 # :bug: Bug Fixes
 
-- Fix effect action [`40da2d6`](https://github.com/keindev/mst-tools/commit/40da2d6528126db07187bf3148819c154c7d18f8)
+- Fix `BaseModel`.detach [`279f86e`](https://github.com/keindev/mst-tools/commit/279f86e385c7616032d97deacdda72193187b7e1)
 
 ---
 

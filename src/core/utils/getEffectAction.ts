@@ -8,7 +8,7 @@ export const getEffectAction = <P extends ModelProperties>(
 ): [string, IFunction] => {
   const [isLoadingFlag, isLoadedFlag] = Object.getOwnPropertyNames(flags);
 
-  if (typeof isLoadingFlag === 'undefined') return [field, action];
+  if (!isLoadingFlag) return [field, action];
 
   return [
     field,
