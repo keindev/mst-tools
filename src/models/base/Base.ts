@@ -48,7 +48,7 @@ export const BaseModel = types
     patch<T extends IAnyModelType>(snapshot: SnapshotIn<Instance<T>>) {
       applySnapshot(self, { ...getSnapshot(self), ...snapshot });
     },
-    detach: (lists: IMSTArray<IAnyModelType>[]) => () => {
+    detach: (lists: IMSTArray<IAnyModelType>[]) => {
       lists.forEach(list => {
         list.forEach(item => detach(item));
         list.clear();
