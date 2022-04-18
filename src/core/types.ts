@@ -13,7 +13,10 @@ const flag = _types.optional(_types.boolean, false);
 
 const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
 
-const reserve = <M extends IAnyModelType>(type: M): IOptionalIType<M, [undefined]> => _types.optional(type, {});
+const reserve = <M extends IAnyModelType>(
+  type: M,
+  value?: OptionalDefaultValueOrFunction<M>
+): IOptionalIType<M, [undefined]> => _types.optional(type, value ?? {});
 
 const empty = (value = ''): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, value);
 
