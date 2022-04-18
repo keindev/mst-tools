@@ -22,10 +22,7 @@ const empty = (value = ''): IOptionalIType<ISimpleType<string>, [undefined]> => 
 
 const zero = (value = 0): IOptionalIType<ISimpleType<number>, [undefined]> => _types.optional(_types.number, value);
 
-const dispatcher = <T extends IModelType<{ type: ISimpleType<string> }, IEmptyObject>>(
-  defaultType: T,
-  map: { [key: string]: T }
-): T =>
+const dispatcher = <T extends IAnyModelType>(defaultType: T, map: { [key: string]: T }): T =>
   types.union(
     {
       dispatcher({ type }: SnapshotIn<T>) {
