@@ -1,6 +1,5 @@
-import { Instance } from 'mobx-state-tree';
-
 import { types } from '../../core/types';
+import { Instance } from '../../mst/index';
 
 export const DictionaryItemModel = types.model('DictionaryItemModel', {
   id: types.identifier,

@@ -1,6 +1,5 @@
-import { Instance } from 'mobx-state-tree';
-
 import { types } from '../../index';
+import { Instance } from '../../mst/index';
 
 describe('Core contexts', () => {
   it('Create models hierarchy with context', () => {

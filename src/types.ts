@@ -1,8 +1,9 @@
+import { ConditionalKeys } from 'type-fest';
+
 import {
     _NotCustomized, IModelType as IOriginalModelType, Instance, IOptionalIType, ISimpleType, ModelActions,
     ModelProperties, ModelPropertiesDeclaration, ModelPropertiesDeclarationToProperties,
-} from 'mobx-state-tree';
-import { ConditionalKeys } from 'type-fest';
+} from './mst/index';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type IFunction = Function;
@@ -37,6 +38,7 @@ export interface IModelType<PROPS extends ModelProperties, OTHERS, CustomC = _No
   actions<A extends ModelActions>(fn: (self: Instance<this>) => A): IModelType<PROPS, OTHERS & A, CustomC, CustomS>;
   effects<E extends IModelEffect<PROPS>>(
     fn: IEffectFunction<this, PROPS, E>
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   ): IModelType<PROPS, OTHERS & { [key in keyof E]: E[key][0] }, CustomC, CustomS>;
   extend<A extends ModelActions = IEmptyObject, V extends IObject = IEmptyObject, VS extends IObject = IEmptyObject>(
     fn: (self: Instance<this>) => { actions?: A; state?: VS; views?: V }

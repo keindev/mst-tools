@@ -1,5 +1,4 @@
-import { isOptionalType, ModelPropertiesDeclaration, types } from 'mobx-state-tree';
-
+import { isOptionalType, ModelPropertiesDeclaration, types } from '../../mst/index';
 import { IEmptyObject, IFlags, IProperties } from '../../types';
 
 export const getFlags = <PROPS extends ModelPropertiesDeclaration = IEmptyObject>(

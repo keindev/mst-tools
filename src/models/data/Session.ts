@@ -1,5 +1,4 @@
-import { flow, getEnv, getIdentifier, getSnapshot, Instance } from 'mobx-state-tree';
-
+import { flow, getEnv, getIdentifier, getSnapshot, Instance } from '../../mst/index';
 import { IEnvironment } from '../../types';
 import { fail } from '../../utils';
 import { DataSourceModel } from './DataSource';

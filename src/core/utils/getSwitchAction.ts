@@ -1,5 +1,4 @@
-import { ModelProperties } from 'mobx-state-tree';
-
+import { ModelProperties } from '../../mst/index';
 import { IFlags, IFunction } from '../../types';
 
 export const getSwitchAction = <P extends ModelProperties>(

@@ -1,6 +1,5 @@
-import { flow, ModelProperties } from 'mobx-state-tree';
-import { FlowReturn } from 'mobx-state-tree/dist/internal';
-
+import { flow, ModelProperties } from '../mst/index';
+import { FlowReturn } from '../mst/internal';
 import { IFlags } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

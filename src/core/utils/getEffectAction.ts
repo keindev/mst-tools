@@ -1,5 +1,4 @@
-import { flow, ModelProperties } from 'mobx-state-tree';
-
+import { flow, ModelProperties } from '../../mst/index';
 import { IFlags, IFunction } from '../../types';
 
 export const getEffectAction = <P extends ModelProperties>(

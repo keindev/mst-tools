@@ -1,7 +1,6 @@
-import { applySnapshot, detach, getSnapshot, IAnyModelType, IMSTArray, Instance, SnapshotIn } from 'mobx-state-tree';
-
 import { EMPTY_VALUE } from '../../constants';
 import { types } from '../../core/types';
+import { applySnapshot, detach, getSnapshot, IAnyModelType, IMSTArray, Instance, SnapshotIn } from '../../mst/index';
 import { IFunction } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +27,8 @@ const process = async (functions: (IFunction | undefined)[], parallel = true): P
 
 export const BaseModel = types
   .model('BaseModel', {
-    id: types.uid(),
+    // TODO: Unique by default
+    id: types.optional(types.string, ''),
   })
   .volatile(() => ({
     pipe: {

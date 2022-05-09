@@ -1,8 +1,7 @@
 import {
     _CustomJoin, getPropertyMembers, Instance, ModelActions, ModelProperties, ModelPropertiesDeclaration,
     types as _types,
-} from 'mobx-state-tree';
-
+} from '../mst/index';
 import {
     IEffectFunction, IEmptyObject, IModelEffect, IModelSwitch, IModelType, IObject, IProperties, ISwitchFunction,
 } from '../types';

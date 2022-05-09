@@ -1,7 +1,6 @@
-import { flow, Instance } from 'mobx-state-tree';
-
 import effect from '../../core/effect';
 import { types } from '../../core/types';
+import { flow, Instance } from '../../mst/index';
 import { fail } from '../../utils';
 import { BaseModel } from '../base/Base';
 

@@ -1,6 +1,5 @@
-import { Instance } from 'mobx-state-tree';
-
 import { types } from '../../core/types';
+import { Instance } from '../../mst/index';
 import { DictionaryItemModel } from './DictionaryItem';
 import { SessionModel } from './Session';
 

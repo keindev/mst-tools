@@ -1,0 +1,35 @@
+// we import the types to re-export them inside types.
+import {
+    array, boolean, compose, custom, DatePrimitive, enumeration, frozen, identifier, identifierNumber, integer, late,
+    literal, map, maybe, maybeNull, model, nullType, number, optional, reference, refinement, safeReference,
+    snapshotProcessor, string, undefinedType, union,
+} from '../internal';
+
+export const types = {
+  enumeration,
+  model,
+  compose,
+  custom,
+  reference,
+  safeReference,
+  union,
+  optional,
+  literal,
+  maybe,
+  maybeNull,
+  refinement,
+  string,
+  boolean,
+  number,
+  integer,
+  Date: DatePrimitive,
+  map,
+  array,
+  frozen,
+  identifier,
+  identifierNumber,
+  late,
+  undefined: undefinedType,
+  null: nullType,
+  snapshotProcessor,
+};

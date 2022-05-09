@@ -1,9 +1,7 @@
 import {
     getParent, hasParent, IAnyModelType, IModelType, Instance, IOptionalIType, IReferenceType, ISimpleType, isRoot,
     ModelProperties, OptionalDefaultValueOrFunction, SnapshotIn, types as _types,
-} from 'mobx-state-tree';
-import { nanoid } from 'nanoid';
-
+} from '../mst/index';
 import { IContext, IContextModel, IContextName, IContextWrapper, IEmptyObject, IObject } from '../types';
 import { compose, model } from './methods';
 
@@ -11,7 +9,8 @@ export { getFlags } from './utils/getFlags';
 
 const flag = _types.optional(_types.boolean, false);
 
-const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
+// TODO: Processed typed functions
+// const uid = (): IOptionalIType<ISimpleType<string>, [undefined]> => _types.optional(_types.string, nanoid());
 
 const reserve = <M extends IAnyModelType>(
   type: M,
@@ -82,7 +81,7 @@ export const types = {
   flag,
   model,
   reserve,
-  uid,
+  // uid,
   unique,
   uniqueRef,
   zero,
