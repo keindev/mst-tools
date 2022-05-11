@@ -14,7 +14,6 @@ export {
   IAnyType,
   ModelPrimitive,
   ISimpleType,
-  IComplexType,
   IAnyComplexType,
   IReferenceType,
   _CustomCSProcessor,

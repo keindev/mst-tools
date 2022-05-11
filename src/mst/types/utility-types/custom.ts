@@ -81,10 +81,6 @@ export class CustomType<S, T> extends SimpleType<S | T, S, T> {
     super(options.name);
   }
 
-  describe(): string {
-    return this.name;
-  }
-
   getSnapshot(node: this['N']): S {
     return this.options.toSnapshot(node.storedValue);
   }
@@ -100,11 +96,9 @@ export class CustomType<S, T> extends SimpleType<S | T, S, T> {
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
     if (this.options.isTargetType(value)) return typeCheckSuccess();
 
-    const typeError: string = this.options.getValidationMessage(value as S);
+    const typeError = this.options.getValidationMessage(value as S);
 
-    if (typeError) {
-      return typeCheckFailure(context, value, `Invalid value for type '${this.name}': ${typeError}`);
-    }
+    if (typeError) return typeCheckFailure(context, value, `Invalid value for type '${this.name}': ${typeError}`);
 
     return typeCheckSuccess();
   }

@@ -49,21 +49,13 @@ export class IdentifierType extends BaseIdentifierType<string> {
   readonly flags = TypeFlags.Identifier;
 
   constructor() {
-    super(`identifier`, 'string');
-  }
-
-  describe(): string {
-    return `identifier`;
+    super('identifier', 'string');
   }
 }
 
 export class IdentifierNumberType extends BaseIdentifierType<number> {
   constructor() {
     super('identifierNumber', 'number');
-  }
-
-  describe(): string {
-    return `identifierNumber`;
   }
 
   getSnapshot(node: ScalarNode<number, number, number>): number {
@@ -121,10 +113,10 @@ export function isIdentifierType<IT extends typeof identifier | typeof identifie
 export type ReferenceIdentifier = string | number;
 
 export function normalizeIdentifier(id: ReferenceIdentifier): string {
-  return '' + id;
+  return id.toString();
 }
 
-export function isValidIdentifier(id: any): id is ReferenceIdentifier {
+export function isValidIdentifier(id: unknown): id is ReferenceIdentifier {
   return typeof id === 'string' || typeof id === 'number';
 }
 

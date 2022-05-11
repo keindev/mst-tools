@@ -28,10 +28,6 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
     }
 
     this.state = NodeLifeCycle.CREATED;
-    // for scalar nodes there's no point in firing this event since it would fire on the constructor, before
-    // anybody can actually register for/listen to it
-    // this.fireHook(Hook.AfterCreate)
-
     this.finalizeCreation();
   }
 
@@ -41,7 +37,7 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
 
   get root(): AnyObjectNode {
     // future optimization: store root ref in the node and maintain it
-    if (!this.parent) throw fail(`This scalar node is not part of a tree`);
+    if (!this.parent) throw fail('This scalar node is not part of a tree');
 
     return this.parent.root;
   }
@@ -52,6 +48,7 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
 
   die(): void {
     if (!this.isAlive || this.state === NodeLifeCycle.DETACHING) return;
+
     this.aboutToDie();
     this.finalizeDeath();
   }
@@ -77,21 +74,12 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
     }
 
     if (devMode()) {
-      if (!subpath) {
-        // istanbul ignore next
-        throw fail('assertion failed: subpath expected');
-      }
-      if (!newParent) {
-        // istanbul ignore next
-        throw fail('assertion failed: parent expected');
-      }
-      if (parentChanged) {
-        // istanbul ignore next
-        throw fail('assertion failed: scalar nodes cannot change their parent');
-      }
+      if (!subpath) throw fail('assertion failed: subpath expected');
+      if (!newParent) throw fail('assertion failed: parent expected');
+      if (parentChanged) throw fail('assertion failed: scalar nodes cannot change their parent');
     }
 
-    this.environment = undefined; // use parent's
+    this.environment = undefined;
     this.baseSetParent(this.parent, subpath);
   }
 

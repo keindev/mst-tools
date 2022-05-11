@@ -104,36 +104,24 @@ export interface IType<C, S, T> {
 /** Any kind of type. */
 export interface IAnyType extends IType<any, any, any> {}
 
-/**
- * A simple type, this is, a type where the instance and the snapshot representation are the same.
- */
+/** A simple type, this is, a type where the instance and the snapshot representation are the same. */
 export interface ISimpleType<T> extends IType<T, T, T> {}
 
 export type Primitives = ModelPrimitive | null | undefined;
 
-/**
- * A complex type.
- * @deprecated just for compatibility with old versions, could be deprecated on the next major version
- */
-export interface IComplexType<C, S, T> extends IType<C, S, T & object> {}
-
-/**
- * Any kind of complex type.
- */
+/** Any kind of complex type. */
 export interface IAnyComplexType extends IType<any, any, object> {}
 
 export type ExtractCSTWithoutSTN<
   IT extends { [$type]: undefined; CreationType: any; SnapshotType: any; TypeWithoutSTN: any }
 > = IT['CreationType'] | IT['SnapshotType'] | IT['TypeWithoutSTN'];
-/** @hidden */
+
 export type ExtractCSTWithSTN<IT extends { [$type]: undefined; CreationType: any; SnapshotType: any; Type: any }> =
   | IT['CreationType']
   | IT['SnapshotType']
   | IT['Type'];
 
-/**
- * The instance representation of a given type.
- */
+/** The instance representation of a given type. */
 export type Instance<T> = T extends { [$type]: undefined; Type: any } ? T['Type'] : T;
 
 /** The input (creation) snapshot representation of a given type */
@@ -178,16 +166,11 @@ export type SnapshotOut<T> = T extends { [$type]: undefined; SnapshotType: any }
  */
 export type SnapshotOrInstance<T> = SnapshotIn<T> | Instance<T>;
 
-/**
- * A base type produces a MST node (Node in the state tree)
- *
- * @internal
- * @hidden
- */
+/** A base type produces a MST node (Node in the state tree) */
 export abstract class BaseType<C, S, T, N extends BaseNode<any, any> = BaseNode<S, T>> implements IType<C, S, T> {
   [$type]!: undefined;
 
-  // these are just to make inner types avaialable to inherited classes
+  // these are just to make inner types available to inherited classes
   readonly C!: C;
   readonly N!: N;
   readonly S!: S;
@@ -234,6 +217,10 @@ export abstract class BaseType<C, S, T, N extends BaseNode<any, any> = BaseNode<
     return this.instantiate(null, '', environment, snapshot!).value;
   }
 
+  describe(): string {
+    return this.name;
+  }
+
   getSnapshot(_node: N, _applyPostProcess?: boolean): S {
     // istanbul ignore next
     throw fail('unimplemented method');
@@ -260,7 +247,6 @@ export abstract class BaseType<C, S, T, N extends BaseNode<any, any> = BaseNode<
     return this.isValidSnapshot(value as C, context);
   }
 
-  abstract describe(): string;
   abstract getSubTypes(): IAnyType[] | IAnyType | null | typeof cannotDetermineSubtype;
   abstract instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: C | T): N;
   abstract isValidSnapshot(value: C, context: IValidationContext): IValidationResult;
@@ -269,31 +255,13 @@ export abstract class BaseType<C, S, T, N extends BaseNode<any, any> = BaseNode<
 
 BaseType.prototype.create = action(BaseType.prototype.create);
 
-/**
- * @internal
- * @hidden
- */
 export type AnyBaseType = BaseType<any, any, any, any>;
 
-/**
- * @internal
- * @hidden
- */
 export type ExtractNodeType<IT extends IAnyType> = IT extends BaseType<any, any, any, infer N> ? N : never;
 
-/**
- * A complex type produces a MST node (Node in the state tree)
- *
- * @internal
- * @hidden
- */
+/** A complex type produces a MST node (Node in the state tree) */
 export abstract class ComplexType<C, S, T> extends BaseType<C, S, T, ObjectNode<C, S, T>> {
   identifierAttribute?: string;
-
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(name: string) {
-    super(name);
-  }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   create(snapshot: C = this.getDefaultSnapshot(), environment?: any) {
@@ -328,7 +296,8 @@ export abstract class ComplexType<C, S, T> extends BaseType<C, S, T, ObjectNode<
     }
 
     // current node cannot be recycled in any way
-    current.die(); // noop if detaching
+    // noop if detaching
+    current.die();
 
     // attempt to reuse the new one
     if (isStateTreeNode(newValue) && this.isAssignableFrom(getType(newValue))) {

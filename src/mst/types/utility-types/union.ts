@@ -23,25 +23,14 @@ export class Union extends BaseType<any, any, any> {
   private readonly _dispatcher?: ITypeDispatcher;
   private readonly _eager: boolean = true;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  get flags() {
-    let result: TypeFlags = TypeFlags.Union;
-
-    this._types.forEach(type => {
-      result |= type.flags;
-    });
-
-    return result;
+  get flags(): number {
+    return this._types.reduce((acc, { flags }) => acc | flags, TypeFlags.Union);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   constructor(name: string, private readonly _types: IAnyType[], options?: UnionOptions) {
     super(name);
-    options = {
-      eager: true,
-      dispatcher: undefined,
-      ...options,
-    };
+    options = { eager: true, dispatcher: undefined, ...options };
     this._dispatcher = options.dispatcher;
 
     if (!options.eager) this._eager = false;
@@ -54,16 +43,12 @@ export class Union extends BaseType<any, any, any> {
 
   determineType(value: this['C'] | this['T'], reconcileCurrentType: IAnyType | undefined): IAnyType | undefined {
     // try the dispatcher, if defined
-    if (this._dispatcher) {
-      return this._dispatcher(value);
-    }
+    if (this._dispatcher) return this._dispatcher(value);
 
     // find the most accomodating type
     // if we are using reconciliation try the current node type first (fix for #1045)
     if (reconcileCurrentType) {
-      if (reconcileCurrentType.is(value)) {
-        return reconcileCurrentType;
-      }
+      if (reconcileCurrentType.is(value)) return reconcileCurrentType;
 
       return this._types.filter(t => t !== reconcileCurrentType).find(type => type.is(value));
     }
@@ -95,9 +80,7 @@ export class Union extends BaseType<any, any, any> {
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
-    if (this._dispatcher) {
-      return this._dispatcher(value).validate(value, context);
-    }
+    if (this._dispatcher) return this._dispatcher(value).validate(value, context);
 
     const allErrors: IValidationError[][] = [];
     let applicableTypes = 0;
@@ -245,12 +228,9 @@ export function union(optionsOrType: UnionOptions | IAnyType, ...otherTypes: IAn
 
   // check all options
   if (devMode()) {
-    if (options) {
-      assertArg(options, o => isPlainObject(o), 'object { eager?: boolean, dispatcher?: Function }', 1);
-    }
-    types.forEach((type, i) => {
-      assertIsType(type, options ? i + 2 : i + 1);
-    });
+    if (options) assertArg(options, o => isPlainObject(o), 'object { eager?: boolean, dispatcher?: Function }', 1);
+
+    types.forEach((type, i) => assertIsType(type, options ? i + 2 : i + 1));
   }
 
   return new Union(name, types, options);

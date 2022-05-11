@@ -35,15 +35,10 @@ function _isActionContextThisOrChildOf(
   includeSame: boolean
 ): boolean {
   const parentId = typeof sameOrParent === 'number' ? sameOrParent : sameOrParent.id;
-
-  let current: IActionContext | IMiddlewareEvent | undefined = includeSame
-    ? actionContext
-    : actionContext.parentActionEvent;
+  let current = includeSame ? actionContext : actionContext.parentActionEvent;
 
   while (current) {
-    if (current.id === parentId) {
-      return true;
-    }
+    if (current.id === parentId) return true;
 
     current = current.parentActionEvent;
   }

@@ -117,9 +117,7 @@ class SnapshotProcessor<IT extends IAnyType, CustomC, CustomS> extends BaseType<
       subpath
     ) as any;
 
-    if (node !== current) {
-      this._fixNode(node);
-    }
+    if (node !== current) this._fixNode(node);
 
     return node;
   }
@@ -131,14 +129,9 @@ class SnapshotProcessor<IT extends IAnyType, CustomC, CustomS> extends BaseType<
     const oldGetSnapshot = node.getSnapshot;
 
     // eslint-disable-next-line arrow-body-style
-    node.getSnapshot = () => {
-      return this.postProcessSnapshot(oldGetSnapshot.call(node)) as any;
-    };
-
+    node.getSnapshot = () => this.postProcessSnapshot(oldGetSnapshot.call(node));
     // eslint-disable-next-line arrow-body-style
-    node.getReconciliationType = () => {
-      return this;
-    };
+    node.getReconciliationType = () => this;
   }
 
   private postProcessSnapshot(sn: IT['SnapshotType']): this['S'] {
@@ -150,11 +143,7 @@ class SnapshotProcessor<IT extends IAnyType, CustomC, CustomS> extends BaseType<
   }
 
   private preProcessSnapshot(sn: this['C']): IT['CreationType'] {
-    if (this._processors.preProcessor) {
-      return this._processors.preProcessor.call(null, sn);
-    }
-
-    return sn as any;
+    return this._processors.preProcessor ? this._processors.preProcessor.call(null, sn) : (sn as any);
   }
 
   private preProcessSnapshotSafe(sn: this['C']): IT['CreationType'] | typeof $preProcessorFailed {

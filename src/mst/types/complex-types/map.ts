@@ -54,10 +54,7 @@ const needsIdentifierError = `Map.put can only be used to store complex values t
 function tryCollectModelTypes(type: IAnyType, modelTypes: Array<IAnyModelType>): boolean {
   const subtypes = type.getSubTypes();
 
-  if (subtypes === cannotDetermineSubtype) {
-    return false;
-  }
-
+  if (subtypes === cannotDetermineSubtype) return false;
   if (subtypes) {
     const subtypesArray = asArray(subtypes);
 
@@ -66,17 +63,11 @@ function tryCollectModelTypes(type: IAnyType, modelTypes: Array<IAnyModelType>):
     }
   }
 
-  if (type instanceof ModelType) {
-    modelTypes.push(type);
-  }
+  if (type instanceof ModelType) modelTypes.push(type);
 
   return true;
 }
 
-/**
- * @internal
- * @hidden
- */
 export enum MapIdentifierMode {
   UNKNOWN,
   YES,
@@ -110,14 +101,10 @@ class MSTMap<IT extends IAnyType> extends ObservableMap<string, any> {
       const node = getStateTreeNode(value);
 
       if (devMode()) {
-        if (!node.identifierAttribute) {
-          throw fail(needsIdentifierError);
-        }
+        if (!node.identifierAttribute) throw fail(needsIdentifierError);
       }
 
-      if (node.identifier === null) {
-        throw fail(needsIdentifierError);
-      }
+      if (node.identifier === null) throw fail(needsIdentifierError);
 
       this.set(node.identifier, value);
 
@@ -129,9 +116,7 @@ class MSTMap<IT extends IAnyType> extends ObservableMap<string, any> {
       const mapNode = getStateTreeNode(this as IAnyStateTreeNode);
       const mapType = mapNode.type as MapType<any>;
 
-      if (mapType.identifierMode !== MapIdentifierMode.YES) {
-        throw fail(needsIdentifierError);
-      }
+      if (mapType.identifierMode !== MapIdentifierMode.YES) throw fail(needsIdentifierError);
 
       const idAttr = mapType.mapIdentifierAttribute!;
       const id = (value as any)[idAttr];
@@ -290,7 +275,7 @@ export class MapType<IT extends IAnyType> extends ComplexType<
     const subType = (objNode.type as this)._subType;
     const result: IChildNodesMap = {};
 
-    Object.keys(initialSnapshot!).forEach(name => {
+    Object.keys(initialSnapshot).forEach(name => {
       result[name] = subType.instantiate(objNode, name, undefined, initialSnapshot[name]);
     });
 
@@ -343,34 +328,19 @@ export class MapType<IT extends IAnyType> extends ComplexType<
   }
 
   getSnapshot(node: this['N']): this['S'] {
-    const res: any = {};
-
-    node.getChildren().forEach(childNode => {
-      res[childNode.subpath] = childNode.snapshot;
-    });
-
-    return res;
+    return Object.fromEntries(node.getChildren().map(({ subpath, snapshot }) => [subpath, snapshot]));
   }
 
   processInitialSnapshot(childNodes: IChildNodesMap): this['S'] {
-    const processed: any = {};
-
-    Object.keys(childNodes).forEach(key => {
-      processed[key] = childNodes[key]!.getSnapshot();
-    });
-
-    return processed;
+    return Object.fromEntries(Object.entries(childNodes).map(([key, value]) => [key, value.getSnapshot()]));
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  removeChild(node: this['N'], subpath: string) {
+  removeChild(node: this['N'], subpath: string): void {
     node.storedValue.delete(subpath);
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
-    if (!isPlainObject(value)) {
-      return typeCheckFailure(context, value, 'Value is not a plain object');
-    }
+    if (!isPlainObject(value)) return typeCheckFailure(context, value, 'Value is not a plain object');
 
     return flattenTypeErrors(
       Object.keys(value).map(path =>
@@ -413,9 +383,7 @@ export class MapType<IT extends IAnyType> extends ComplexType<
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   private _determineIdentifierMode() {
-    if (this.identifierMode !== MapIdentifierMode.UNKNOWN) {
-      return;
-    }
+    if (this.identifierMode !== MapIdentifierMode.UNKNOWN) return;
 
     const modelTypes: IAnyModelType[] = [];
 
@@ -446,7 +414,7 @@ export class MapType<IT extends IAnyType> extends ComplexType<
 
   private processIdentifier(expected: string, node: AnyNode): void {
     if (this.identifierMode === MapIdentifierMode.YES && node instanceof ObjectNode) {
-      const identifier = node.identifier!;
+      const { identifier } = node;
 
       if (identifier !== expected) {
         throw fail(

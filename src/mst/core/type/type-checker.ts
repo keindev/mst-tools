@@ -31,13 +31,11 @@ function safeStringify(value: any): string {
   try {
     return JSON.stringify(value);
   } catch (e) {
-    // istanbul ignore next
     return `<Unserializable: ${e}>`;
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function prettyPrintValue(value: any) {
+export function prettyPrintValue(value: any): string {
   if (typeof value === 'function') return `<function${value.name ? ' ' + value.name : ''}>`;
 
   return isStateTreeNode(value) ? `<${value}>` : `\`${safeStringify(value)}\``;
@@ -54,7 +52,7 @@ function shortenPrintValue(valueInString: string): string {
 
 function toErrorString(error: IValidationError): string {
   const { value } = error;
-  const type = error.context[error.context.length - 1]!.type!;
+  const type = error.context[error.context.length - 1]?.type;
   const fullPath = error.context
     .map(({ path }) => path)
     .filter(path => path.length > 0)
@@ -133,12 +131,8 @@ function validationErrorsToString<IT extends IAnyType>(
   value: ExtractCSTWithSTN<IT>,
   errors: IValidationError[]
 ): string | undefined {
-  if (errors.length === 0) {
-    return undefined;
-  }
-
-  return (
-    `Error while converting ${shortenPrintValue(prettyPrintValue(value))} to \`${type.name}\`:\n\n    ` +
-    errors.map(toErrorString).join('\n    ')
-  );
+  return errors.length === 0
+    ? undefined
+    : `Error while converting ${shortenPrintValue(prettyPrintValue(value))} to \`${type.name}\`:\n\n    ` +
+        errors.map(toErrorString).join('\n    ');
 }

@@ -1,4 +1,3 @@
-// noinspection ES6UnusedImports
 import { _allowStateChangesInsideComputed, action, computed, IComputedValue, reaction } from 'mobx';
 
 import {
@@ -424,6 +423,14 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     this.type.removeChild(this, subpath);
   }
 
+  removeDisposer(disposer: () => void): void {
+    if (!this._internalEventsHas(InternalEvents.Dispose, disposer)) {
+      throw fail('cannot remove a disposer which was never registered for execution');
+    }
+
+    this._internalEventsUnregister(InternalEvents.Dispose, disposer);
+  }
+
   // eslint-disable-next-line max-lines-per-function
   setParent(newParent: AnyObjectNode, subpath: string): void {
     const parentChanged = newParent !== this.parent;
@@ -434,15 +441,8 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     }
 
     if (devMode()) {
-      if (!subpath) {
-        // istanbul ignore next
-        throw fail('assertion failed: subpath expected');
-      }
-      if (!newParent) {
-        // istanbul ignore next
-        throw fail('assertion failed: new parent expected');
-      }
-
+      if (!subpath) throw fail('assertion failed: subpath expected');
+      if (!newParent) throw fail('assertion failed: new parent expected');
       if (this.parent && parentChanged) {
         throw fail(
           `A node cannot exists twice in the state tree. Failed to add ${this} to path '${newParent.path}/${subpath}'.`
@@ -455,15 +455,15 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
       }
       if (!this.parent && !!this.environment && this.environment !== newParent.root.environment) {
         throw fail(
-          `A state tree cannot be made part of another state tree as long as their environments are different.`
+          'A state tree cannot be made part of another state tree as long as their environments are different.'
         );
       }
     }
 
     if (parentChanged) {
-      // attach to new parent
-      this.environment = undefined; // will use root's
-      newParent.root.identifierCache!.mergeCache(this);
+      // attach to new parent, will use root's
+      this.environment = undefined;
+      newParent.root.identifierCache?.mergeCache(this);
       this.baseSetParent(newParent, subpath);
       this.fireHook(Hook.afterAttach);
     } else if (subpathChanged) {
@@ -479,15 +479,6 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     return `${this.type.name}@${path}${identifier}${this.isAlive ? '' : ' [dead]'}`;
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  removeDisposer(disposer: () => void): void {
-    if (!this._internalEventsHas(InternalEvents.Dispose, disposer)) {
-      throw fail('cannot remove a disposer which was never registered for execution');
-    }
-
-    this._internalEventsUnregister(InternalEvents.Dispose, disposer);
-  }
-
   // bound on the constructor
   unbox(childNode: AnyNode | undefined): AnyNode | undefined {
     if (!childNode) return childNode;
@@ -497,6 +488,10 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     });
 
     return this._autoUnbox ? childNode.value : childNode;
+  }
+
+  protected emitSnapshot(snapshot: S): void {
+    this._internalEventsEmit(InternalEvents.Snapshot, snapshot);
   }
 
   protected fireHook(name: Hook): void {
@@ -516,33 +511,21 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     }
   }
 
-  protected emitSnapshot(snapshot: S): void {
-    this._internalEventsEmit(InternalEvents.Snapshot, snapshot);
+  private _addSnapshotReaction(): void {
+    if (!this._hasSnapshotReaction) {
+      const snapshotDisposer = reaction(
+        () => this.snapshot,
+        snapshot => this.emitSnapshot(snapshot),
+        snapshotReactionOptions
+      );
+
+      this.addDisposer(snapshotDisposer);
+      this._hasSnapshotReaction = true;
+    }
   }
 
   private _getActualSnapshot(): S {
     return this.type.getSnapshot(this);
-  }
-
-  private _getCachedInitialSnapshot(): S {
-    if (!this._cachedInitialSnapshotCreated) {
-      // eslint-disable-next-line prefer-destructuring
-      const type = this.type;
-      const childNodes = this._childNodes;
-      const snapshot = this._initialSnapshot;
-
-      this._cachedInitialSnapshot = type.processInitialSnapshot(childNodes, snapshot);
-      this._cachedInitialSnapshotCreated = true;
-    }
-
-    return this._cachedInitialSnapshot!;
-  }
-
-  private isRunningAction(): boolean {
-    if (this._isRunningAction) return true;
-    if (this.isRoot) return false;
-
-    return this.parent!.isRunningAction();
   }
 
   private _getAssertAliveError(context: AssertAliveContext): string {
@@ -569,27 +552,78 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     return `You are trying to read or write to an object that is no longer part of a state tree. (Object type: '${this.type.name}', Path upon death: '${escapedPath}', Subpath: '${subpath}', Action: '${actionFullPath}'). Either detach nodes first, or don't use objects after removing / replacing them in the tree.`;
   }
 
-  private removeMiddleware(middleware: IMiddleware): void {
-    if (this.middlewares) {
-      const index = this.middlewares.indexOf(middleware);
+  private _getCachedInitialSnapshot(): S {
+    if (!this._cachedInitialSnapshotCreated) {
+      // eslint-disable-next-line prefer-destructuring
+      const type = this.type;
+      const childNodes = this._childNodes;
+      const snapshot = this._initialSnapshot;
 
-      if (index >= 0) {
-        this.middlewares.splice(index, 1);
-      }
+      this._cachedInitialSnapshot = type.processInitialSnapshot(childNodes, snapshot);
+      this._cachedInitialSnapshotCreated = true;
+    }
+
+    return this._cachedInitialSnapshot!;
+  }
+
+  private _internalEventsClear(event: InternalEvents): void {
+    if (this._internalEvents) {
+      this._internalEvents.clear(event);
     }
   }
 
-  private _addSnapshotReaction(): void {
-    if (!this._hasSnapshotReaction) {
-      const snapshotDisposer = reaction(
-        () => this.snapshot,
-        snapshot => this.emitSnapshot(snapshot),
-        snapshotReactionOptions
-      );
-
-      this.addDisposer(snapshotDisposer);
-      this._hasSnapshotReaction = true;
+  private _internalEventsClearAll(): void {
+    if (this._internalEvents) {
+      this._internalEvents.clearAll();
     }
+  }
+
+  private _internalEventsEmit<IE extends InternalEvents>(
+    event: IE,
+    ...args: ArgumentTypes<InternalEventHandlers<S>[IE]>
+  ): void {
+    if (this._internalEvents) {
+      this._internalEvents.emit(event, ...args);
+    }
+  }
+
+  private _internalEventsHas<IE extends InternalEvents>(
+    event: IE,
+    eventHandler: InternalEventHandlers<S>[IE]
+  ): boolean {
+    return !!this._internalEvents && this._internalEvents.has(event, eventHandler);
+  }
+
+  private _internalEventsHasSubscribers(event: InternalEvents): boolean {
+    return !!this._internalEvents && this._internalEvents.hasSubscribers(event);
+  }
+
+  private _internalEventsRegister<IE extends InternalEvents>(
+    event: IE,
+    eventHandler: InternalEventHandlers<S>[IE],
+    atTheBeginning = false
+  ): IDisposer {
+    if (!this._internalEvents) {
+      this._internalEvents = new EventHandlers();
+    }
+
+    return this._internalEvents.register(event, eventHandler, atTheBeginning);
+  }
+
+  private _internalEventsUnregister<IE extends InternalEvents>(
+    event: IE,
+    eventHandler: InternalEventHandlers<S>[IE]
+  ): void {
+    if (this._internalEvents) {
+      this._internalEvents.unregister(event, eventHandler);
+    }
+  }
+
+  private isRunningAction(): boolean {
+    if (this._isRunningAction) return true;
+    if (this.isRoot) return false;
+
+    return this.parent!.isRunningAction();
   }
 
   private preboot(): void {
@@ -624,58 +658,13 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     addHiddenFinalProp(this.storedValue, 'toJSON', toJSON);
   }
 
-  // we proxy the methods to avoid creating an EventHandlers instance when it is not needed
+  private removeMiddleware(middleware: IMiddleware): void {
+    if (this.middlewares) {
+      const index = this.middlewares.indexOf(middleware);
 
-  private _internalEventsHasSubscribers(event: InternalEvents): boolean {
-    return !!this._internalEvents && this._internalEvents.hasSubscribers(event);
-  }
-
-  private _internalEventsRegister<IE extends InternalEvents>(
-    event: IE,
-    eventHandler: InternalEventHandlers<S>[IE],
-    atTheBeginning = false
-  ): IDisposer {
-    if (!this._internalEvents) {
-      this._internalEvents = new EventHandlers();
-    }
-
-    return this._internalEvents.register(event, eventHandler, atTheBeginning);
-  }
-
-  private _internalEventsHas<IE extends InternalEvents>(
-    event: IE,
-    eventHandler: InternalEventHandlers<S>[IE]
-  ): boolean {
-    return !!this._internalEvents && this._internalEvents.has(event, eventHandler);
-  }
-
-  private _internalEventsUnregister<IE extends InternalEvents>(
-    event: IE,
-    eventHandler: InternalEventHandlers<S>[IE]
-  ): void {
-    if (this._internalEvents) {
-      this._internalEvents.unregister(event, eventHandler);
-    }
-  }
-
-  private _internalEventsEmit<IE extends InternalEvents>(
-    event: IE,
-    ...args: ArgumentTypes<InternalEventHandlers<S>[IE]>
-  ): void {
-    if (this._internalEvents) {
-      this._internalEvents.emit(event, ...args);
-    }
-  }
-
-  private _internalEventsClear(event: InternalEvents): void {
-    if (this._internalEvents) {
-      this._internalEvents.clear(event);
-    }
-  }
-
-  private _internalEventsClearAll(): void {
-    if (this._internalEvents) {
-      this._internalEvents.clearAll();
+      if (index >= 0) {
+        this.middlewares.splice(index, 1);
+      }
     }
   }
 }

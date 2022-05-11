@@ -92,15 +92,11 @@ export function createFlowSpawner(name: string, generator: Function) {
     const runId = getNextActionId();
     const parentContext = getCurrentActionContext()!;
 
-    if (!parentContext) {
-      throw fail('a mst flow must always have a parent context');
-    }
+    if (!parentContext) throw fail('a mst flow must always have a parent context');
 
     const parentActionContext = getParentActionContext(parentContext);
 
-    if (!parentActionContext) {
-      throw fail('a mst flow must always have a parent action context');
-    }
+    if (!parentActionContext) throw fail('a mst flow must always have a parent action context');
 
     const contextBase = {
       name,
@@ -120,14 +116,7 @@ export function createFlowSpawner(name: string, generator: Function) {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     function wrap(fn: any, type: IMiddlewareEventType, arg: any) {
       fn.$mst_middleware = (spawner as any).$mst_middleware; // pick up any middleware attached to the flow
-      runWithActionContext(
-        {
-          ...contextBase,
-          type,
-          args: [arg],
-        },
-        fn
-      );
+      runWithActionContext({ ...contextBase, type, args: [arg] }, fn);
     }
 
     // eslint-disable-next-line max-lines-per-function
@@ -143,14 +132,7 @@ export function createFlowSpawner(name: string, generator: Function) {
 
       (init as any).$mst_middleware = (spawner as any).$mst_middleware;
 
-      runWithActionContext(
-        {
-          ...contextBase,
-          type: 'flow_spawn',
-          args: argsToArray(args),
-        },
-        init
-      );
+      runWithActionContext({ ...contextBase, type: 'flow_spawn', args: argsToArray(args) }, init);
 
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       function onFulfilled(res: any) {

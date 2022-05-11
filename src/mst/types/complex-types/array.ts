@@ -256,9 +256,7 @@ export class ArrayType<IT extends IAnyType> extends ComplexType<
             [change.index]
           );
 
-          if (!updatedNodes) {
-            return null;
-          }
+          if (!updatedNodes) return null;
 
           change.newValue = updatedNodes[0]!;
         }
@@ -425,10 +423,9 @@ function valueAsNode(childType: IAnyType, parent: AnyObjectNode, subpath: string
         return childNode;
       }
     }
+
     // there is old node and new one is a value/snapshot
-    if (oldNode) {
-      return childType.reconcile(oldNode, newValue, parent, subpath);
-    }
+    if (oldNode) return childType.reconcile(oldNode, newValue, parent, subpath);
 
     // nothing to do, create from scratch
     return childType.instantiate(parent, subpath, undefined, newValue);
@@ -454,10 +451,7 @@ function valueAsNode(childType: IAnyType, parent: AnyObjectNode, subpath: string
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function areSame(oldNode: AnyNode, newValue: any) {
   // never consider dead old nodes for reconciliation
-  if (!oldNode.isAlive) {
-    return false;
-  }
-
+  if (!oldNode.isAlive) return false;
   // the new value has the same node
   if (isStateTreeNode(newValue)) {
     const newNode = getStateTreeNode(newValue);
@@ -466,14 +460,9 @@ function areSame(oldNode: AnyNode, newValue: any) {
   }
 
   // the provided value is the snapshot of the old node
-  if (oldNode.snapshot === newValue) {
-    return true;
-  }
-
+  if (oldNode.snapshot === newValue) return true;
   // Non object nodes don't get reconciled
-  if (!(oldNode instanceof ObjectNode)) {
-    return false;
-  }
+  if (!(oldNode instanceof ObjectNode)) return false;
 
   const oldNodeType = oldNode.getReconciliationType();
 

@@ -15,44 +15,29 @@ export interface IReversibleJsonPatch extends IJsonPatch {
 }
 
 export function splitPatch(patch: IReversibleJsonPatch): [IJsonPatch, IJsonPatch] {
-  if (!('oldValue' in patch)) throw fail('Patches without `oldValue` field cannot be inversed');
+  if (!('oldValue' in patch)) throw fail('Patches without `oldValue` field cannot be inverted');
 
   return [stripPatch(patch), invertPatch(patch)];
 }
 
-export function stripPatch(patch: IReversibleJsonPatch): IJsonPatch {
-  // strips `oldvalue` information from the patch, so that it becomes a patch conform the json-patch spec
+export function stripPatch({ op, path, value }: IReversibleJsonPatch): IJsonPatch {
+  // strips `oldValue` information from the patch, so that it becomes a patch conform the json-patch spec
   // this removes the ability to undo the patch
-  switch (patch.op) {
-    case 'add':
-      return { op: 'add', path: patch.path, value: patch.value };
-    case 'remove':
-      return { op: 'remove', path: patch.path };
-    case 'replace':
-      return { op: 'replace', path: patch.path, value: patch.value };
-  }
+  return {
+    add: { op, path, value },
+    remove: { op, path },
+    replace: { op, path, value },
+  }[op];
 }
 
-function invertPatch(patch: IReversibleJsonPatch): IJsonPatch {
-  switch (patch.op) {
-    case 'add':
-      return {
-        op: 'remove',
-        path: patch.path,
-      };
-    case 'remove':
-      return {
-        op: 'add',
-        path: patch.path,
-        value: patch.oldValue,
-      };
-    case 'replace':
-      return {
-        op: 'replace',
-        path: patch.path,
-        value: patch.oldValue,
-      };
-  }
+function invertPatch({ op, path, oldValue: value }: IReversibleJsonPatch): IJsonPatch {
+  return (
+    {
+      add: { op: 'remove', path },
+      remove: { op: 'add', path, value },
+      replace: { op, path, value },
+    } as { [key in IJsonPatch['op']]: IJsonPatch }
+  )[op];
 }
 
 /**
@@ -68,29 +53,19 @@ function isNumber(x: string): boolean {
  * http://tools.ietf.org/html/rfc6901
  */
 export function escapeJsonPath(path: string): string {
-  if (isNumber(path) === true) {
-    return '' + path;
-  }
-
+  if (isNumber(path) === true) return '' + path;
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (path.indexOf('/') === -1 && path.indexOf('~') === -1) return path;
 
   return path.replace(/~/g, '~0').replace(/\//g, '~1');
 }
 
-/**
- * Unescape slashes and backslashes.
- */
+/** Unescape slashes and backslashes. */
 export function unescapeJsonPath(path: string): string {
   return path.replace(/~1/g, '/').replace(/~0/g, '~');
 }
 
-/**
- * Generates a json-path compliant json path from path parts.
- *
- * @param path
- * @returns
- */
+/** Generates a json-path compliant json path from path parts. */
 export function joinJsonPath(path: string[]): string {
   // `/` refers to property with an empty name, while `` refers to root itself!
   if (path.length === 0) return '';
@@ -104,16 +79,10 @@ export function joinJsonPath(path: string[]): string {
   return '/' + getPathStr(path);
 }
 
-/**
- * Splits and decodes a json path into several parts.
- *
- * @param path
- * @returns
- */
+/** Splits and decodes a json path into several parts. */
 export function splitJsonPath(path: string): string[] {
   // `/` refers to property with an empty name, while `` refers to root itself!
   const parts = path.split('/').map(unescapeJsonPath);
-
   const valid =
     path === '' ||
     path === '.' ||
@@ -122,20 +91,14 @@ export function splitJsonPath(path: string): string[] {
     stringStartsWith(path, './') ||
     stringStartsWith(path, '../');
 
-  if (!valid) {
-    throw fail(`a json path must be either rooted, empty or relative, but got '${path}'`);
-  }
-
+  if (!valid) throw fail(`a json path must be either rooted, empty or relative, but got '${path}'`);
   // '/a/b/c' -> ["a", "b", "c"]
   // '../../b/c' -> ["..", "..", "b", "c"]
   // '' -> []
   // '/' -> ['']
   // './a' -> [".", "a"]
   // /./a' -> [".", "a"] equivalent to './a'
-
-  if (parts[0] === '') {
-    parts.shift();
-  }
+  if (parts[0] === '') parts.shift();
 
   return parts;
 }

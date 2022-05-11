@@ -819,9 +819,7 @@ export function compose(...args: any[]): any {
   const hasTypename = typeof args[0] === 'string';
   const typeName: string = hasTypename ? args[0] : 'AnonymousModel';
 
-  if (hasTypename) {
-    args.shift();
-  }
+  if (hasTypename) args.shift();
 
   // check all parameters
   if (devMode()) {

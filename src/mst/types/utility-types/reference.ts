@@ -119,10 +119,6 @@ export abstract class BaseReferenceType<IT extends IAnyComplexType> extends Simp
     super(`reference(${targetType.name})`);
   }
 
-  describe(): string {
-    return this.name;
-  }
-
   isAssignableFrom(type: IAnyType): boolean {
     return this.targetType.isAssignableFrom(type);
   }
@@ -156,9 +152,7 @@ export abstract class BaseReferenceType<IT extends IAnyComplexType> extends Simp
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const startWatching = (sync: boolean) => {
       // re-create hook in case the stored ref gets reattached
-      if (onRefTargetDestroyedHookDisposer) {
-        onRefTargetDestroyedHookDisposer();
-      }
+      if (onRefTargetDestroyedHookDisposer) onRefTargetDestroyedHookDisposer();
 
       // make sure the target node is actually there and initialized
       const storedRefParentNode = storedRefNode.parent;

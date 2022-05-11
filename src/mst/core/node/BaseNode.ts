@@ -4,12 +4,8 @@ import {
     AnyObjectNode, devMode, escapeJsonPath, EventHandlers, Hook, IAnyType, IDisposer, NodeLifeCycle,
 } from '../../internal';
 
-type HookSubscribers = {
-  [Hook.afterAttach]: (node: AnyNode, hook: Hook) => void;
-  [Hook.afterCreate]: (node: AnyNode, hook: Hook) => void;
-  [Hook.afterCreationFinalization]: (node: AnyNode, hook: Hook) => void;
-  [Hook.beforeDestroy]: (node: AnyNode, hook: Hook) => void;
-  [Hook.beforeDetach]: (node: AnyNode, hook: Hook) => void;
+type IHookSubscribers = {
+  [key in Hook]: (node: AnyNode, hook: Hook) => void;
 };
 
 export abstract class BaseNode<S, T> {
@@ -19,7 +15,7 @@ export abstract class BaseNode<S, T> {
   readonly type: IAnyType;
 
   private _escapedSubpath?: string;
-  private _hookSubscribers?: EventHandlers<HookSubscribers>;
+  private _hookSubscribers?: EventHandlers<IHookSubscribers>;
   private _parent!: AnyObjectNode | null;
   private _pathUponDeath?: string;
   private _state = NodeLifeCycle.INITIALIZING;
@@ -95,7 +91,7 @@ export abstract class BaseNode<S, T> {
     return this.type;
   }
 
-  registerHook<H extends Hook>(hook: H, hookHandler: HookSubscribers[H]): IDisposer {
+  registerHook<H extends Hook>(hook: H, hookHandler: IHookSubscribers[H]): IDisposer {
     if (!this._hookSubscribers) this._hookSubscribers = new EventHandlers();
 
     return this._hookSubscribers.register(hook, hookHandler);

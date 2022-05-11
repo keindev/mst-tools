@@ -76,8 +76,7 @@ export function runWithActionContext(context: IMiddlewareEvent, fn: Function): v
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function getParentActionContext(parentContext: IMiddlewareEvent | undefined) {
+export function getParentActionContext(parentContext: IMiddlewareEvent | undefined): IMiddlewareEvent | undefined {
   if (!parentContext) return undefined;
   if (parentContext.type === 'action') return parentContext;
 
@@ -171,7 +170,7 @@ export function decorate<T extends Function>(handler: IMiddlewareHandler, fn: T,
 class CollectedMiddlewares {
   private arrayIndex = 0;
   private inArrayIndex = 0;
-  private middlewares: IMiddleware[][] = [];
+  private readonly middlewares: IMiddleware[][] = [];
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   constructor(node: AnyObjectNode, fn: Function) {
@@ -232,7 +231,7 @@ function runMiddleWares(node: AnyObjectNode, baseCall: IMiddlewareEvent, origina
     }
 
     // skip hooks if asked to
-    if (!middleware!.includeHooks && (Hook as any)[call.name]) {
+    if (!middleware?.includeHooks && (Hook as any)[call.name]) {
       return runNextMiddleware(call);
     }
 

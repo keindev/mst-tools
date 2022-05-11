@@ -24,9 +24,7 @@ export function createObjectNode<C, S, T>(
       );
     }
 
-    if (parent) {
-      existingNode.setParent(parent, subpath);
-    }
+    if (parent) existingNode.setParent(parent, subpath);
     // else it already has no parent since it is a pre-requisite
 
     return existingNode;

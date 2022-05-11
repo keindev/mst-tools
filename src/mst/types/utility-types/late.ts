@@ -85,10 +85,8 @@ class Late<IT extends IAnyType> extends BaseType<
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
     const t = this.getSubType(false);
 
-    if (!t) {
-      // See #916; the variable the definition closure is pointing to wasn't defined yet, so can't be evaluted yet here
-      return typeCheckSuccess();
-    }
+    // See #916; the variable the definition closure is pointing to wasn't defined yet, so can't be evaluated yet here
+    if (!t) return typeCheckSuccess();
 
     return t.validate(value, context);
   }

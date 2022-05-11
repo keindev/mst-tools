@@ -515,11 +515,6 @@ export function resolvePath(target: IAnyStateTreeNode, path: string): any {
 /**
  * Resolves a model instance given a root target, the type and the identifier you are searching for.
  * Returns undefined if no value can be found.
- *
- * @param type
- * @param target
- * @param identifier
- * @returns
  */
 export function resolveIdentifier<IT extends IAnyModelType>(
   type: IT,
@@ -540,9 +535,6 @@ export function resolveIdentifier<IT extends IAnyModelType>(
 /**
  * Returns the identifier of the target node.
  * This is the *string normalized* identifier, which might not match the type of the identifier attribute
- *
- * @param target
- * @returns
  */
 export function getIdentifier(target: IAnyStateTreeNode): string | null {
   // check all arguments
@@ -557,7 +549,6 @@ export function getIdentifier(target: IAnyStateTreeNode): string | null {
  *
  * @param getter Function to access the reference.
  * @param checkIfAlive true to also make sure the referenced node is alive (default), false to skip this check.
- * @returns
  */
 export function tryReference<N extends IAnyStateTreeNode>(
   getter: () => N | null | undefined,
@@ -587,7 +578,6 @@ export function tryReference<N extends IAnyStateTreeNode>(
  *
  * @param getter Function to access the reference.
  * @param checkIfAlive true to also make sure the referenced node is alive (default), false to skip this check.
- * @returns
  */
 export function isValidReference<N extends IAnyStateTreeNode>(
   getter: () => N | null | undefined,
@@ -607,13 +597,7 @@ export function isValidReference<N extends IAnyStateTreeNode>(
   }
 }
 
-/**
- * Try to resolve a given path relative to a given node.
- *
- * @param target
- * @param path
- * @returns
- */
+/** Try to resolve a given path relative to a given node. */
 export function tryResolve(target: IAnyStateTreeNode, path: string): any {
   // check all arguments
   assertIsStateTreeNode(target, 1);
@@ -634,11 +618,7 @@ export function tryResolve(target: IAnyStateTreeNode, path: string): any {
 
 /**
  * Given two state tree nodes that are part of the same tree,
- * returns the shortest jsonpath needed to navigate from the one to the other
- *
- * @param base
- * @param target
- * @returns
+ * returns the shortest json path needed to navigate from the one to the other
  */
 export function getRelativePath(base: IAnyStateTreeNode, target: IAnyStateTreeNode): string {
   // check all arguments
@@ -677,7 +657,6 @@ export function clone<T extends IAnyStateTreeNode>(source: T, keepEnvironment: b
 export function detach<T extends IAnyStateTreeNode>(target: T): T {
   // check all arguments
   assertIsStateTreeNode(target, 1);
-
   getStateTreeNode(target).detach();
 
   return target;
@@ -701,9 +680,6 @@ export function destroy(target: IAnyStateTreeNode): void {
  * This means that the node is still a part of a tree, and that `destroy`
  * has not been called. If a node is not alive anymore, the only thing one can do with it
  * is requesting it's last path and snapshot
- *
- * @param target
- * @returns
  */
 export function isAlive(target: IAnyStateTreeNode): boolean {
   // check all arguments

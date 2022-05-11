@@ -46,9 +46,7 @@ export class OptionalValue<IT extends IAnyType, OptionalVals extends ValidOption
 
     // while static values are already snapshots and checked on types.optional
     // generator functions must always be rechecked just in case
-    if (typeof this._defaultValue === 'function') {
-      typecheckInternal(this, defaultInstanceOrSnapshot);
-    }
+    if (typeof this._defaultValue === 'function') typecheckInternal(this, defaultInstanceOrSnapshot);
 
     return defaultInstanceOrSnapshot;
   }
@@ -127,9 +125,7 @@ function checkOptionalPreconditions<IT extends IAnyType>(
     // if they are generator functions they will be checked once they are generated
     // we don't check generator function results here to avoid generating a node just for type-checking purposes
     // which might generate side-effects
-    if (typeof defaultValueOrFunction !== 'function') {
-      typecheckInternal(type, defaultValueOrFunction);
-    }
+    if (typeof defaultValueOrFunction !== 'function') typecheckInternal(type, defaultValueOrFunction);
   }
 }
 

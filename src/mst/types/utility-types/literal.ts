@@ -23,9 +23,7 @@ export class Literal<T> extends SimpleType<T, T, T> {
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
-    if (isPrimitive(value) && value === this.value) {
-      return typeCheckSuccess();
-    }
+    if (isPrimitive(value) && value === this.value) return typeCheckSuccess();
 
     return typeCheckFailure(context, value, `Value is not a literal ${JSON.stringify(this.value)}`);
   }

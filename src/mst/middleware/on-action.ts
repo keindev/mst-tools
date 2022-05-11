@@ -143,9 +143,7 @@ export function recordActions(
   const listener = (call: ISerializedActionCall) => {
     const recordThis = filter ? filter(call, getRunningActionContext()) : true;
 
-    if (recordThis) {
-      actions.push(call);
-    }
+    if (recordThis) actions.push(call);
   };
 
   let disposer: IDisposer | undefined;

@@ -1,0 +1,86 @@
+> mst-tools@3.1.1 build:ts
+> rimraf lib tmp && tsc --extendedDiagnostics --importHelpers && rollup -c && rimraf tmp
+
+Files:                         360
+Lines of Library:            27421
+Lines of Definitions:        57400
+Lines of TypeScript:         22660
+Lines of JavaScript:             0
+Lines of JSON:                   0
+Lines of Other:                  0
+Nodes of Library:           118506
+Nodes of Definitions:       183590
+Nodes of TypeScript:        116165
+Nodes of JavaScript:             0
+Nodes of JSON:                   0
+Nodes of Other:                  0
+Identifiers:                146207
+Symbols:                    755090
+Types:                      556354
+Instantiations:            2038305
+Memory used:               862561K
+Assignability cache size:   363580
+Identity cache size:         13989
+Subtype cache size:           5579
+Strict subtype cache size:    1555
+I/O Read time:               0.01s
+Parse time:                  0.60s
+ResolveModule time:          0.04s
+ResolveTypeReference time:   0.01s
+Program time:                0.70s
+Bind time:                   0.31s
+Check time:                 11.26s
+transformTime time:          0.27s
+commentTime time:            0.00s
+I/O Write time:              0.02s
+printTime time:              0.52s
+Emit time:                   0.52s
+Total time:                 12.80s
+
+./tmp/index.js → lib/mst-tools.js...
+┌───────────────────────────────────┐
+│                                   │
+│   Destination: lib/mst-tools.js   │
+│   Bundle Size:  136.34 KB         │
+│   Minified Size:  73.62 KB        │
+│   Gzipped Size:  19.54 KB         │
+│                                   │
+└───────────────────────────────────┘
+(!) Circular dependencies
+tmp/mst/internal.js -> tmp/mst/core/mst-operations.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/BaseNode.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/scalar-node.js -> tmp/mst/internal.js
+...and 26 more
+created lib/mst-tools.js in 700ms
+
+./tmp/index.js → lib/mst-tools.min.js...
+┌───────────────────────────────────────┐
+│                                       │
+│   Destination: lib/mst-tools.min.js   │
+│   Bundle Size:  63 KB                 │
+│   Minified Size:  62.9 KB             │
+│   Gzipped Size:  18.3 KB              │
+│                                       │
+└───────────────────────────────────────┘
+(!) Circular dependencies
+tmp/mst/internal.js -> tmp/mst/core/mst-operations.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/BaseNode.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/scalar-node.js -> tmp/mst/internal.js
+...and 26 more
+created lib/mst-tools.min.js in 1.1s
+
+./tmp/index.js → lib/mst-tools.module.js...
+┌──────────────────────────────────────────┐
+│                                          │
+│   Destination: lib/mst-tools.module.js   │
+│   Bundle Size:  136.14 KB                │
+│   Minified Size:  73.42 KB               │
+│   Gzipped Size:  19.53 KB                │
+│                                          │
+└──────────────────────────────────────────┘
+(!) Circular dependencies
+tmp/mst/internal.js -> tmp/mst/core/mst-operations.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/BaseNode.js -> tmp/mst/internal.js
+tmp/mst/internal.js -> tmp/mst/core/node/scalar-node.js -> tmp/mst/internal.js
+...and 26 more
+created lib/mst-tools.module.js in 454ms

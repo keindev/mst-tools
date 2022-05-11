@@ -42,10 +42,7 @@ export function assertIsStateTreeNode(value: IAnyStateTreeNode, argNumber: numbe
 }
 
 export function getStateTreeNode(value: IAnyStateTreeNode): AnyObjectNode {
-  if (!isStateTreeNode(value)) {
-    // istanbul ignore next
-    throw fail(`Value ${value} is no MST Node`);
-  }
+  if (!isStateTreeNode(value)) throw fail(`Value ${value} is no MST Node`);
 
   return value.$treenode!;
 }
@@ -57,8 +54,6 @@ export function getStateTreeNodeSafe(value: IAnyStateTreeNode): AnyObjectNode | 
 export function toJSON<S>(this: IStateTreeNode<IType<any, S, any>>): S {
   return getStateTreeNode(this).snapshot;
 }
-
-const doubleDot = (_: any): string => '..';
 
 export function getRelativePathBetweenNodes(base: AnyObjectNode, target: AnyObjectNode): string {
   // PRE condition target is (a child of) base!
@@ -77,7 +72,12 @@ export function getRelativePathBetweenNodes(base: AnyObjectNode, target: AnyObje
   }
 
   // TODO: assert that no targetParts paths are "..", "." or ""!
-  return baseParts.slice(common).map(doubleDot).join('/') + joinJsonPath(targetParts.slice(common));
+  return (
+    baseParts
+      .slice(common)
+      .map(() => '..')
+      .join('/') + joinJsonPath(targetParts.slice(common))
+  );
 }
 
 export function resolveNodeByPath(base: AnyObjectNode, path: string, failIfResolveFails = true): AnyNode | undefined {
@@ -98,7 +98,8 @@ export function resolveNodeByPathParts(
     if (part === '..') {
       current = current!.parent;
 
-      if (current) continue; // not everything has a parent
+      // not everything has a parent
+      if (current) continue;
     } else if (part === '.') {
       continue;
     } else if (current) {
@@ -106,17 +107,12 @@ export function resolveNodeByPathParts(
         // check if the value of a scalar resolves to a state tree node (e.g. references)
         // then we can continue resolving...
         try {
-          // eslint-disable-next-line prefer-destructuring
-          const value: any = current.value;
+          const { value } = current;
 
-          if (isStateTreeNode(value)) {
-            current = getStateTreeNode(value);
-            // fall through
-          }
+          if (isStateTreeNode(value)) current = getStateTreeNode(value);
         } catch (e) {
-          if (!failIfResolveFails) {
-            return undefined;
-          }
+          if (!failIfResolveFails) return undefined;
+
           throw e;
         }
       }
