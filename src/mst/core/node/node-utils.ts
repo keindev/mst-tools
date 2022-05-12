@@ -1,6 +1,6 @@
 import {
     AnyNode, AnyObjectNode, assertArg, EMPTY_ARRAY, fail, IAnyComplexType, IAnyType, IChildNodesMap, Instance, IType,
-    joinJsonPath, ObjectNode, ScalarNode, splitJsonPath, STNValue,
+    joinJsonPath, ObjectNode, ScalarNode, splitJsonPath, StateTreeNodeValue,
 } from '../../internal';
 
 export enum NodeLifeCycle {
@@ -18,23 +18,21 @@ export interface IStateTreeNode<IT extends IAnyType = IAnyType> {
   // fake, will never be present, just for typing
   // we use this weird trick to solve an issue with reference types
   readonly [$stateTreeNodeType]?: [IT] | [any];
-  readonly $treenode?: any;
+  readonly $treeNode?: any;
 }
 
 export type TypeOfValue<T extends IAnyStateTreeNode> = T extends IStateTreeNode<infer IT> ? IT : never;
 
 /** Represents any state tree node instance */
-export interface IAnyStateTreeNode extends STNValue<any, IAnyType> {}
+export interface IAnyStateTreeNode extends StateTreeNodeValue<any, IAnyType> {}
 
 /**
  * Returns true if the given value is a node in a state tree.
  * More precisely, that is, if the value is an instance of a
  * `types.model`, `types.array` or `types.map`.
  */
-export function isStateTreeNode<IT extends IAnyComplexType = IAnyComplexType>(
-  value: any
-): value is STNValue<Instance<IT>, IT> {
-  return !!(value && value.$treenode);
+export function isStateTreeNode<IT extends IAnyComplexType>(value: any): value is StateTreeNodeValue<Instance<IT>, IT> {
+  return !!(value && value.$treeNode);
 }
 
 export function assertIsStateTreeNode(value: IAnyStateTreeNode, argNumber: number | number[]): void {
@@ -44,11 +42,11 @@ export function assertIsStateTreeNode(value: IAnyStateTreeNode, argNumber: numbe
 export function getStateTreeNode(value: IAnyStateTreeNode): AnyObjectNode {
   if (!isStateTreeNode(value)) throw fail(`Value ${value} is no MST Node`);
 
-  return value.$treenode!;
+  return value.$treeNode!;
 }
 
 export function getStateTreeNodeSafe(value: IAnyStateTreeNode): AnyObjectNode | null {
-  return (value && value.$treenode) || null;
+  return (value && value.$treeNode) || null;
 }
 
 export function toJSON<S>(this: IStateTreeNode<IType<any, S, any>>): S {

@@ -8,9 +8,9 @@ import {
 
 import {
     _CustomOrOther, _NotCustomized, addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, ArrayType,
-    assertArg, assertIsString, ComplexType, createActionInvoker, createObjectNode, devMode, EMPTY_ARRAY, EMPTY_OBJECT,
-    escapeJsonPath, fail, flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode,
-    Hook, IAnyType, IChildNodesMap, IJsonPatch, Instance, isPlainObject, isPrimitive, isStateTreeNode, isType, IType,
+    assertArg, assertIsString, ComplexType, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath,
+    fail, flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IAnyType,
+    IChildNodesMap, IJsonPatch, Instance, isPlainObject, isPrimitive, isStateTreeNode, isType, IType,
     IValidationContext, IValidationResult, MapType, mobxShallow, optional, typeCheckFailure, typecheckInternal,
     TypeFlags,
 } from '../../internal';
@@ -475,11 +475,14 @@ export class ModelType<
     environment: any,
     initialValue: this['C'] | this['T']
   ): this['N'] {
-    const value = isStateTreeNode(initialValue) ? initialValue : this.applySnapshotPreProcessor(initialValue);
-
-    return createObjectNode(this, parent, subpath, environment, value);
     // Optimization: record all prop- view- and action names after first construction, and generate an optimal base class
     // that pre-reserves all these fields for fast object-member lookups
+    return super.instantiate(
+      parent,
+      subpath,
+      environment,
+      isStateTreeNode(initialValue) ? initialValue : this.applySnapshotPreProcessor(initialValue)
+    );
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {

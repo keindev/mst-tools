@@ -127,7 +127,7 @@ const defineVolatile = <P extends Declaration, O = IEmptyObject>(store: Raw<P, O
 };
 
 /* eslint-disable max-len */
-// copied from https://github.com/mobxjs/mobx-state-tree/blob/master/packages/mobx-state-tree/src/types/complex-types/model.ts
+// copied from https://github.com/mobxjs/mobx-state-tree/blob/master/packages/mobx-state-tree/src/types/complex/model.ts
 // prettier-ignore
 export function compose<PA extends ModelProperties, OA, FCA, FSA, PB extends ModelProperties, OB, FCB, FSB>(name: string, A: IModelType<PA, OA, FCA, FSA>, B: IModelType<PB, OB, FCB, FSB>): IModelType<PA & PB, OA & OB, _CustomJoin<FCA, FCB>, _CustomJoin<FSA, FSB>>;
 // prettier-ignore

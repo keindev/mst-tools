@@ -1,7 +1,7 @@
 import { createAtom, IAtom } from 'mobx';
 
 import {
-    AnyObjectNode, devMode, escapeJsonPath, EventHandlers, Hook, IAnyType, IDisposer, NodeLifeCycle,
+    AnyObjectNode, devMode, escapeJsonPath, EventHandlers, fail, Hook, IAnyType, IDisposer, NodeLifeCycle,
 } from '../../internal';
 
 type IHookSubscribers = {
@@ -10,7 +10,8 @@ type IHookSubscribers = {
 
 export abstract class BaseNode<S, T> {
   environment: any;
-  storedValue!: any; // usually the same type as the value, but not always (such as with references)
+  // usually the same type as the value, but not always (such as with references)
+  storedValue!: any;
 
   readonly type: IAnyType;
 
@@ -50,10 +51,10 @@ export abstract class BaseNode<S, T> {
     return this._state;
   }
 
-  set state(val: NodeLifeCycle) {
+  set state(value: NodeLifeCycle) {
     const wasAlive = this.isAlive;
 
-    this._state = val;
+    this._state = value;
 
     if (this.aliveAtom && wasAlive !== this.isAlive) this.aliveAtom.reportChanged();
   }
@@ -103,28 +104,21 @@ export abstract class BaseNode<S, T> {
 
   protected baseFinalizeCreation(whenFinalized?: () => void): void {
     if (devMode()) {
-      if (!this.isAlive) {
-        // eslint-disable-next-line jest/no-jasmine-globals
-        throw fail('assertion failed: cannot finalize the creation of a node that is already dead');
-      }
+      if (!this.isAlive) throw fail('assertion failed: cannot finalize the creation of a node that is already dead');
     }
 
     // goal: afterCreate hooks runs depth-first. After attach runs parent first, so on afterAttach the parent has completed already
     if (this.state === NodeLifeCycle.CREATED) {
       if (this.parent) {
-        if (this.parent.state !== NodeLifeCycle.FINALIZED) {
-          // parent not ready yet, postpone
-          return;
-        }
+        // parent not ready yet, postpone
+        if (this.parent.state !== NodeLifeCycle.FINALIZED) return;
 
         this.fireHook(Hook.afterAttach);
       }
 
       this.state = NodeLifeCycle.FINALIZED;
 
-      if (whenFinalized) {
-        whenFinalized();
-      }
+      if (whenFinalized) whenFinalized();
     }
   }
 

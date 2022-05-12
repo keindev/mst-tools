@@ -76,18 +76,13 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   ) {
     super(complexType, parent, subpath, environment);
     this._snapshotComputed = computed<S>(() => freeze(this.getSnapshot()));
-
     this.unbox = this.unbox.bind(this);
-
     this._initialSnapshot = freeze(initialValue);
     this.identifierAttribute = complexType.identifierAttribute;
 
-    if (!parent) {
-      this.identifierCache = new IdentifierCache();
-    }
+    if (!parent) this.identifierCache = new IdentifierCache();
 
     this._childNodes = complexType.initializeChildNodes(this, this._initialSnapshot);
-
     // identifier can not be changed during lifecycle of a node
     // so we safely can read it from initial snapshot
     this.identifier = null;
@@ -100,9 +95,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
         // try with the actual node if not (for optional identifiers)
         const childNode = this._childNodes[this.identifierAttribute];
 
-        if (childNode) {
-          id = childNode.value;
-        }
+        if (childNode) id = childNode.value;
       }
 
       if (typeof id !== 'string' && typeof id !== 'number') {
@@ -116,11 +109,8 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
       this.unnormalizedIdentifier = id;
     }
 
-    if (!parent) {
-      this.identifierCache!.addNodeToCache(this);
-    } else {
-      parent.root.identifierCache!.addNodeToCache(this);
-    }
+    if (!parent) this.identifierCache?.addNodeToCache(this);
+    else parent.root.identifierCache?.addNodeToCache(this);
   }
 
   get root(): AnyObjectNode {
@@ -139,29 +129,20 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   }
 
   aboutToDie(): void {
-    if (this._observableInstanceState === ObservableInstanceLifecycle.UNINITIALIZED) {
-      return;
+    if (this._observableInstanceState !== ObservableInstanceLifecycle.UNINITIALIZED) {
+      this.getChildren().forEach(node => node.aboutToDie());
+      // beforeDestroy should run before the disposers since else we could end up in a situation where
+      // a disposer added with addDisposer at this stage (beforeDestroy) is actually never released
+      this.baseAboutToDie();
+      this._internalEventsEmit(InternalEvents.Dispose);
+      this._internalEventsClear(InternalEvents.Dispose);
     }
-
-    this.getChildren().forEach(node => {
-      node.aboutToDie();
-    });
-
-    // beforeDestroy should run before the disposers since else we could end up in a situation where
-    // a disposer added with addDisposer at this stage (beforeDestroy) is actually never released
-    this.baseAboutToDie();
-
-    this._internalEventsEmit(InternalEvents.Dispose);
-    this._internalEventsClear(InternalEvents.Dispose);
   }
 
   addDisposer(disposer: () => void): void {
-    if (!this.hasDisposer(disposer)) {
-      this._internalEventsRegister(InternalEvents.Dispose, disposer, true);
+    if (this.hasDisposer(disposer)) throw fail('cannot add a disposer when it is already registered for execution');
 
-      return;
-    }
-    throw fail('cannot add a disposer when it is already registered for execution');
+    this._internalEventsRegister(InternalEvents.Dispose, disposer, true);
   }
 
   addMiddleWare(handler: IMiddlewareHandler, includeHooks = true): IDisposer {
@@ -170,15 +151,11 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     if (!this.middlewares) this.middlewares = [middleware];
     else this.middlewares.push(middleware);
 
-    return () => {
-      this.removeMiddleware(middleware);
-    };
+    return () => this.removeMiddleware(middleware);
   }
 
   applyPatchLocally(subpath: string, patch: IJsonPatch): void {
-    this.assertWritable({
-      subpath,
-    });
+    this.assertWritable({ subpath });
     this.createObservableInstanceIfNeeded();
     this.type.applyPatchLocally(this, subpath, patch);
   }
@@ -248,6 +225,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
         throw fail('assertion failed: the creation of the observable instance must be done on the initializing phase');
       }
     }
+
     this._observableInstanceState = ObservableInstanceLifecycle.CREATING;
 
     // make sure the parent chain is created as well
@@ -279,7 +257,6 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     try {
       this.storedValue = type.createNewInstance(this._childNodes);
       this.preboot();
-
       this._isRunningAction = true;
       type.finalizeNewInstance(this, this.storedValue);
     } catch (e) {
@@ -355,20 +332,15 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     this.root.identifierCache!.notifyDied(this);
 
     // "kill" the computed prop and just store the last snapshot
-    // eslint-disable-next-line prefer-destructuring
-    const snapshot = this.snapshot;
+    const { snapshot } = this;
 
     this._snapshotUponDeath = snapshot;
-
     this._internalEventsClearAll();
-
     this.baseFinalizeDeath();
   }
 
   getChildNode(subpath: string): AnyNode {
-    this.assertAlive({
-      subpath,
-    });
+    this.assertAlive({ subpath });
     this._autoUnbox = false;
 
     try {
@@ -387,6 +359,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   getChildren(): ReadonlyArray<AnyNode> {
     this.assertAlive(EMPTY_OBJECT);
     this._autoUnbox = false;
+
     try {
       return this._observableInstanceState === ObservableInstanceLifecycle.CREATED
         ? this.type.getChildren(this)
@@ -483,9 +456,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   unbox(childNode: AnyNode | undefined): AnyNode | undefined {
     if (!childNode) return childNode;
 
-    this.assertAlive({
-      subpath: childNode.subpath || childNode.subpathUponDeath,
-    });
+    this.assertAlive({ subpath: childNode.subpath || childNode.subpathUponDeath });
 
     return this._autoUnbox ? childNode.value : childNode;
   }
@@ -502,9 +473,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     if (typeof fn === 'function') {
       // we check for it to allow old mobx peer dependencies that don't have the method to work (even when still bugged)
       if (_allowStateChangesInsideComputed) {
-        _allowStateChangesInsideComputed(() => {
-          fn.apply(this.storedValue);
-        });
+        _allowStateChangesInsideComputed(() => fn.apply(this.storedValue));
       } else {
         fn.apply(this.storedValue);
       }
@@ -591,11 +560,11 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     event: IE,
     eventHandler: InternalEventHandlers<S>[IE]
   ): boolean {
-    return !!this._internalEvents && this._internalEvents.has(event, eventHandler);
+    return !!this._internalEvents?.has(event, eventHandler);
   }
 
   private _internalEventsHasSubscribers(event: InternalEvents): boolean {
-    return !!this._internalEvents && this._internalEvents.hasSubscribers(event);
+    return !!this._internalEvents?.hasSubscribers(event);
   }
 
   private _internalEventsRegister<IE extends InternalEvents>(
@@ -603,9 +572,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     eventHandler: InternalEventHandlers<S>[IE],
     atTheBeginning = false
   ): IDisposer {
-    if (!this._internalEvents) {
-      this._internalEvents = new EventHandlers();
-    }
+    if (!this._internalEvents) this._internalEvents = new EventHandlers();
 
     return this._internalEvents.register(event, eventHandler, atTheBeginning);
   }
@@ -614,9 +581,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     event: IE,
     eventHandler: InternalEventHandlers<S>[IE]
   ): void {
-    if (this._internalEvents) {
-      this._internalEvents.unregister(event, eventHandler);
-    }
+    this._internalEvents?.unregister(event, eventHandler);
   }
 
   private isRunningAction(): boolean {
@@ -627,34 +592,32 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   }
 
   private preboot(): void {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-
     this._applyPatches = createActionInvoker(this.storedValue, '@APPLY_PATCHES', (patches: IJsonPatch[]) => {
       patches.forEach(patch => {
         if (!patch.path) {
-          self.type.applySnapshot(self, patch.value);
+          this.type.applySnapshot(this, patch.value);
 
           return;
         }
 
         const parts = splitJsonPath(patch.path);
         // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        const node = resolveNodeByPathParts(self, parts.slice(0, -1)) as AnyObjectNode;
+        const node = resolveNodeByPathParts(this, parts.slice(0, -1)) as AnyObjectNode;
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         node.applyPatchLocally(parts[parts.length - 1]!, patch);
       });
     });
+
     this._applySnapshot = createActionInvoker(this.storedValue, '@APPLY_SNAPSHOT', (snapshot: C) => {
       // if the snapshot is the same as the current one, avoid performing a reconcile
-      if (snapshot === (self.snapshot as any)) return;
+      if (snapshot === (this.snapshot as any)) return;
 
       // else, apply it by calling the type logic
-      return self.type.applySnapshot(self, snapshot as any);
+      return this.type.applySnapshot(this, snapshot as any);
     });
 
-    addHiddenFinalProp(this.storedValue, '$treenode', this);
+    addHiddenFinalProp(this.storedValue, '$treeNode', this);
     addHiddenFinalProp(this.storedValue, 'toJSON', toJSON);
   }
 
@@ -662,9 +625,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     if (this.middlewares) {
       const index = this.middlewares.indexOf(middleware);
 
-      if (index >= 0) {
-        this.middlewares.splice(index, 1);
-      }
+      if (index >= 0) this.middlewares.splice(index, 1);
     }
   }
 }

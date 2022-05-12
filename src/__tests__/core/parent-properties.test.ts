@@ -35,7 +35,7 @@ const ParentModel = types
 interface IParentModelInstance extends Instance<typeof ParentModel> {}
 
 // NOTE: parents are now always created before children;
-// moreover, we do not actually have actions hash during object-node creation
+// moreover, we do not actually have actions hash during ObjectNode creation
 test("Parent property have value during child's afterCreate() event", () => {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const mockFetcher = () => Promise.resolve(true);

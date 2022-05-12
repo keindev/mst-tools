@@ -183,12 +183,7 @@ export function defineProperty(object: any, key: PropertyKey, descriptor: Proper
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function addHiddenFinalProp(object: any, propName: string, value: any) {
-  defineProperty(object, propName, {
-    enumerable: false,
-    writable: false,
-    configurable: true,
-    value,
-  });
+  defineProperty(object, propName, { enumerable: false, writable: false, configurable: true, value });
 }
 
 /**
@@ -197,12 +192,7 @@ export function addHiddenFinalProp(object: any, propName: string, value: any) {
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function addHiddenWritableProp(object: any, propName: string, value: any) {
-  defineProperty(object, propName, {
-    enumerable: false,
-    writable: true,
-    configurable: true,
-    value,
-  });
+  defineProperty(object, propName, { enumerable: false, writable: true, configurable: true, value });
 }
 
 /**

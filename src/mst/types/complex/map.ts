@@ -7,10 +7,10 @@ import {
 
 import {
     addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, cannotDetermineSubtype, ComplexType,
-    createActionInvoker, createObjectNode, devMode, EMPTY_OBJECT, escapeJsonPath, ExtractCSTWithSTN, fail,
-    flattenTypeErrors, getContextForPath, getSnapshot, getStateTreeNode, IAnyModelType, IAnyStateTreeNode, IAnyType,
-    IChildNodesMap, IHooksGetter, IJsonPatch, isMutable, isPlainObject, isStateTreeNode, isType, isValidIdentifier,
-    IType, IValidationContext, IValidationResult, ModelType, normalizeIdentifier, ObjectNode, typeCheckFailure,
+    createActionInvoker, devMode, EMPTY_OBJECT, escapeJsonPath, ExtractCSTWithSTN, fail, flattenTypeErrors,
+    getContextForPath, getSnapshot, getStateTreeNode, IAnyModelType, IAnyStateTreeNode, IAnyType, IChildNodesMap,
+    IHooksGetter, IJsonPatch, isMutable, isPlainObject, isStateTreeNode, isType, isValidIdentifier, IType,
+    IValidationContext, IValidationResult, ModelType, normalizeIdentifier, ObjectNode, typeCheckFailure,
     typecheckInternal, TypeFlags,
 } from '../../internal';
 
@@ -268,7 +268,7 @@ export class MapType<IT extends IAnyType> extends ComplexType<
   ): this['N'] {
     this._determineIdentifierMode();
 
-    return createObjectNode(this, parent, subpath, environment, initialValue);
+    return super.instantiate(parent, subpath, environment, initialValue);
   }
 
   initializeChildNodes(objNode: this['N'], initialSnapshot: this['C'] = {}): IChildNodesMap {

@@ -6,14 +6,12 @@ import {
 
 import {
     addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, ComplexType,
-    convertChildNodesToArray, createActionInvoker, createObjectNode, devMode, EMPTY_ARRAY, EMPTY_OBJECT,
-    ExtractCSTWithSTN, fail, flattenTypeErrors, getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType,
-    IChildNodesMap, IHooksGetter, IJsonPatch, isArray, isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType,
-    IType, IValidationContext, IValidationResult, mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal,
-    TypeFlags,
+    convertChildNodesToArray, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail,
+    flattenTypeErrors, getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType, IChildNodesMap, IHooksGetter,
+    IJsonPatch, isArray, isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext,
+    IValidationResult, mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal, TypeFlags,
 } from '../../internal';
 
-/** @hidden */
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {
   concat(...items: ConcatArray<IT['Type']>[]): IT['Type'][];
   concat(...items: ConcatArray<ExtractCSTWithSTN<IT>>[]): IT['Type'][];
@@ -33,16 +31,11 @@ export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Typ
   unshift(...items: ExtractCSTWithSTN<IT>[]): number;
 }
 
-/** @hidden */
 export interface IArrayType<IT extends IAnyType>
   extends IType<IT['CreationType'][] | undefined, IT['SnapshotType'][], IMSTArray<IT>> {
   hooks(hooks: IHooksGetter<IMSTArray<IAnyType>>): IArrayType<IT>;
 }
 
-/**
- * @internal
- * @hidden
- */
 export class ArrayType<IT extends IAnyType> extends ComplexType<
   IT['CreationType'][] | undefined,
   IT['SnapshotType'][],
@@ -196,15 +189,6 @@ export class ArrayType<IT extends IAnyType> extends ComplexType<
     });
 
     return result;
-  }
-
-  instantiate(
-    parent: AnyObjectNode | null,
-    subpath: string,
-    environment: any,
-    initialValue: this['C'] | this['T']
-  ): this['N'] {
-    return createObjectNode(this, parent, subpath, environment, initialValue);
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {

@@ -4,8 +4,7 @@ import { AnyObjectNode, BaseNode, devMode, fail, freeze, Hook, NodeLifeCycle, Si
 
 export class ScalarNode<C, S, T> extends BaseNode<S, T> {
   // note about hooks:
-  // - afterCreate is not emmited in scalar nodes, since it would be emitted in the
-  //   constructor, before it can be subscribed by anybody
+  // - afterCreate is not emitted in scalar nodes, since it would be emitted in the constructor, before it can be subscribed by anybody
   // - afterCreationFinalization could be emitted, but there's no need for it right now
   // - beforeDetach is never emitted for scalar nodes, since they cannot be detached
 
