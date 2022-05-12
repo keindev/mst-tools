@@ -21,7 +21,6 @@ export * from './core/json-patch';
 export * from './utils';
 export * from './middleware/on-action';
 export * from './types/utility-types/snapshotProcessor';
-export * from './types/complex/ComplexType';
 export * from './types/complex/map';
 export * from './types/complex/array';
 export * from './types/complex/model';

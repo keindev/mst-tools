@@ -5,6 +5,7 @@ import {
     ObservableMap, observe, values,
 } from 'mobx';
 
+import ComplexType from '../../core/type/ComplexType';
 import {
     addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, cannotDetermineSubtype,
     createActionInvoker, devMode, EMPTY_OBJECT, escapeJsonPath, ExtractCSTWithSTN, fail, flattenTypeErrors,
@@ -13,7 +14,6 @@ import {
     IValidationContext, IValidationResult, ModelType, normalizeIdentifier, ObjectNode, typeCheckFailure,
     typecheckInternal, TypeFlags,
 } from '../../internal';
-import ComplexType from './ComplexType';
 
 export interface IMapType<IT extends IAnyType>
   extends IType<IKeyValueMap<IT['CreationType']> | undefined, IKeyValueMap<IT['SnapshotType']>, IMSTMap<IT>> {

@@ -6,6 +6,7 @@ import {
     IObjectWillChange, makeObservable, observable, observe, set,
 } from 'mobx';
 
+import ComplexType from '../../core/type/ComplexType';
 import {
     _CustomOrOther, _NotCustomized, addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, ArrayType,
     assertArg, assertIsString, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath, fail,
@@ -14,7 +15,6 @@ import {
     IValidationContext, IValidationResult, MapType, mobxShallow, optional, typeCheckFailure, typecheckInternal,
     TypeFlags,
 } from '../../internal';
-import ComplexType from './ComplexType';
 
 const PRE_PROCESS_SNAPSHOT = 'preProcessSnapshot';
 const POST_PROCESS_SNAPSHOT = 'postProcessSnapshot';

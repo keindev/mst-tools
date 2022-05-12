@@ -4,6 +4,7 @@ import {
     IObservableArray, observable, observe,
 } from 'mobx';
 
+import ComplexType from '../../core/type/ComplexType';
 import {
     addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, convertChildNodesToArray,
     createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail, flattenTypeErrors,
@@ -11,7 +12,6 @@ import {
     isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext, IValidationResult,
     mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal, TypeFlags,
 } from '../../internal';
-import ComplexType from './ComplexType';
 
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {
   concat(...items: ConcatArray<IT['Type']>[]): IT['Type'][];

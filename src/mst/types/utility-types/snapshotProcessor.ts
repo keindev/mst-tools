@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
+import ComplexType from '../../core/type/ComplexType';
 import {
     AnyObjectNode, assertIsType, BaseType, devMode, ExtractNodeType, fail, getSnapshot, IAnyType, isStateTreeNode,
     isType, IType, IValidationContext, IValidationResult, typeCheckFailure, TypeFlags,
 } from '../../internal';
-import ComplexType from '../complex/ComplexType';
 
 /** @hidden */
 declare const $mstNotCustomized: unique symbol;

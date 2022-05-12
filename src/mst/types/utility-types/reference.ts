@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-classes-per-file */
+import SimpleType from '../../core/type/SimpleType';
 import {
-    AnyNode, AnyObjectNode, applyPatch, assertIsType, createScalarNode, devMode, fail, getIdentifier, getStateTreeNode,
-    Hook, IAnyComplexType, IAnyStateTreeNode, IAnyType, IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode,
+    AnyNode, AnyObjectNode, applyPatch, assertIsType, devMode, fail, getIdentifier, getStateTreeNode, Hook,
+    IAnyComplexType, IAnyStateTreeNode, IAnyType, IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode,
     isValidIdentifier, IType, IValidationContext, IValidationResult, maybe, NodeLifeCycle, normalizeIdentifier,
     ReferenceIdentifier, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
-import SimpleType from '../complex/SimpleType';
 
 export type OnReferenceInvalidatedEvent<STN extends IAnyStateTreeNode> = {
   cause: 'detach' | 'destroy' | 'invalidSnapshotReference';
@@ -314,7 +314,7 @@ export class IdentifierReferenceType<IT extends IAnyComplexType> extends BaseRef
   ): this['N'] {
     const identifier = isStateTreeNode(initialValue) ? getIdentifier(initialValue)! : initialValue;
     const storedRef = new StoredReference(initialValue, this.targetType as any);
-    const storedRefNode: this['N'] = createScalarNode(this, parent, subpath, environment, storedRef as any);
+    const storedRefNode: this['N'] = super.instantiate(parent, subpath, environment, storedRef as any);
 
     storedRef.node = storedRefNode;
     this.watchTargetNodeForInvalidations(storedRefNode, identifier as string, undefined);
@@ -378,7 +378,7 @@ export class CustomReferenceType<IT extends IAnyComplexType> extends BaseReferen
     const identifier = isStateTreeNode(newValue)
       ? this.options.set(newValue as any, parent ? parent.storedValue : null)
       : newValue;
-    const storedRefNode: this['N'] = createScalarNode(this, parent, subpath, environment, identifier as any);
+    const storedRefNode: this['N'] = super.instantiate(parent, subpath, environment, identifier as any);
 
     this.watchTargetNodeForInvalidations(storedRefNode, identifier as string, this.options);
 

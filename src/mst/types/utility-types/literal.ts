@@ -1,9 +1,9 @@
+import SimpleType from '../../core/type/SimpleType';
 import {
-    AnyObjectNode, createScalarNode, ISimpleType, isPrimitive, isType, IValidationContext, IValidationResult,
-    Primitives, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    ISimpleType, isPrimitive, isType, IValidationContext, IValidationResult, Primitives, typeCheckFailure,
+    typeCheckSuccess, TypeFlags,
 } from '../../internal';
 import { assertArg } from '../../utils';
-import SimpleType from '../complex/SimpleType';
 
 export class Literal<T> extends SimpleType<T, T, T> {
   readonly flags = TypeFlags.Literal;
@@ -17,10 +17,6 @@ export class Literal<T> extends SimpleType<T, T, T> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   describe() {
     return JSON.stringify(this.value);
-  }
-
-  instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: this['C']): this['N'] {
-    return createScalarNode(this, parent, subpath, environment, initialValue);
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {

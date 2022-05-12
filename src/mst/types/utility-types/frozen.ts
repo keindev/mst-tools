@@ -1,8 +1,8 @@
+import SimpleType from '../../core/type/SimpleType';
 import {
-    AnyObjectNode, createScalarNode, deepFreeze, IAnyType, isSerializable, isType, IType, IValidationContext,
-    IValidationResult, optional, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, deepFreeze, IAnyType, isSerializable, isType, IType, IValidationContext, IValidationResult, optional,
+    typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
-import SimpleType from '../complex/SimpleType';
 
 /**
  * @internal
@@ -22,7 +22,7 @@ export class Frozen<T> extends SimpleType<T, T, T> {
 
   instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, value: this['C']): this['N'] {
     // create the node
-    return createScalarNode(this, parent, subpath, environment, deepFreeze(value));
+    return super.instantiate(parent, subpath, environment, deepFreeze(value));
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {

@@ -1,8 +1,7 @@
+import SimpleType from '../../core/type/SimpleType';
 import {
-    AnyObjectNode, createScalarNode, IType, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess,
-    TypeFlags,
+    AnyObjectNode, IType, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
-import SimpleType from '../complex/SimpleType';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export interface CustomTypeOptions<S, T> {
@@ -87,11 +86,14 @@ export class CustomType<S, T> extends SimpleType<S | T, S, T> {
   }
 
   instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: S | T): this['N'] {
-    const valueToStore: T = this.options.isTargetType(initialValue)
-      ? (initialValue as T)
-      : this.options.fromSnapshot(initialValue as S, parent && parent.root.environment);
-
-    return createScalarNode(this, parent, subpath, environment, valueToStore);
+    return super.instantiate(
+      parent,
+      subpath,
+      environment,
+      this.options.isTargetType(initialValue)
+        ? (initialValue as T)
+        : this.options.fromSnapshot(initialValue as S, parent && parent.root.environment)
+    );
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {

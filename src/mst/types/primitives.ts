@@ -1,8 +1,8 @@
+import SimpleType from '../core/type/SimpleType';
 import {
-    AnyNode, AnyObjectNode, createScalarNode, fail, identity, ISimpleType, isInteger, isPrimitive, isType, IType,
-    IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyNode, fail, identity, ISimpleType, isInteger, isPrimitive, isType, IType, IValidationContext, IValidationResult,
+    typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../internal';
-import SimpleType from './complex/SimpleType';
 
 // TODO: implement CoreType using types.custom ?
 /**
@@ -31,10 +31,6 @@ export class CoreType<C, S, T> extends SimpleType<C, S, T> {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   describe() {
     return this.name;
-  }
-
-  instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: C): this['N'] {
-    return createScalarNode(this, parent, subpath, environment, initialValue);
   }
 
   isValidSnapshot(value: C, context: IValidationContext): IValidationResult {

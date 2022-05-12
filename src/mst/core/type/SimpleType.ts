@@ -17,6 +17,10 @@ export default abstract class SimpleType<C, S, T> extends BaseType<C, S, T, Scal
     return node.storedValue;
   }
 
+  instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: C): this['N'] {
+    return new ScalarNode(this, parent, subpath, environment, initialValue);
+  }
+
   reconcile(current: this['N'], newValue: C, parent: AnyObjectNode, subpath: string): this['N'] {
     // reconcile only if type and value are still the same, and only if the node is not detaching
     if (!current.isDetaching && current.type === this && current.storedValue === newValue) {
@@ -30,6 +34,4 @@ export default abstract class SimpleType<C, S, T> extends BaseType<C, S, T, Scal
 
     return res;
   }
-
-  abstract instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: C): this['N'];
 }

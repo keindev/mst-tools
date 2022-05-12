@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import SimpleType from '../../core/type/SimpleType';
 import {
-    AnyObjectNode, assertArg, createScalarNode, fail, ISimpleType, isType, IValidationContext, IValidationResult,
-    ModelType, ScalarNode, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, assertArg, fail, ISimpleType, isType, IValidationContext, IValidationResult, ModelType, ScalarNode,
+    typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
-import SimpleType from '../complex/SimpleType';
 
 abstract class BaseIdentifierType<T> extends SimpleType<T, T, T> {
   readonly flags = TypeFlags.Identifier;
@@ -13,21 +13,20 @@ abstract class BaseIdentifierType<T> extends SimpleType<T, T, T> {
     super(name);
   }
 
+  instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: this['C']): this['N'] {
+    if (!(parent?.type instanceof ModelType)) {
+      throw fail('Identifier types can only be instantiated as direct child of a model type');
+    }
+
+    return super.instantiate(parent, subpath, environment, initialValue);
+  }
+
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
     if (typeof value !== this.validType) {
       return typeCheckFailure(context, value, `Value is not a valid ${this.describe()}, expected a ${this.validType}`);
     }
 
     return typeCheckSuccess();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: this['C']): this['N'] {
-    if (!parent || !(parent.type instanceof ModelType)) {
-      throw fail(`Identifier types can only be instantiated as direct child of a model type`);
-    }
-
-    return createScalarNode(this, parent, subpath, environment, initialValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

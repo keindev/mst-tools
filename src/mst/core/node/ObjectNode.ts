@@ -7,7 +7,7 @@ import {
     IReversibleJsonPatch, IStateTreeNode, IType, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier,
     resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
 } from '../../internal';
-import ComplexType from '../../types/complex/ComplexType';
+import ComplexType from '../type/ComplexType';
 
 let nextNodeId = 1;
 
