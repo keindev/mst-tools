@@ -6,7 +6,7 @@ import {
 } from '../../internal';
 
 /** A complex type produces a MST node (Node in the state tree) */
-export abstract class ComplexType<C, S, T> extends BaseType<C, S, T, ObjectNode<C, S, T>> {
+export default abstract class ComplexType<C, S, T> extends BaseType<C, S, T, ObjectNode<C, S, T>> {
   identifierAttribute?: string;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -1,12 +1,13 @@
 import { _allowStateChangesInsideComputed, action, computed, IComputedValue, reaction } from 'mobx';
 
 import {
-    addHiddenFinalProp, AnyNode, ArgumentTypes, BaseNode, ComplexType, convertChildNodesToArray, createActionInvoker,
-    devMode, EMPTY_OBJECT, escapeJsonPath, EventHandlers, extend, fail, freeze, getCurrentActionContext,
-    getLivelinessChecking, getPath, Hook, IAnyType, IdentifierCache, IDisposer, IJsonPatch, IMiddleware,
-    IMiddlewareEvent, IMiddlewareHandler, IReversibleJsonPatch, IStateTreeNode, IType, NodeLifeCycle,
-    normalizeIdentifier, ReferenceIdentifier, resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
+    addHiddenFinalProp, AnyNode, ArgumentTypes, BaseNode, convertChildNodesToArray, createActionInvoker, devMode,
+    EMPTY_OBJECT, escapeJsonPath, EventHandlers, extend, fail, freeze, getCurrentActionContext, getLivelinessChecking,
+    getPath, Hook, IAnyType, IdentifierCache, IDisposer, IJsonPatch, IMiddleware, IMiddlewareEvent, IMiddlewareHandler,
+    IReversibleJsonPatch, IStateTreeNode, IType, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier,
+    resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
 } from '../../internal';
+import ComplexType from '../../types/complex/ComplexType';
 
 let nextNodeId = 1;
 

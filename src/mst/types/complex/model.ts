@@ -8,12 +8,13 @@ import {
 
 import {
     _CustomOrOther, _NotCustomized, addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, ArrayType,
-    assertArg, assertIsString, ComplexType, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath,
-    fail, flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IAnyType,
+    assertArg, assertIsString, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath, fail,
+    flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IAnyType,
     IChildNodesMap, IJsonPatch, Instance, isPlainObject, isPrimitive, isStateTreeNode, isType, IType,
     IValidationContext, IValidationResult, MapType, mobxShallow, optional, typeCheckFailure, typecheckInternal,
     TypeFlags,
 } from '../../internal';
+import ComplexType from './ComplexType';
 
 const PRE_PROCESS_SNAPSHOT = 'preProcessSnapshot';
 const POST_PROCESS_SNAPSHOT = 'postProcessSnapshot';

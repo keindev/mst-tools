@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import {
     AnyObjectNode, assertArg, createScalarNode, fail, ISimpleType, isType, IValidationContext, IValidationResult,
-    ModelType, ScalarNode, SimpleType, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    ModelType, ScalarNode, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
+import SimpleType from '../complex/SimpleType';
 
 abstract class BaseIdentifierType<T> extends SimpleType<T, T, T> {
   readonly flags = TypeFlags.Identifier;

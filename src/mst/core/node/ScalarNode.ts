@@ -1,6 +1,7 @@
 import { action } from 'mobx';
 
-import { AnyObjectNode, BaseNode, devMode, fail, freeze, Hook, NodeLifeCycle, SimpleType } from '../../internal';
+import { AnyObjectNode, BaseNode, devMode, fail, freeze, Hook, NodeLifeCycle } from '../../internal';
+import SimpleType from '../../types/complex/SimpleType';
 
 export class ScalarNode<C, S, T> extends BaseNode<S, T> {
   // note about hooks:

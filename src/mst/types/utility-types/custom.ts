@@ -1,7 +1,8 @@
 import {
-    AnyObjectNode, createScalarNode, IType, IValidationContext, IValidationResult, SimpleType, typeCheckFailure,
-    typeCheckSuccess, TypeFlags,
+    AnyObjectNode, createScalarNode, IType, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess,
+    TypeFlags,
 } from '../../internal';
+import SimpleType from '../complex/SimpleType';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export interface CustomTypeOptions<S, T> {

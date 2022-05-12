@@ -6,13 +6,14 @@ import {
 } from 'mobx';
 
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, cannotDetermineSubtype, ComplexType,
+    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, cannotDetermineSubtype,
     createActionInvoker, devMode, EMPTY_OBJECT, escapeJsonPath, ExtractCSTWithSTN, fail, flattenTypeErrors,
     getContextForPath, getSnapshot, getStateTreeNode, IAnyModelType, IAnyStateTreeNode, IAnyType, IChildNodesMap,
     IHooksGetter, IJsonPatch, isMutable, isPlainObject, isStateTreeNode, isType, isValidIdentifier, IType,
     IValidationContext, IValidationResult, ModelType, normalizeIdentifier, ObjectNode, typeCheckFailure,
     typecheckInternal, TypeFlags,
 } from '../../internal';
+import ComplexType from './ComplexType';
 
 export interface IMapType<IT extends IAnyType>
   extends IType<IKeyValueMap<IT['CreationType']> | undefined, IKeyValueMap<IT['SnapshotType']>, IMSTMap<IT>> {
@@ -142,10 +143,6 @@ class MSTMap<IT extends IAnyType> extends ObservableMap<string, any> {
   }
 }
 
-/**
- * @internal
- * @hidden
- */
 export class MapType<IT extends IAnyType> extends ComplexType<
   IKeyValueMap<IT['CreationType']> | undefined,
   IKeyValueMap<IT['SnapshotType']>,

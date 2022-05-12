@@ -1,7 +1,8 @@
 import {
     AnyNode, AnyObjectNode, createScalarNode, fail, identity, ISimpleType, isInteger, isPrimitive, isType, IType,
-    IValidationContext, IValidationResult, SimpleType, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../internal';
+import SimpleType from './complex/SimpleType';
 
 // TODO: implement CoreType using types.custom ?
 /**

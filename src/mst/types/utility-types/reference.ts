@@ -4,8 +4,9 @@ import {
     AnyNode, AnyObjectNode, applyPatch, assertIsType, createScalarNode, devMode, fail, getIdentifier, getStateTreeNode,
     Hook, IAnyComplexType, IAnyStateTreeNode, IAnyType, IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode,
     isValidIdentifier, IType, IValidationContext, IValidationResult, maybe, NodeLifeCycle, normalizeIdentifier,
-    ReferenceIdentifier, SimpleType, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    ReferenceIdentifier, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
+import SimpleType from '../complex/SimpleType';
 
 export type OnReferenceInvalidatedEvent<STN extends IAnyStateTreeNode> = {
   cause: 'detach' | 'destroy' | 'invalidSnapshotReference';

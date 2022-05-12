@@ -4,7 +4,7 @@ import { action } from 'mobx';
 
 import {
     AnyObjectNode, assertArg, BaseNode, fail, getStateTreeNodeSafe, getType, IStateTreeNode, IValidationContext,
-    IValidationResult, ModelPrimitive, ScalarNode, typeCheckFailure, typecheckInternal, typeCheckSuccess,
+    IValidationResult, ModelPrimitive, typeCheckFailure, typecheckInternal, typeCheckSuccess,
 } from '../../internal';
 
 export enum TypeFlags {
@@ -257,45 +257,6 @@ BaseType.prototype.create = action(BaseType.prototype.create);
 export type AnyBaseType = BaseType<any, any, any, any>;
 
 export type ExtractNodeType<IT extends IAnyType> = IT extends BaseType<any, any, any, infer N> ? N : never;
-
-export abstract class SimpleType<C, S, T> extends BaseType<C, S, T, ScalarNode<C, S, T>> {
-  createNewInstance(snapshot: C): T {
-    return snapshot as any;
-  }
-
-  getSnapshot(node: this['N']): S {
-    return node.storedValue;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getSubTypes() {
-    return null;
-  }
-
-  getValue(node: this['N']): T {
-    // if we ever find a case where scalar nodes can be accessed without iterating through its parent
-    // uncomment this to make sure the parent chain is created when this is accessed
-    // if (node.parent) {
-    //     node.parent.createObservableInstanceIfNeeded()
-    // }
-    return node.storedValue;
-  }
-
-  reconcile(current: this['N'], newValue: C, parent: AnyObjectNode, subpath: string): this['N'] {
-    // reconcile only if type and value are still the same, and only if the node is not detaching
-    if (!current.isDetaching && current.type === this && current.storedValue === newValue) {
-      return current;
-    }
-
-    const res = this.instantiate(parent, subpath, undefined, newValue);
-
-    current.die(); // noop if detaching
-
-    return res;
-  }
-
-  abstract instantiate(parent: AnyObjectNode | null, subpath: string, environment: any, initialValue: C): this['N'];
-}
 
 /** Returns if a given value represents a type */
 export function isType(value: any): value is IAnyType {

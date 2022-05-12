@@ -1,7 +1,8 @@
 import {
     AnyObjectNode, createScalarNode, deepFreeze, IAnyType, isSerializable, isType, IType, IValidationContext,
-    IValidationResult, optional, SimpleType, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    IValidationResult, optional, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
+import SimpleType from '../complex/SimpleType';
 
 /**
  * @internal

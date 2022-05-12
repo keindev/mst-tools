@@ -1,4 +1,5 @@
-import { AnyNode, AnyObjectNode, ObjectNode, ScalarNode, SimpleType } from '../../internal';
+import { AnyNode, AnyObjectNode, ObjectNode, ScalarNode } from '../../internal';
+import SimpleType from '../../types/complex/SimpleType';
 
 export function createScalarNode<C, S, T>(
   type: SimpleType<C, S, T>,

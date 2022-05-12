@@ -1,8 +1,9 @@
 import {
     AnyObjectNode, createScalarNode, ISimpleType, isPrimitive, isType, IValidationContext, IValidationResult,
-    Primitives, SimpleType, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    Primitives, typeCheckFailure, typeCheckSuccess, TypeFlags,
 } from '../../internal';
 import { assertArg } from '../../utils';
+import SimpleType from '../complex/SimpleType';
 
 export class Literal<T> extends SimpleType<T, T, T> {
   readonly flags = TypeFlags.Literal;

@@ -5,12 +5,13 @@ import {
 } from 'mobx';
 
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, ComplexType,
-    convertChildNodesToArray, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail,
-    flattenTypeErrors, getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType, IChildNodesMap, IHooksGetter,
-    IJsonPatch, isArray, isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext,
-    IValidationResult, mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal, TypeFlags,
+    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, convertChildNodesToArray,
+    createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail, flattenTypeErrors,
+    getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType, IChildNodesMap, IHooksGetter, IJsonPatch, isArray,
+    isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext, IValidationResult,
+    mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal, TypeFlags,
 } from '../../internal';
+import ComplexType from './ComplexType';
 
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {
   concat(...items: ConcatArray<IT['Type']>[]): IT['Type'][];
