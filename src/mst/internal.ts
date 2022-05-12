@@ -14,7 +14,6 @@ export * from './core/action';
 export * from './core/actionContext';
 export * from './core/type/type-checker';
 export * from './core/node/IdentifierCache';
-export * from './core/node/create-node';
 export * from './core/node/node-utils';
 export * from './core/flow';
 export * from './core/json-patch';

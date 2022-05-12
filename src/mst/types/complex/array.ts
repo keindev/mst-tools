@@ -9,8 +9,8 @@ import {
     addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, convertChildNodesToArray,
     createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail, flattenTypeErrors,
     getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType, IChildNodesMap, IHooksGetter, IJsonPatch, isArray,
-    isNode, isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext, IValidationResult,
-    mobxShallow, ObjectNode, typeCheckFailure, typecheckInternal, TypeFlags,
+    isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext, IValidationResult, mobxShallow,
+    ObjectNode, ScalarNode, typeCheckFailure, typecheckInternal, TypeFlags,
 } from '../../internal';
 
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {
@@ -324,7 +324,7 @@ function reconcileArrayChildren<TT>(
 
     // for some reason, instead of newValue we got a node, fallback to the storedValue
     // TODO: https://github.com/mobxjs/mobx-state-tree/issues/340#issuecomment-325581681
-    if (isNode(newValue)) newValue = newValue.storedValue;
+    if (newValue instanceof ScalarNode || newValue instanceof ObjectNode) newValue = newValue.storedValue;
 
     if (!oldNode && !hasNewNode) {
       // both are empty, end
