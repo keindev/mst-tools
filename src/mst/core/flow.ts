@@ -1,11 +1,6 @@
 import { argsToArray, fail, setImmediateWithFallback } from '../utils';
-import {
-    getCurrentActionContext, getNextActionId, getParentActionContext, IMiddlewareEventType, runWithActionContext,
-} from './action';
+import { getCurrentActionContext, getNextActionId, IMiddlewareEventType, runWithActionContext } from './action';
 
-/**
- * @hidden
- */
 export type FlowReturn<R> = R extends Promise<infer T> ? T : R;
 
 /**
@@ -22,9 +17,6 @@ export function flow<R, Args extends any[]>(
 /**
  * @deprecated Not needed since TS3.6.
  * Used for TypeScript to make flows that return a promise return the actual promise result.
- *
- * @param val
- * @returns
  */
 export function castFlowReturn<T>(val: T): T {
   return val as any;
@@ -90,14 +82,14 @@ export function createFlowSpawner(name: string, generator: Function) {
   const spawner = function flowSpawner(this: any) {
     // Implementation based on https://github.com/tj/co/blob/master/index.js
     const runId = getNextActionId();
-    const parentContext = getCurrentActionContext()!;
+    const parentContext = getCurrentActionContext();
+    const parentActionContext = parentContext?.type === 'action' ? parentContext : parentContext?.parentActionEvent;
 
     if (!parentContext) throw fail('a mst flow must always have a parent context');
-
-    const parentActionContext = getParentActionContext(parentContext);
-
     if (!parentActionContext) throw fail('a mst flow must always have a parent action context');
 
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments;
     const contextBase = {
       name,
       id: runId,
@@ -110,9 +102,6 @@ export function createFlowSpawner(name: string, generator: Function) {
       parentActionEvent: parentActionContext,
     };
 
-    // eslint-disable-next-line prefer-rest-params
-    const args = arguments;
-
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     function wrap(fn: any, type: IMiddlewareEventType, arg: any) {
       fn.$mst_middleware = (spawner as any).$mst_middleware; // pick up any middleware attached to the flow
@@ -122,6 +111,7 @@ export function createFlowSpawner(name: string, generator: Function) {
     // eslint-disable-next-line max-lines-per-function
     return new Promise((resolve, reject) => {
       let gen: any;
+
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       const init = function asyncActionInit() {
         // eslint-disable-next-line prefer-spread, prefer-rest-params
@@ -145,12 +135,7 @@ export function createFlowSpawner(name: string, generator: Function) {
           }, "flow_resume", res);
         } catch (e) {
           // prettier-ignore
-          setImmediateWithFallback(() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            wrap(() => {
-              reject(e);
-            }, "flow_throw", e);
-          });
+          setImmediateWithFallback(() => wrap(() => reject(e), "flow_throw", e));
 
           return;
         }
@@ -171,13 +156,7 @@ export function createFlowSpawner(name: string, generator: Function) {
             ret = gen.throw(r);
           }, "flow_resume_error", err); // or yieldError?
         } catch (e) {
-          // prettier-ignore
-          setImmediateWithFallback(() => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            wrap(() => {
-              reject(e);
-            }, "flow_throw", e);
-          });
+          setImmediateWithFallback(() => wrap(() => reject(e), 'flow_throw', e));
 
           return;
         }
@@ -188,12 +167,7 @@ export function createFlowSpawner(name: string, generator: Function) {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       function next(ret: any) {
         if (ret.done) {
-          // prettier-ignore
-          setImmediateWithFallback(() => {
-            wrap((r: any) => {
-              resolve(r);
-            }, "flow_return", ret.value);
-          });
+          setImmediateWithFallback(() => wrap((r: any) => resolve(r), 'flow_return', ret.value));
 
           return;
         }

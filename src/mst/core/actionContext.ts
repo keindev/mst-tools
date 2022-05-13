@@ -16,15 +16,11 @@ export interface IActionContext {
   readonly tree: IAnyStateTreeNode;
 }
 
-/**
- * Returns the currently executing MST action context, or undefined if none.
- */
+/** Returns the currently executing MST action context, or undefined if none. */
 export function getRunningActionContext(): IActionContext | undefined {
   let current = getCurrentActionContext();
 
-  while (current && current.type !== 'action') {
-    current = current.parentActionEvent;
-  }
+  while (current && current?.type !== 'action') current = current.parentActionEvent;
 
   return current;
 }

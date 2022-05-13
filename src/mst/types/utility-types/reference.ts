@@ -375,10 +375,8 @@ export class CustomReferenceType<IT extends IAnyComplexType> extends BaseReferen
     environment: any,
     newValue: this['C'] | this['T']
   ): this['N'] {
-    const identifier = isStateTreeNode(newValue)
-      ? this.options.set(newValue as any, parent ? parent.storedValue : null)
-      : newValue;
-    const storedRefNode: this['N'] = super.instantiate(parent, subpath, environment, identifier as any);
+    const identifier = isStateTreeNode(newValue) ? this.options.set(newValue, parent?.storedValue ?? null) : newValue;
+    const storedRefNode = super.instantiate(parent, subpath, environment, identifier as any);
 
     this.watchTargetNodeForInvalidations(storedRefNode, identifier as string, this.options);
 
@@ -387,7 +385,7 @@ export class CustomReferenceType<IT extends IAnyComplexType> extends BaseReferen
 
   reconcile(current: this['N'], newValue: this['C'] | this['T'], parent: AnyObjectNode, subpath: string): this['N'] {
     const newIdentifier = isStateTreeNode(newValue)
-      ? this.options.set(newValue as any, current ? current.storedValue : null)
+      ? this.options.set(newValue, current?.storedValue ?? null)
       : newValue;
 
     if (!current.isDetaching && current.type === this && current.storedValue === newIdentifier) {

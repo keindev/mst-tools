@@ -76,20 +76,13 @@ export function runWithActionContext(context: IMiddlewareEvent, fn: Function): v
   }
 }
 
-export function getParentActionContext(parentContext: IMiddlewareEvent | undefined): IMiddlewareEvent | undefined {
-  if (!parentContext) return undefined;
-  if (parentContext.type === 'action') return parentContext;
-
-  return parentContext.parentActionEvent;
-}
-
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/ban-types
 export function createActionInvoker<T extends Function>(target: IAnyStateTreeNode, name: string, fn: T) {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const res = function () {
     const id = getNextActionId();
     const parentContext = currentActionContext;
-    const parentActionContext = getParentActionContext(parentContext);
+    const parentActionContext = parentContext?.type === 'action' ? parentContext : parentContext?.parentActionEvent;
 
     return runWithActionContext(
       {
