@@ -1,8 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import SimpleType from '../../core/type/SimpleType';
+import { TypeFlags } from '../../core/enums';
+import SimpleType, { ISimpleType } from '../../core/type/SimpleType';
+import { isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, assertArg, fail, ISimpleType, isType, IValidationContext, IValidationResult, ModelType, ScalarNode,
-    typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, assertArg, fail, IValidationContext, IValidationResult, ModelType, ScalarNode, typeCheckFailure,
+    typeCheckSuccess,
 } from '../../internal';
 
 abstract class BaseIdentifierType<T> extends SimpleType<T, T, T> {

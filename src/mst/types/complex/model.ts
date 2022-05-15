@@ -6,14 +6,17 @@ import {
     IObjectWillChange, makeObservable, observable, observe, set,
 } from 'mobx';
 
+import { TypeFlags } from '../../core/enums';
+import { Instance } from '../../core/state/Instance';
 import ComplexType from '../../core/type/ComplexType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { isType } from '../../core/type/type-utils';
 import {
     _CustomOrOther, _NotCustomized, addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, ArrayType,
     assertArg, assertIsString, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath, fail,
-    flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IAnyType,
-    IChildNodesMap, IJsonPatch, Instance, isPlainObject, isPrimitive, isStateTreeNode, isType, IType,
-    IValidationContext, IValidationResult, MapType, mobxShallow, optional, typeCheckFailure, typecheckInternal,
-    TypeFlags,
+    flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IChildNodesMap,
+    IJsonPatch, isPlainObject, isPrimitive, isStateTreeNode, IValidationContext, IValidationResult, MapType,
+    mobxShallow, optional, typeCheckFailure, typecheckInternal,
 } from '../../internal';
 
 const PRE_PROCESS_SNAPSHOT = 'preProcessSnapshot';

@@ -1,7 +1,8 @@
 import {
-    EMPTY_ARRAY, ExtractCSTWithSTN, fail, getStateTreeNode, IAnyType, isPrimitive, isPrimitiveType, isStateTreeNode,
-    isTypeCheckingEnabled,
+    EMPTY_ARRAY, fail, getStateTreeNode, isPrimitive, isPrimitiveType, isStateTreeNode, isTypeCheckingEnabled,
 } from '../../internal';
+import { IAnyType } from './Type';
+import { ExtractCSTWithSTN } from './type-utils';
 
 /** Validation context entry, this is, where the validation should run against which type */
 export interface IValidationContextEntry {

@@ -1,6 +1,8 @@
 import { types } from '../../index';
+import { Instance } from '../../mst/core/state/Instance';
+import { SnapshotIn } from '../../mst/core/state/Snapshot';
 import {
-    getIdentifier, IAnyComplexType, IAnyModelType, resolveIdentifier, resolvePath, SnapshotOrInstance, tryResolve,
+    getIdentifier, IAnyComplexType, IAnyModelType, resolveIdentifier, resolvePath, tryResolve,
 } from '../../mst/index';
 
 it('Identifiers should check refinement', () => {
@@ -18,7 +20,7 @@ it('Identifiers should check refinement', () => {
       models: types.array(Model),
     })
     .actions(self => ({
-      addModel(model: SnapshotOrInstance<typeof Model>) {
+      addModel(model: SnapshotIn<typeof Model> | Instance<typeof Model>) {
         self.models.push(model);
       },
     }));

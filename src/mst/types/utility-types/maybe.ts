@@ -1,4 +1,6 @@
-import { assertIsType, IAnyType, IType, nullType, optional, undefinedType, union } from '../../internal';
+import { IAnyType, IType } from '../../core/type/Type';
+import { assertIsType } from '../../core/type/type-utils';
+import { nullType, optional, undefinedType, union } from '../../internal';
 
 const optionalUndefinedType = optional(undefinedType, undefined);
 const optionalNullType = optional(nullType, null);

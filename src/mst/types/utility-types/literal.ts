@@ -1,9 +1,9 @@
-import SimpleType from '../../core/type/SimpleType';
-import {
-    ISimpleType, isPrimitive, isType, IValidationContext, IValidationResult, Primitives, typeCheckFailure,
-    typeCheckSuccess, TypeFlags,
-} from '../../internal';
+import { TypeFlags } from '../../core/enums';
+import SimpleType, { ISimpleType } from '../../core/type/SimpleType';
+import { isType } from '../../core/type/type-utils';
+import { isPrimitive, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess } from '../../internal';
 import { assertArg } from '../../utils';
+import { ModelPrimitive } from '../complex/model';
 
 export class Literal<T> extends SimpleType<T, T, T> {
   readonly flags = TypeFlags.Literal;
@@ -42,7 +42,7 @@ export class Literal<T> extends SimpleType<T, T, T> {
  * @param value The value to use in the strict equal check
  * @returns
  */
-export function literal<S extends Primitives>(value: S): ISimpleType<S> {
+export function literal<S extends ModelPrimitive | null | undefined>(value: S): ISimpleType<S> {
   // check that the given value is a primitive
   assertArg(value, isPrimitive, 'primitive', 1);
 

@@ -1,7 +1,10 @@
+import { TypeFlags } from '../../core/enums';
 import SimpleType from '../../core/type/SimpleType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, deepFreeze, IAnyType, isSerializable, isType, IType, IValidationContext, IValidationResult, optional,
-    typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, deepFreeze, isSerializable, IValidationContext, IValidationResult, optional, typeCheckFailure,
+    typeCheckSuccess,
 } from '../../internal';
 
 /**

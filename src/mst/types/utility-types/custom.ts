@@ -1,6 +1,8 @@
+import { TypeFlags } from '../../core/enums';
 import SimpleType from '../../core/type/SimpleType';
+import { IType } from '../../core/type/Type';
 import {
-    AnyObjectNode, IType, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess,
 } from '../../internal';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/indent */
-import {
-    AnyObjectNode, BaseType, cannotDetermineSubtype, devMode, ExtractNodeType, fail, IAnyType, isType,
-    IValidationContext, IValidationResult, typeCheckSuccess, TypeFlags,
-} from '../../internal';
+import { cannotDetermineSubtype } from '../../core/constants';
+import { TypeFlags } from '../../core/enums';
+import BaseType from '../../core/type/BaseType';
+import { IAnyType } from '../../core/type/Type';
+import { ExtractNodeType, isType } from '../../core/type/type-utils';
+import { AnyObjectNode, devMode, fail, IValidationContext, IValidationResult, typeCheckSuccess } from '../../internal';
 
 class Late<IT extends IAnyType> extends BaseType<
   IT['CreationType'],

@@ -3,7 +3,7 @@ import { configure } from 'mobx';
 import { types } from '../../index';
 import {
     cast, castToSnapshot, getParent, getRoot, getSnapshot, IAnyType, Instance, isFrozenType, isStateTreeNode, IType,
-    ModelPrimitive, ModelPropertiesDeclaration, SnapshotIn, SnapshotOrInstance, TypeOfValue, types as _types, unprotect,
+    ModelPrimitive, ModelPropertiesDeclaration, SnapshotIn, TypeOfValue, types as _types, unprotect,
 } from '../../mst/index';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -724,18 +724,18 @@ it('#951', () => {
 });
 
 // eslint-disable-next-line jest/expect-expect
-it('cast and SnapshotOrInstance', () => {
+it('cast, snapshot and instance', () => {
   const NumberArray = types.array(types.number);
   const NumberMap = types.map(types.number);
   const A = types.model('', { n: 123, n2: types.number, arr: NumberArray, map: NumberMap }).actions(self => ({
     // for primitives (although not needed)
-    setN(nn: SnapshotOrInstance<typeof self.n>) {
+    setN(nn: SnapshotIn<typeof self.n> | Instance<typeof self.n>) {
       self.n = cast(nn);
     },
-    setN2(nn: SnapshotOrInstance<typeof types.number>) {
+    setN2(nn: SnapshotIn<typeof types.number> | Instance<typeof types.number>) {
       self.n = cast(nn);
     },
-    setN3(nn: SnapshotOrInstance<number>) {
+    setN3(nn: SnapshotIn<number> | Instance<number>) {
       self.n = cast(nn);
     },
     setN4(nn: number) {
@@ -746,10 +746,10 @@ it('cast and SnapshotOrInstance', () => {
     },
 
     // for arrays
-    setArr(nn: SnapshotOrInstance<typeof self.arr>) {
+    setArr(nn: SnapshotIn<typeof self.arr> | Instance<typeof self.arr>) {
       self.arr = cast(nn);
     },
-    setArr2(nn: SnapshotOrInstance<typeof NumberArray>) {
+    setArr2(nn: SnapshotIn<typeof NumberArray> | Instance<typeof NumberArray>) {
       self.arr = cast(nn);
     },
     setArr3(nn: SnapshotIn<typeof NumberArray>) {
@@ -765,10 +765,10 @@ it('cast and SnapshotOrInstance', () => {
     },
 
     // for maps
-    setMap(nn: SnapshotOrInstance<typeof self.map>) {
+    setMap(nn: SnapshotIn<typeof self.map> | Instance<typeof self.map>) {
       self.map = cast(nn);
     },
-    setMap2(nn: SnapshotOrInstance<typeof NumberMap>) {
+    setMap2(nn: SnapshotIn<typeof NumberMap> | Instance<typeof NumberMap>) {
       self.map = cast(nn);
     },
     setMap3(nn: SnapshotIn<typeof NumberMap>) {
@@ -786,7 +786,7 @@ it('cast and SnapshotOrInstance', () => {
 
   const C = types.model('', { a: A, maybeA: types.maybe(A), maybeNullA: types.maybeNull(A) }).actions(self => ({
     // for submodels, using typeof self.var
-    setA(na: SnapshotOrInstance<typeof self.a>) {
+    setA(na: SnapshotIn<typeof self.a> | Instance<typeof self.a>) {
       self.a = cast(na);
 
       // we just want to check it compiles
@@ -797,7 +797,7 @@ it('cast and SnapshotOrInstance', () => {
       }
     },
     // for submodels, using the type directly
-    setA2(na: SnapshotOrInstance<typeof A>) {
+    setA2(na: SnapshotIn<typeof A> | Instance<typeof A>) {
       self.a = cast(na);
 
       // we just want to check it compiles
@@ -923,8 +923,9 @@ it('castToSnapshot', () => {
     brew2: { outside: { brew1: { inner: 222 } } },
   };
   const storeInstance = secondModel.create(storeSnapshot);
-  const storeSnapshotOrInstance1: SnapshotOrInstance<typeof secondModel> = secondModel.create(storeSnapshot);
-  const storeSnapshotOrInstance2: SnapshotOrInstance<typeof secondModel> = storeSnapshot;
+  const storeSnapshotOrInstance1: SnapshotIn<typeof secondModel> | Instance<typeof secondModel> =
+    secondModel.create(storeSnapshot);
+  const storeSnapshotOrInstance2: SnapshotIn<typeof secondModel> | Instance<typeof secondModel> = storeSnapshot;
 
   appMod.create({ aaa: castToSnapshot(storeInstance) });
   appMod.create({ aaa: castToSnapshot(storeSnapshot) });

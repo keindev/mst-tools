@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { _getGlobalState, defineProperty as mobxDefineProperty, isObservableArray, isObservableObject } from 'mobx';
 
-import { Primitives } from './core/type/type';
+import { ModelPrimitive } from './internal';
 
 const plainObjectString = Object.toString();
 
@@ -114,7 +114,7 @@ export function isMutable(value: any) {
  * @internal
  * @hidden
  */
-export function isPrimitive(value: any, includeDate = true): value is Primitives {
+export function isPrimitive(value: any, includeDate = true): value is ModelPrimitive | null | undefined {
   return (
     value === null ||
     value === undefined ||

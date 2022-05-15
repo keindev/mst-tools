@@ -1,4 +1,5 @@
-import { assertIsString, devMode, ISimpleType, literal, union } from '../../internal';
+import { ISimpleType } from '../../core/type/SimpleType';
+import { assertIsString, devMode, literal, union } from '../../internal';
 
 /** @hidden */
 export type UnionStringArray<T extends string[]> = T[number];

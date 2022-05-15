@@ -1,4 +1,9 @@
-import { AnyObjectNode, BaseType, ScalarNode } from '../../internal';
+import { AnyObjectNode, ScalarNode } from '../../internal';
+import BaseType from './BaseType';
+import { IType } from './Type';
+
+/** A simple type, this is, a type where the instance and the snapshot representation are the same. */
+export interface ISimpleType<T> extends IType<T, T, T> {}
 
 export default abstract class SimpleType<C, S, T> extends BaseType<C, S, T, ScalarNode<C, S, T>> {
   createNewInstance(snapshot: C): T {

@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
+import { TypeFlags } from '../../core/enums';
+import BaseType from '../../core/type/BaseType';
 import ComplexType from '../../core/type/ComplexType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { assertIsType, ExtractNodeType, isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, assertIsType, BaseType, devMode, ExtractNodeType, fail, getSnapshot, IAnyType, isStateTreeNode,
-    isType, IType, IValidationContext, IValidationResult, typeCheckFailure, TypeFlags,
+    AnyObjectNode, devMode, fail, getSnapshot, isStateTreeNode, IValidationContext, IValidationResult, typeCheckFailure,
 } from '../../internal';
 
 /** @hidden */

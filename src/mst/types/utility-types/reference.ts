@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-classes-per-file */
+import { TypeFlags } from '../../core/enums';
+import { IAnyComplexType } from '../../core/type/ComplexType';
 import SimpleType from '../../core/type/SimpleType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { assertIsType } from '../../core/type/type-utils';
 import {
-    AnyNode, AnyObjectNode, applyPatch, assertIsType, devMode, fail, getIdentifier, getStateTreeNode, Hook,
-    IAnyComplexType, IAnyStateTreeNode, IAnyType, IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode,
-    isValidIdentifier, IType, IValidationContext, IValidationResult, maybe, NodeLifeCycle, normalizeIdentifier,
-    ReferenceIdentifier, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyNode, AnyObjectNode, applyPatch, devMode, fail, getIdentifier, getStateTreeNode, Hook, IAnyStateTreeNode,
+    IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode, isValidIdentifier, IValidationContext,
+    IValidationResult, maybe, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier, typeCheckFailure,
+    typeCheckSuccess,
 } from '../../internal';
 
 export type OnReferenceInvalidatedEvent<STN extends IAnyStateTreeNode> = {

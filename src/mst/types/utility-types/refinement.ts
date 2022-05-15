@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
+import { TypeFlags } from '../../core/enums';
+import BaseType from '../../core/type/BaseType';
+import { IAnyType } from '../../core/type/Type';
+import { assertIsType, ExtractNodeType, isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, assertIsType, BaseType, ExtractNodeType, getStateTreeNode, IAnyType, isStateTreeNode, isType,
-    IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyObjectNode, getStateTreeNode, isStateTreeNode, IValidationContext, IValidationResult, typeCheckFailure,
+    typeCheckSuccess,
 } from '../../internal';
 import { assertIsFunction, assertIsString } from '../../utils';
 

@@ -1,9 +1,14 @@
 import { action } from 'mobx';
 
 import {
-    AnyNode, AnyObjectNode, BaseType, fail, getStateTreeNode, getStateTreeNodeSafe, getType, IAnyType, IChildNodesMap,
-    IJsonPatch, isMutable, isStateTreeNode, normalizeIdentifier, ObjectNode,
+    AnyNode, AnyObjectNode, fail, getStateTreeNode, getStateTreeNodeSafe, getType, IChildNodesMap, IJsonPatch,
+    isMutable, isStateTreeNode, normalizeIdentifier, ObjectNode,
 } from '../../internal';
+import BaseType from './BaseType';
+import { IAnyType, IType } from './Type';
+
+/** Any kind of complex type. */
+export interface IAnyComplexType extends IType<any, any, object> {}
 
 /** A complex type produces a MST node (Node in the state tree) */
 export default abstract class ComplexType<C, S, T> extends BaseType<C, S, T, ObjectNode<C, S, T>> {

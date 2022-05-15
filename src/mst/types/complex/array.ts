@@ -4,13 +4,15 @@ import {
     IObservableArray, observable, observe,
 } from 'mobx';
 
+import { TypeFlags } from '../../core/enums';
 import ComplexType from '../../core/type/ComplexType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { assertIsType, ExtractCSTWithSTN, isType } from '../../core/type/type-utils';
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, assertIsType, convertChildNodesToArray,
-    createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, ExtractCSTWithSTN, fail, flattenTypeErrors,
-    getContextForPath, getStateTreeNode, IAnyStateTreeNode, IAnyType, IChildNodesMap, IHooksGetter, IJsonPatch, isArray,
-    isPlainObject, isStateTreeNode, IStateTreeNode, isType, IType, IValidationContext, IValidationResult, mobxShallow,
-    ObjectNode, ScalarNode, typeCheckFailure, typecheckInternal, TypeFlags,
+    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, convertChildNodesToArray, createActionInvoker,
+    devMode, EMPTY_ARRAY, EMPTY_OBJECT, fail, flattenTypeErrors, getContextForPath, getStateTreeNode, IAnyStateTreeNode,
+    IChildNodesMap, IHooksGetter, IJsonPatch, isArray, isPlainObject, isStateTreeNode, IStateTreeNode,
+    IValidationContext, IValidationResult, mobxShallow, ObjectNode, ScalarNode, typeCheckFailure, typecheckInternal,
 } from '../../internal';
 
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {

@@ -19,6 +19,7 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
     initialSnapshot: C
   ) {
     super(simpleType, parent, subpath, environment);
+
     try {
       this.storedValue = simpleType.createNewInstance(initialSnapshot);
     } catch (e) {
@@ -47,10 +48,10 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
   }
 
   die(): void {
-    if (!this.isAlive || this.state === NodeLifeCycle.DETACHING) return;
-
-    this.aboutToDie();
-    this.finalizeDeath();
+    if (this.isAlive && this.state !== NodeLifeCycle.DETACHING) {
+      this.aboutToDie();
+      this.finalizeDeath();
+    }
   }
 
   finalizeCreation(): void {
@@ -69,22 +70,20 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
     const parentChanged = this.parent !== newParent;
     const subpathChanged = this.subpath !== subpath;
 
-    if (!parentChanged && !subpathChanged) {
-      return;
-    }
+    if (parentChanged && subpathChanged) {
+      if (devMode()) {
+        if (!subpath) throw fail('assertion failed: subpath expected');
+        if (!newParent) throw fail('assertion failed: parent expected');
+        if (parentChanged) throw fail('assertion failed: scalar nodes cannot change their parent');
+      }
 
-    if (devMode()) {
-      if (!subpath) throw fail('assertion failed: subpath expected');
-      if (!newParent) throw fail('assertion failed: parent expected');
-      if (parentChanged) throw fail('assertion failed: scalar nodes cannot change their parent');
+      this.environment = undefined;
+      this.baseSetParent(this.parent, subpath);
     }
-
-    this.environment = undefined;
-    this.baseSetParent(this.parent, subpath);
   }
 
   toString(): string {
-    const path = (this.isAlive ? this.path : this.pathUponDeath) || '<root>';
+    const path = (this.isAlive ? this.path : this.pathUponDeath) ?? '<root>';
 
     return `${this.type.name}@${path}${this.isAlive ? '' : ' [dead]'}`;
   }

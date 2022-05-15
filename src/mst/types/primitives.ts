@@ -1,7 +1,10 @@
-import SimpleType from '../core/type/SimpleType';
+import { TypeFlags } from '../core/enums';
+import SimpleType, { ISimpleType } from '../core/type/SimpleType';
+import { IType } from '../core/type/Type';
+import { isType } from '../core/type/type-utils';
 import {
-    AnyNode, fail, identity, ISimpleType, isInteger, isPrimitive, isType, IType, IValidationContext, IValidationResult,
-    typeCheckFailure, typeCheckSuccess, TypeFlags,
+    AnyNode, fail, identity, isInteger, isPrimitive, IValidationContext, IValidationResult, typeCheckFailure,
+    typeCheckSuccess,
 } from '../internal';
 
 // TODO: implement CoreType using types.custom ?

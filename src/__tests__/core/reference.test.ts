@@ -1,10 +1,11 @@
 import { autorun, configure, isObservable, reaction } from 'mobx';
 
 import { types } from '../../index';
+import { SnapshotIn } from '../../mst/core/state/Snapshot';
 import {
     addDisposer, applyPatch, applySnapshot, cast, castToReferenceSnapshot, destroy, detach, getRoot, getSnapshot,
-    IAnyModelType, Instance, isAlive, isStateTreeNode, isValidReference, onPatch, resolveIdentifier, SnapshotOrInstance,
-    SnapshotOut, tryReference, unprotect,
+    IAnyModelType, Instance, isAlive, isStateTreeNode, isValidReference, onPatch, resolveIdentifier, SnapshotOut,
+    tryReference, unprotect,
 } from '../../mst/index';
 
 it('should support prefixed paths in maps', () => {
@@ -286,7 +287,7 @@ it('self reference with a late type', () => {
       books: types.array(Book),
     })
     .actions(self => ({
-      addBook(book: SnapshotOrInstance<typeof Book>) {
+      addBook(book: SnapshotIn<typeof Book> | Instance<typeof Book>) {
         self.books.push(book);
       },
     }));
@@ -603,7 +604,7 @@ it('References in recursive structures', () => {
       data: types.maybeNull(types.reference(Folder)),
     })
     .actions(self => ({
-      addFolder(data: SnapshotOrInstance<typeof Folder>) {
+      addFolder(data: SnapshotIn<typeof Folder> | Instance<typeof Folder>) {
         const folder3 = Folder.create(data);
 
         getRoot<typeof Storage>(self).putFolderHelper(folder3);
@@ -617,7 +618,7 @@ it('References in recursive structures', () => {
       tree: Tree,
     })
     .actions(self => ({
-      putFolderHelper(aFolder: SnapshotOrInstance<typeof Folder>) {
+      putFolderHelper(aFolder: SnapshotIn<typeof Folder> | Instance<typeof Folder>) {
         self.objects.put(aFolder);
       },
     }));

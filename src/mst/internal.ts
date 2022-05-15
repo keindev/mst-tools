@@ -9,7 +9,7 @@ export * from './core/mst-operations';
 export * from './core/node/BaseNode';
 export * from './core/node/ScalarNode';
 export * from './core/node/ObjectNode';
-export * from './core/type/type';
+// export * from './core/type/type';
 export * from './core/action';
 export * from './core/actionContext';
 export * from './core/type/type-checker';

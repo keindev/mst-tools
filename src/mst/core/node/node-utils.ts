@@ -1,7 +1,10 @@
 import {
-    AnyNode, AnyObjectNode, assertArg, EMPTY_ARRAY, fail, IAnyComplexType, IAnyType, IChildNodesMap, Instance, IType,
-    joinJsonPath, ObjectNode, ScalarNode, splitJsonPath, StateTreeNodeValue,
+    AnyNode, AnyObjectNode, assertArg, EMPTY_ARRAY, fail, IChildNodesMap, joinJsonPath, ObjectNode, ScalarNode,
+    splitJsonPath,
 } from '../../internal';
+import { Instance } from '../state/Instance';
+import { IAnyComplexType } from '../type/ComplexType';
+import { IAnyType, IType, StateTreeNodeValue } from '../type/Type';
 
 export enum NodeLifeCycle {
   INITIALIZING, // setting up

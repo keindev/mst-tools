@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
+import { TypeFlags } from '../../core/enums';
+import BaseType from '../../core/type/BaseType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { assertIsType, isType } from '../../core/type/type-utils';
 import {
-    _NotCustomized, AnyObjectNode, assertArg, assertIsType, BaseType, devMode, fail, flattenTypeErrors, IAnyType,
-    IModelType, isPlainObject, isType, IType, IValidationContext, IValidationError, IValidationResult,
-    ModelCreationType2, ModelInstanceType, ModelProperties, ModelSnapshotType2, typeCheckFailure, typeCheckSuccess,
-    TypeFlags,
+    _NotCustomized, AnyObjectNode, assertArg, devMode, fail, flattenTypeErrors, IModelType, isPlainObject,
+    IValidationContext, IValidationError, IValidationResult, ModelCreationType2, ModelInstanceType, ModelProperties,
+    ModelSnapshotType2, typeCheckFailure, typeCheckSuccess,
 } from '../../internal';
 
 export type ITypeDispatcher = (snapshot: any) => IAnyType;

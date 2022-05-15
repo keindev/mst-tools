@@ -3,11 +3,14 @@ import { isComputedProp, isObservableProp } from 'mobx';
 
 import {
     AnyObjectNode, asArray, assertArg, assertIsFunction, assertIsNumber, assertIsStateTreeNode, assertIsString,
-    assertIsType, assertIsValidIdentifier, EMPTY_OBJECT, fail, freeze, getRelativePathBetweenNodes,
-    getRunningActionContext, getStateTreeNode, IActionContext, IAnyComplexType, IAnyModelType, IAnyStateTreeNode,
-    IAnyType, IDisposer, IJsonPatch, InvalidReferenceError, isModelType, isStateTreeNode, IStateTreeNode, IType,
-    normalizeIdentifier, ReferenceIdentifier, resolveNodeByPath, splitJsonPath, TypeOfValue,
+    assertIsValidIdentifier, EMPTY_OBJECT, fail, freeze, getRelativePathBetweenNodes, getRunningActionContext,
+    getStateTreeNode, IActionContext, IAnyModelType, IAnyStateTreeNode, IDisposer, IJsonPatch, InvalidReferenceError,
+    isModelType, isStateTreeNode, IStateTreeNode, normalizeIdentifier, ReferenceIdentifier, resolveNodeByPath,
+    splitJsonPath, TypeOfValue,
 } from '../internal';
+import { IAnyComplexType } from './type/ComplexType';
+import { IAnyType, IType } from './type/Type';
+import { assertIsType } from './type/type-utils';
 
 /** @hidden */
 export type TypeOrStateTreeNodeToStateTreeNode<T extends IAnyType | IAnyStateTreeNode> = T extends IType<

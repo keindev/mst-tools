@@ -1,6 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // import { IObservableArray, ObservableMap } from 'mobx';
 
+export { Instance } from './core/state/Instance';
+export { SnapshotIn, SnapshotOut } from './core/state/Snapshot';
+
+export { IType, IAnyType } from './core/type/Type';
+export { ISimpleType } from './core/type/SimpleType';
+export { IAnyComplexType } from './core/type/ComplexType';
+export { isType } from './core/type/type-utils';
+
 /* all code is initially loaded through internal, to avoid circular dep issues */
 export {
   IModelType,
@@ -10,11 +18,7 @@ export {
   IMapType,
   IMSTArray,
   IArrayType,
-  IType,
-  IAnyType,
   ModelPrimitive,
-  ISimpleType,
-  IAnyComplexType,
   IReferenceType,
   _CustomCSProcessor,
   _CustomOrOther,
@@ -58,10 +62,6 @@ export {
   ITypeUnion,
   CustomTypeOptions,
   UnionOptions,
-  Instance,
-  SnapshotIn,
-  SnapshotOut,
-  SnapshotOrInstance,
   TypeOrStateTreeNodeToStateTreeNode,
   UnionStringArray,
   getType,
@@ -111,7 +111,6 @@ export {
   cast,
   castToSnapshot,
   castToReferenceSnapshot,
-  isType,
   isArrayType,
   isFrozenType,
   isIdentifierType,

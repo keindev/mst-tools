@@ -3,11 +3,12 @@ import { _allowStateChangesInsideComputed, action, computed, IComputedValue, rea
 import {
     addHiddenFinalProp, AnyNode, ArgumentTypes, BaseNode, convertChildNodesToArray, createActionInvoker, devMode,
     EMPTY_OBJECT, escapeJsonPath, EventHandlers, extend, fail, freeze, getCurrentActionContext, getLivelinessChecking,
-    getPath, Hook, IAnyType, IdentifierCache, IDisposer, IJsonPatch, IMiddleware, IMiddlewareEvent, IMiddlewareHandler,
-    IReversibleJsonPatch, IStateTreeNode, IType, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier,
+    getPath, Hook, IdentifierCache, IDisposer, IJsonPatch, IMiddleware, IMiddlewareEvent, IMiddlewareHandler,
+    IReversibleJsonPatch, IStateTreeNode, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier,
     resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
 } from '../../internal';
 import ComplexType from '../type/ComplexType';
+import { IAnyType, IType } from '../type/Type';
 
 let nextNodeId = 1;
 
@@ -41,6 +42,12 @@ type InternalEventHandlers<S> = {
   [InternalEvents.Patch]: (patch: IJsonPatch, reversePatch: IJsonPatch) => void;
   [InternalEvents.Snapshot]: (snapshot: S) => void;
 };
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+interface IAssertAliveContext {
+  actionContext?: IMiddlewareEvent;
+  subpath?: string;
+}
 
 export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   _isRunningAction = false; // only relevant for root
@@ -171,7 +178,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     this._applySnapshot!(snapshot);
   }
 
-  assertAlive(context: AssertAliveContext): void {
+  assertAlive(context: IAssertAliveContext): void {
     const livelinessChecking = getLivelinessChecking();
 
     if (!this.isAlive && livelinessChecking !== 'ignore') {
@@ -186,7 +193,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     }
   }
 
-  assertWritable(context: AssertAliveContext): void {
+  assertWritable(context: IAssertAliveContext): void {
     this.assertAlive(context);
 
     if (!this.isRunningAction() && this.isProtected) {
@@ -498,7 +505,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
     return this.type.getSnapshot(this);
   }
 
-  private _getAssertAliveError(context: AssertAliveContext): string {
+  private _getAssertAliveError(context: IAssertAliveContext): string {
     const escapedPath = this.getEscapedPath(false) || this.pathUponDeath || '';
     const subpath = (context.subpath && escapeJsonPath(context.subpath)) || '';
 
@@ -636,9 +643,3 @@ ObjectNode.prototype.detach = action(ObjectNode.prototype.detach);
 ObjectNode.prototype.die = action(ObjectNode.prototype.die);
 
 export type AnyObjectNode = ObjectNode<any, any, any>;
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface AssertAliveContext {
-  actionContext?: IMiddlewareEvent;
-  subpath?: string;
-}

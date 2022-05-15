@@ -5,14 +5,17 @@ import {
     ObservableMap, observe, values,
 } from 'mobx';
 
+import { cannotDetermineSubtype } from '../../core/constants';
+import { TypeFlags } from '../../core/enums';
 import ComplexType from '../../core/type/ComplexType';
+import { IAnyType, IType } from '../../core/type/Type';
+import { ExtractCSTWithSTN, isType } from '../../core/type/type-utils';
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, cannotDetermineSubtype,
-    createActionInvoker, devMode, EMPTY_OBJECT, escapeJsonPath, ExtractCSTWithSTN, fail, flattenTypeErrors,
-    getContextForPath, getSnapshot, getStateTreeNode, IAnyModelType, IAnyStateTreeNode, IAnyType, IChildNodesMap,
-    IHooksGetter, IJsonPatch, isMutable, isPlainObject, isStateTreeNode, isType, isValidIdentifier, IType,
-    IValidationContext, IValidationResult, ModelType, normalizeIdentifier, ObjectNode, typeCheckFailure,
-    typecheckInternal, TypeFlags,
+    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, createActionInvoker, devMode,
+    EMPTY_OBJECT, escapeJsonPath, fail, flattenTypeErrors, getContextForPath, getSnapshot, getStateTreeNode,
+    IAnyModelType, IAnyStateTreeNode, IChildNodesMap, IHooksGetter, IJsonPatch, isMutable, isPlainObject,
+    isStateTreeNode, isValidIdentifier, IValidationContext, IValidationResult, ModelType, normalizeIdentifier,
+    ObjectNode, typeCheckFailure, typecheckInternal,
 } from '../../internal';
 
 export interface IMapType<IT extends IAnyType>
@@ -50,7 +53,7 @@ export interface IMSTMap<IT extends IAnyType> {
   values(): IterableIterator<IT['Type']>;
 }
 
-const needsIdentifierError = `Map.put can only be used to store complex values that have an identifier type attribute`;
+const needsIdentifierError = 'Map.put can only be used to store complex values that have an identifier type attribute';
 
 function tryCollectModelTypes(type: IAnyType, modelTypes: Array<IAnyModelType>): boolean {
   const subtypes = type.getSubTypes();

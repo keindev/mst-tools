@@ -1,8 +1,9 @@
 import { createAtom, IAtom } from 'mobx';
 
 import {
-    AnyObjectNode, devMode, escapeJsonPath, EventHandlers, fail, Hook, IAnyType, IDisposer, NodeLifeCycle,
+    AnyObjectNode, devMode, escapeJsonPath, EventHandlers, fail, Hook, IDisposer, NodeLifeCycle,
 } from '../../internal';
+import { IAnyType } from '../type/Type';
 
 type IHookSubscribers = {
   [key in Hook]: (node: AnyNode, hook: Hook) => void;
