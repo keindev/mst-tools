@@ -34,3 +34,16 @@ export enum TypeFlags {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   SnapshotProcessor = 1 << 19,
 }
+
+export enum NodeLifeCycle {
+  // setting up
+  INITIALIZING,
+  // afterCreate has run
+  CREATED,
+  // afterAttach has run
+  FINALIZED,
+  // being detached from the tree
+  DETACHING,
+  // no coming back from this one
+  DEAD,
+}

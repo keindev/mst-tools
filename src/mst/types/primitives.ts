@@ -3,8 +3,7 @@ import SimpleType, { ISimpleType } from '../core/type/SimpleType';
 import { IType } from '../core/type/Type';
 import { isType } from '../core/type/type-utils';
 import {
-    AnyNode, fail, identity, isInteger, isPrimitive, IValidationContext, IValidationResult, typeCheckFailure,
-    typeCheckSuccess,
+    AnyNode, fail, isPrimitive, IValidationContext, IValidationResult, typeCheckFailure, typeCheckSuccess,
 } from '../internal';
 
 // TODO: implement CoreType using types.custom ?
@@ -20,7 +19,7 @@ export class CoreType<C, S, T> extends SimpleType<C, S, T> {
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
     private readonly checker: (value: C) => boolean,
     // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-    private readonly initializer: (v: C) => T = identity
+    private readonly initializer: (v: C) => T = (_: any) => _ as T
   ) {
     super(name);
     this.flags = flags;
@@ -96,7 +95,7 @@ export const number: ISimpleType<number> = new CoreType<number, number, number>(
  * ```
  */
 export const integer: ISimpleType<number> = new CoreType<number, number, number>('integer', TypeFlags.Integer, v =>
-  isInteger(v)
+  Number.isInteger(v)
 );
 
 /**

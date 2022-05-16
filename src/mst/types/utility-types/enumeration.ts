@@ -1,5 +1,6 @@
+import { DEV_MODE } from '../../core/constants';
 import { ISimpleType } from '../../core/type/SimpleType';
-import { assertIsString, devMode, literal, union } from '../../internal';
+import { assertIsString, literal, union } from '../../internal';
 
 /** @hidden */
 export type UnionStringArray<T extends string[]> = T[number];
@@ -31,7 +32,7 @@ export function enumeration(name: string | string[], options?: any): ISimpleType
   const realOptions: string[] = typeof name === 'string' ? options! : name;
 
   // check all options
-  if (devMode()) {
+  if (DEV_MODE) {
     realOptions.forEach((option, i) => {
       assertIsString(option, i + 1);
     });

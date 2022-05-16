@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
     "@tagproject/docs-shared-config": "^1.0.4",
     "@tagproject/ts-library-shared-config": "^1.0.7",
     "@tagproject/vscode-shared-config": "^2.0.2",

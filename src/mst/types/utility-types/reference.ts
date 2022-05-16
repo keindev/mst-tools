@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-classes-per-file */
-import { TypeFlags } from '../../core/enums';
+import { DEV_MODE } from '../../core/constants';
+import { NodeLifeCycle, TypeFlags } from '../../core/enums';
 import { IAnyComplexType } from '../../core/type/ComplexType';
 import SimpleType from '../../core/type/SimpleType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { assertIsType } from '../../core/type/type-utils';
 import {
-    AnyNode, AnyObjectNode, applyPatch, devMode, fail, getIdentifier, getStateTreeNode, Hook, IAnyStateTreeNode,
-    IDisposer, IMaybe, isModelType, isStateTreeNode, IStateTreeNode, isValidIdentifier, IValidationContext,
-    IValidationResult, maybe, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier, typeCheckFailure,
-    typeCheckSuccess,
+    AnyNode, AnyObjectNode, applyPatch, fail, getIdentifier, getStateTreeNode, Hook, IAnyStateTreeNode, IDisposer,
+    IMaybe, isModelType, isStateTreeNode, IStateTreeNode, isValidIdentifier, IValidationContext, IValidationResult,
+    maybe, normalizeIdentifier, ReferenceIdentifier, typeCheckFailure, typeCheckSuccess,
 } from '../../internal';
 
 export type OnReferenceInvalidatedEvent<STN extends IAnyStateTreeNode> = {
@@ -434,7 +434,7 @@ export interface IReferenceType<IT extends IAnyComplexType>
 export function reference<IT extends IAnyComplexType>(subType: IT, options?: ReferenceOptions<IT>): IReferenceType<IT> {
   assertIsType(subType, 1);
 
-  if (devMode()) {
+  if (DEV_MODE) {
     // eslint-disable-next-line prefer-rest-params
     if (arguments.length === 2 && typeof arguments[1] === 'string') {
       // istanbul ignore next
@@ -446,7 +446,7 @@ export function reference<IT extends IAnyComplexType>(subType: IT, options?: Ref
   const onInvalidated = options ? (options as ReferenceOptionsOnInvalidated<IT>).onInvalidated : undefined;
 
   if (getSetOptions && (getSetOptions.get || getSetOptions.set)) {
-    if (devMode()) {
+    if (DEV_MODE) {
       if (!getSetOptions.get || !getSetOptions.set) {
         throw fail("reference options must either contain both a 'get' and a 'set' method or none of them");
       }

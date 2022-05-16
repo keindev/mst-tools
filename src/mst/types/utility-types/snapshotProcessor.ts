@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/indent */
+import { DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import BaseType from '../../core/type/BaseType';
 import ComplexType from '../../core/type/ComplexType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { assertIsType, ExtractNodeType, isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, devMode, fail, getSnapshot, isStateTreeNode, IValidationContext, IValidationResult, typeCheckFailure,
+    AnyObjectNode, fail, getSnapshot, isStateTreeNode, IValidationContext, IValidationResult, typeCheckFailure,
 } from '../../internal';
 
 /** @hidden */
@@ -230,7 +231,7 @@ export function snapshotProcessor<IT extends IAnyType, CustomC = _NotCustomized,
 ): ISnapshotProcessor<IT, CustomC, CustomS> {
   assertIsType(type, 1);
 
-  if (devMode()) {
+  if (DEV_MODE) {
     if (processors.postProcessor && typeof processors.postProcessor !== 'function') {
       // istanbul ignore next
       // eslint-disable-next-line jest/no-jasmine-globals

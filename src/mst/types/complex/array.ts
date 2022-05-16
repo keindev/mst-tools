@@ -4,16 +4,18 @@ import {
     IObservableArray, observable, observe,
 } from 'mobx';
 
+import { DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import ComplexType from '../../core/type/ComplexType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { assertIsType, ExtractCSTWithSTN, isType } from '../../core/type/type-utils';
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, convertChildNodesToArray, createActionInvoker,
-    devMode, EMPTY_ARRAY, EMPTY_OBJECT, fail, flattenTypeErrors, getContextForPath, getStateTreeNode, IAnyStateTreeNode,
-    IChildNodesMap, IHooksGetter, IJsonPatch, isArray, isPlainObject, isStateTreeNode, IStateTreeNode,
-    IValidationContext, IValidationResult, mobxShallow, ObjectNode, ScalarNode, typeCheckFailure, typecheckInternal,
+    AnyNode, AnyObjectNode, createActionInvoker, fail, flattenTypeErrors, getContextForPath, getStateTreeNode,
+    IAnyStateTreeNode, IChildNodesMap, IHooksGetter, IJsonPatch, isArray, isPlainObject, isStateTreeNode,
+    IStateTreeNode, IValidationContext, IValidationResult, mobxShallow, ObjectNode, ScalarNode, typeCheckFailure,
+    typecheckInternal,
 } from '../../internal';
+import { defineHiddenProperty } from '../../utils';
 
 export interface IMSTArray<IT extends IAnyType> extends IObservableArray<IT['Type']> {
   concat(...items: ConcatArray<IT['Type']>[]): IT['Type'][];
@@ -78,7 +80,7 @@ export class ArrayType<IT extends IAnyType> extends ComplexType<
   }
 
   createNewInstance(childNodes: IChildNodesMap): this['T'] {
-    return observable.array(convertChildNodesToArray(childNodes), mobxShallow) as this['T'];
+    return observable.array(Object.values(childNodes), mobxShallow) as this['T'];
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -139,10 +141,12 @@ export class ArrayType<IT extends IAnyType> extends ComplexType<
       const hooks = initializer(instance);
 
       Object.keys(hooks).forEach(name => {
-        const hook = hooks[name as keyof typeof hooks]!;
-        const actionInvoker = createActionInvoker(instance as IAnyStateTreeNode, name, hook);
-
-        (!devMode() ? addHiddenFinalProp : addHiddenWritableProp)(instance, name, actionInvoker);
+        defineHiddenProperty(
+          instance,
+          name,
+          createActionInvoker(instance as IAnyStateTreeNode, name, hooks[name as keyof typeof hooks]!),
+          DEV_MODE
+        );
       });
     });
 
@@ -167,7 +171,7 @@ export class ArrayType<IT extends IAnyType> extends ComplexType<
   }
 
   getDefaultSnapshot(): this['C'] {
-    return EMPTY_ARRAY as this['C'];
+    return [];
   }
 
   getSnapshot(node: this['N']): this['S'] {
@@ -401,7 +405,7 @@ function valueAsNode(childType: IAnyType, parent: AnyObjectNode, subpath: string
     if (isStateTreeNode(newValue)) {
       const childNode = getStateTreeNode(newValue);
 
-      childNode.assertAlive(EMPTY_OBJECT);
+      childNode.assertAlive({});
 
       // the node lives here
       if (childNode.parent !== null && childNode.parent === parent) {

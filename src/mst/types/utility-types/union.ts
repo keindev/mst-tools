@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable max-len */
+import { DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import BaseType from '../../core/type/BaseType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { assertIsType, isType } from '../../core/type/type-utils';
 import {
-    _NotCustomized, AnyObjectNode, assertArg, devMode, fail, flattenTypeErrors, IModelType, isPlainObject,
-    IValidationContext, IValidationError, IValidationResult, ModelCreationType2, ModelInstanceType, ModelProperties,
-    ModelSnapshotType2, typeCheckFailure, typeCheckSuccess,
+    _NotCustomized, AnyObjectNode, assertArg, fail, flattenTypeErrors, IModelType, isPlainObject, IValidationContext,
+    IValidationError, IValidationResult, ModelCreationType2, ModelInstanceType, ModelProperties, ModelSnapshotType2,
+    typeCheckFailure, typeCheckSuccess,
 } from '../../internal';
 
 export type ITypeDispatcher = (snapshot: any) => IAnyType;
@@ -230,7 +231,7 @@ export function union(optionsOrType: UnionOptions | IAnyType, ...otherTypes: IAn
   const name = '(' + types.map(type => type.name).join(' | ') + ')';
 
   // check all options
-  if (devMode()) {
+  if (DEV_MODE) {
     if (options) assertArg(options, o => isPlainObject(o), 'object { eager?: boolean, dispatcher?: Function }', 1);
 
     types.forEach((type, i) => assertIsType(type, options ? i + 2 : i + 1));

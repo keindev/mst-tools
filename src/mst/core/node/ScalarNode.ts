@@ -1,6 +1,8 @@
 import { action } from 'mobx';
 
-import { AnyObjectNode, BaseNode, devMode, fail, freeze, Hook, NodeLifeCycle } from '../../internal';
+import { AnyObjectNode, BaseNode, fail, freeze, Hook } from '../../internal';
+import { DEV_MODE } from '../constants';
+import { NodeLifeCycle } from '../enums';
 import SimpleType from '../type/SimpleType';
 
 export class ScalarNode<C, S, T> extends BaseNode<S, T> {
@@ -71,7 +73,7 @@ export class ScalarNode<C, S, T> extends BaseNode<S, T> {
     const subpathChanged = this.subpath !== subpath;
 
     if (parentChanged && subpathChanged) {
-      if (devMode()) {
+      if (DEV_MODE) {
         if (!subpath) throw fail('assertion failed: subpath expected');
         if (!newParent) throw fail('assertion failed: parent expected');
         if (parentChanged) throw fail('assertion failed: scalar nodes cannot change their parent');

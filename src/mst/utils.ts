@@ -1,84 +1,36 @@
 /* eslint-disable max-classes-per-file */
 import { _getGlobalState, defineProperty as mobxDefineProperty, isObservableArray, isObservableObject } from 'mobx';
 
+import { DEV_MODE } from './core/constants';
 import { ModelPrimitive } from './internal';
 
 const plainObjectString = Object.toString();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare const global: any;
-
-export const EMPTY_ARRAY: ReadonlyArray<any> = Object.freeze([]);
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const EMPTY_OBJECT: {} = Object.freeze({});
-
 export const mobxShallow = _getGlobalState().useProxies ? { deep: false } : { deep: false, proxy: false };
 Object.freeze(mobxShallow);
 
-/**
- * A generic disposer.
- */
+/** A generic disposer. */
 export type IDisposer = () => void;
 
 export function fail(message = 'Illegal state'): Error {
   return new Error('[mobx-state-tree] ' + message);
 }
 
-export function identity(_: any): any {
-  return _;
+export function isArray(value: any): value is any[] {
+  return Array.isArray(value) || isObservableArray(value);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-empty-function
-export function noop() {}
-
-/**
- * pollyfill (for IE) suggested in MDN:
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
- * @internal
- * @hidden
- */
-export const isInteger =
-  Number.isInteger ||
-  function (value: any) {
-    return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
-  };
-
-export function isArray(val: any): val is any[] {
-  return Array.isArray(val) || isObservableArray(val);
-}
-
-/**
- * @internal
- * @hidden
- */
 export function asArray<T>(val: undefined | null | T | T[] | ReadonlyArray<T>): T[] {
-  if (!val) return EMPTY_ARRAY as any as T[];
-  if (isArray(val)) return val as T[];
+  if (!val) return [];
+  if (isArray(val)) return val;
 
   return [val] as T[];
 }
 
 export function extend<A, B>(a: A, b: B): A & B;
-/**
- * @internal
- * @hidden
- */
 export function extend<A, B, C>(a: A, b: B, c: C): A & B & C;
-/**
- * @internal
- * @hidden
- */
 export function extend<A, B, C, D>(a: A, b: B, c: C, d: D): A & B & C & D;
-/**
- * @internal
- * @hidden
- */
 export function extend(a: any, ...b: any[]): any;
-/**
- * @internal
- * @hidden
- */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function extend(a: any, ...b: any[]) {
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -91,10 +43,6 @@ export function extend(a: any, ...b: any[]) {
   return a;
 }
 
-/**
- * @internal
- * @hidden
- */
 export function isPlainObject(value: any): value is { [k: string]: any } {
   if (value === null || typeof value !== 'object') return false;
 
@@ -110,10 +58,6 @@ export function isMutable(value: any) {
   return value !== null && typeof value === 'object' && !(value instanceof Date) && !(value instanceof RegExp);
 }
 
-/**
- * @internal
- * @hidden
- */
 export function isPrimitive(value: any, includeDate = true): value is ModelPrimitive | null | undefined {
   return (
     value === null ||
@@ -125,24 +69,16 @@ export function isPrimitive(value: any, includeDate = true): value is ModelPrimi
   );
 }
 
-/**
- * @internal
- * @hidden
- * Freeze a value and return it (if not in production)
- */
+/** Freeze a value and return it (if not in production) */
 export function freeze<T>(value: T): T {
-  if (!devMode()) return value;
+  if (!DEV_MODE) return value;
 
   return isPrimitive(value) || isObservableArray(value) ? value : Object.freeze(value);
 }
 
-/**
- * @internal
- * @hidden
- * Recursively freeze a value (if not in production)
- */
+/** Recursively freeze a value (if not in production) */
 export function deepFreeze<T>(value: T): T {
-  if (!devMode()) return value;
+  if (!DEV_MODE) return value;
   freeze(value);
 
   if (isPlainObject(value)) {
@@ -156,19 +92,6 @@ export function deepFreeze<T>(value: T): T {
   return value;
 }
 
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function isSerializable(value: any) {
-  return typeof value !== 'function';
-}
-
-/**
- * @internal
- * @hidden
- */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function defineProperty(object: any, key: PropertyKey, descriptor: PropertyDescriptor) {
   // eslint-disable-next-line no-unused-expressions
@@ -177,22 +100,8 @@ export function defineProperty(object: any, key: PropertyKey, descriptor: Proper
     : Object.defineProperty(object, key, descriptor);
 }
 
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function addHiddenFinalProp(object: any, propName: string, value: any) {
-  defineProperty(object, propName, { enumerable: false, writable: false, configurable: true, value });
-}
-
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function addHiddenWritableProp(object: any, propName: string, value: any) {
-  defineProperty(object, propName, { enumerable: false, writable: true, configurable: true, value });
+export function defineHiddenProperty(object: any, propName: string, value: any, writable = false): void {
+  defineProperty(object, propName, { enumerable: false, writable, configurable: true, value });
 }
 
 /**
@@ -342,12 +251,7 @@ export function argsToArray(args: IArguments): any[] {
   return res;
 }
 
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function stringStartsWith(str: string, beginning: string) {
+export function stringStartsWith(str: string, beginning: string): boolean {
   return str.indexOf(beginning) === 0;
 }
 
@@ -358,13 +262,9 @@ export function stringStartsWith(str: string, beginning: string) {
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type DeprecatedFunction = Function & { ids?: { [id: string]: true } };
 
-/**
- * @internal
- * @hidden
- */
 export const deprecated: DeprecatedFunction = function (id: string, message: string): void {
   // skip if running production
-  if (!devMode()) return;
+  if (!DEV_MODE) return;
   // warn if hasn't been warned before
   // eslint-disable-next-line no-prototype-builtins
   if (deprecated.ids && !deprecated.ids.hasOwnProperty(id)) {
@@ -375,41 +275,22 @@ export const deprecated: DeprecatedFunction = function (id: string, message: str
 };
 deprecated.ids = {};
 
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function warnError(msg: string) {
+export function warnError(msg: string): void {
   console.warn(new Error(`[mobx-state-tree] ${msg}`));
 }
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function isTypeCheckingEnabled() {
-  return devMode() || (typeof process !== 'undefined' && process.env && process.env.ENABLE_TYPE_CHECK === 'true');
+
+export function isTypeCheckingEnabled(): boolean {
+  return DEV_MODE || (typeof process !== 'undefined' && process.env && process.env.ENABLE_TYPE_CHECK === 'true');
 }
 
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function devMode() {
-  return process.env.NODE_ENV !== 'production';
-}
-
-/**
- * @internal
- * @hidden
- */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function assertArg<T>(value: T, fn: (value: T) => boolean, typeName: string, argNumber: number | number[]) {
-  if (devMode()) {
+export function assertArg<T>(
+  value: T,
+  fn: (value: T) => boolean,
+  typeName: string,
+  argNumber: number | number[]
+): void {
+  if (DEV_MODE) {
     if (!fn(value)) {
-      // istanbul ignore next
       throw fail(`expected ${typeName} as argument ${asArray(argNumber).join(' or ')}, got ${value} instead`);
     }
   }
@@ -428,31 +309,19 @@ export function assertIsFunction(value: Function, argNumber: number | number[]) 
 export function assertIsNumber(value: number, argNumber: number | number[], min?: number, max?: number) {
   assertArg(value, n => typeof n === 'number', 'number', argNumber);
 
-  if (min !== undefined) {
-    assertArg(value, n => n >= min, `number greater than ${min}`, argNumber);
-  }
-
-  if (max !== undefined) {
-    assertArg(value, n => n <= max, `number lesser than ${max}`, argNumber);
-  }
+  if (min !== undefined) assertArg(value, n => n >= min, `number greater than ${min}`, argNumber);
+  if (max !== undefined) assertArg(value, n => n <= max, `number lesser than ${max}`, argNumber);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function assertIsString(value: string, argNumber: number | number[], canBeEmpty = true) {
   assertArg(value, s => typeof s === 'string', 'string', argNumber);
 
-  if (!canBeEmpty) {
-    assertArg(value, s => s !== '', 'not empty string', argNumber);
-  }
+  if (!canBeEmpty) assertArg(value, s => s !== '', 'not empty string', argNumber);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function setImmediateWithFallback(fn: (...args: any[]) => void) {
-  if (typeof queueMicrotask === 'function') {
-    queueMicrotask(fn);
-  } else if (typeof setImmediate === 'function') {
-    setImmediate(fn);
-  } else {
-    setTimeout(fn, 1);
-  }
+export function setImmediateWithFallback(fn: (...args: any[]) => void): void {
+  if (typeof queueMicrotask === 'function') queueMicrotask(fn);
+  else if (typeof setImmediate === 'function') setImmediate(fn);
+  else setTimeout(fn, 1);
 }

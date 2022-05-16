@@ -1,6 +1,5 @@
 import { types } from '../../index';
 import { applySnapshot, getSnapshot } from '../../mst/index';
-import { isInteger } from '../../mst/utils';
 
 it('Date instance can be reused', () => {
   const Model = types.model('', {
@@ -46,12 +45,6 @@ it('Date can be rehydrated using unix timestamp', () => {
   applySnapshot(store, { date: newTime });
   expect(store.date.getTime()).toBe(newTime);
   expect(getSnapshot(store).date).toBe(newTime);
-});
-
-it('isInteger polyfill', () => {
-  expect(isInteger(5)).toBe(true);
-  expect(isInteger(-5)).toBe(true);
-  expect(isInteger(5.2)).toBe(false);
 });
 
 test("Default inference for integers is 'number'", () => {

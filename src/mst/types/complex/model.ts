@@ -6,18 +6,19 @@ import {
     IObjectWillChange, makeObservable, observable, observe, set,
 } from 'mobx';
 
+import { DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import { Instance } from '../../core/state/Instance';
 import ComplexType from '../../core/type/ComplexType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { isType } from '../../core/type/type-utils';
 import {
-    _CustomOrOther, _NotCustomized, addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, ArrayType,
-    assertArg, assertIsString, createActionInvoker, devMode, EMPTY_ARRAY, EMPTY_OBJECT, escapeJsonPath, fail,
-    flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode, Hook, IChildNodesMap,
-    IJsonPatch, isPlainObject, isPrimitive, isStateTreeNode, IValidationContext, IValidationResult, MapType,
-    mobxShallow, optional, typeCheckFailure, typecheckInternal,
+    _CustomOrOther, _NotCustomized, AnyNode, AnyObjectNode, ArrayType, assertArg, assertIsString, createActionInvoker,
+    escapeJsonPath, fail, flattenTypeErrors, freeze, getContextForPath, getPrimitiveFactoryFromValue, getStateTreeNode,
+    Hook, IChildNodesMap, IJsonPatch, isPlainObject, isPrimitive, isStateTreeNode, IValidationContext,
+    IValidationResult, MapType, mobxShallow, optional, typeCheckFailure, typecheckInternal,
 } from '../../internal';
+import { defineHiddenProperty } from '../../utils';
 
 const PRE_PROCESS_SNAPSHOT = 'preProcessSnapshot';
 const POST_PROCESS_SNAPSHOT = 'postProcessSnapshot';
@@ -202,7 +203,7 @@ export interface ModelTypeConfig {
 const defaultObjectOptions = {
   name: 'AnonymousModel',
   properties: {},
-  initializers: EMPTY_ARRAY,
+  initializers: [],
 };
 
 // eslint-disable-next-line max-lines-per-function
@@ -246,13 +247,13 @@ function toPropertiesObject(declaredProps: ModelPropertiesDeclaration): ModelPro
     } else if (isType(value)) {
       return props;
       // its a function, maybe the user wanted a view?
-    } else if (devMode() && typeof value === 'function') {
+    } else if (DEV_MODE && typeof value === 'function') {
       throw fail(
         // eslint-disable-next-line max-len
         `Invalid type definition for property '${key}', it looks like you passed a function. Did you forget to invoke it, or did you intend to declare a view / action?`
       );
       // no other complex values
-    } else if (devMode() && typeof value === 'object') {
+    } else if (DEV_MODE && typeof value === 'object') {
       throw fail(
         // eslint-disable-next-line max-len
         `Invalid type definition for property '${key}', it looks like you passed an object. Try passing another model type or a types.frozen.`
@@ -374,7 +375,7 @@ export class ModelType<
   }
 
   createNewInstance(childNodes: IChildNodesMap): this['T'] {
-    return observable.object(childNodes, EMPTY_OBJECT, mobxShallow) as any;
+    return observable.object(childNodes, {}, mobxShallow) as any;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/ban-types
@@ -404,7 +405,7 @@ export class ModelType<
   }
 
   finalizeNewInstance(node: this['N'], instance: this['T']): void {
-    addHiddenFinalProp(instance, 'toString', objectTypeToString);
+    defineHiddenProperty(instance, 'toString', objectTypeToString);
 
     this.forAllProps(name => {
       _interceptReads(instance, name, node.unbox);
@@ -442,7 +443,7 @@ export class ModelType<
   }
 
   getDefaultSnapshot(): this['C'] {
-    return EMPTY_OBJECT as this['C'];
+    return {} as this['C'];
   }
 
   getSnapshot(node: this['N'], applyPostProcess = true): this['S'] {
@@ -651,8 +652,8 @@ export class ModelType<
 
       actions[name] = actionInvoker;
 
-      // See #646, allow models to be mocked
-      (!devMode() ? addHiddenFinalProp : addHiddenWritableProp)(self, name, actionInvoker);
+      // allow models to be mocked
+      defineHiddenProperty(self, name, actionInvoker, DEV_MODE);
     });
   }
 
@@ -680,8 +681,8 @@ export class ModelType<
         makeObservable(self, { [key]: computed } as any);
       } else if (typeof descriptor.value === 'function') {
         // this is a view function, merge as is!
-        // See #646, allow models to be mocked
-        (!devMode() ? addHiddenFinalProp : addHiddenWritableProp)(self, key, descriptor.value);
+        // allow models to be mocked
+        defineHiddenProperty(self, key, descriptor.value, DEV_MODE);
       } else {
         throw fail(`A view member should either be a function or getter based property`);
       }
@@ -829,7 +830,7 @@ export function compose(...args: any[]): any {
   if (hasTypename) args.shift();
 
   // check all parameters
-  if (devMode()) {
+  if (DEV_MODE) {
     args.forEach((type, i) => {
       assertArg(type, isModelType, 'mobx-state-tree model type', hasTypename ? i + 2 : i + 1);
     });

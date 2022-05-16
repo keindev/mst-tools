@@ -1,7 +1,8 @@
 import { runInAction } from 'mobx';
 
+import { DEV_MODE } from '../core/constants';
 import {
-    addMiddleware, AnyNode, applyPatch, applySnapshot, asArray, assertArg, assertIsStateTreeNode, devMode, fail,
+    addMiddleware, AnyNode, applyPatch, applySnapshot, asArray, assertArg, assertIsStateTreeNode, fail,
     getRelativePathBetweenNodes, getRunningActionContext, getStateTreeNode, getType, IActionContext, IAnyStateTreeNode,
     IDisposer, isArray, isPlainObject, isPrimitive, isProtected, isRoot, isStateTreeNode, tryResolve, warnError,
 } from '../internal';
@@ -219,7 +220,7 @@ export function onAction(
   // check all arguments
   assertIsStateTreeNode(target, 1);
 
-  if (devMode()) {
+  if (DEV_MODE) {
     if (!isRoot(target)) {
       warnError(
         // eslint-disable-next-line max-len

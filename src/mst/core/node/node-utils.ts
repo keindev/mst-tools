@@ -1,18 +1,9 @@
 import {
-    AnyNode, AnyObjectNode, assertArg, EMPTY_ARRAY, fail, IChildNodesMap, joinJsonPath, ObjectNode, ScalarNode,
-    splitJsonPath,
+    AnyNode, AnyObjectNode, assertArg, fail, joinJsonPath, ObjectNode, ScalarNode, splitJsonPath,
 } from '../../internal';
 import { Instance } from '../state/Instance';
 import { IAnyComplexType } from '../type/ComplexType';
 import { IAnyType, IType, StateTreeNodeValue } from '../type/Type';
-
-export enum NodeLifeCycle {
-  INITIALIZING, // setting up
-  CREATED, // afterCreate has run
-  FINALIZED, // afterAttach has run
-  DETACHING, // being detached from the tree
-  DEAD, // no coming back from this one
-}
 
 declare const $stateTreeNodeType: unique symbol;
 
@@ -139,20 +130,4 @@ export function resolveNodeByPathParts(
   }
 
   return current!;
-}
-
-export function convertChildNodesToArray(childNodes: IChildNodesMap | null): AnyNode[] {
-  if (!childNodes) return EMPTY_ARRAY as AnyNode[];
-
-  const keys = Object.keys(childNodes);
-
-  if (!keys.length) return EMPTY_ARRAY as AnyNode[];
-
-  const result = new Array(keys.length) as AnyNode[];
-
-  keys.forEach((key, index) => {
-    result[index] = childNodes![key]!;
-  });
-
-  return result;
 }

@@ -63,9 +63,8 @@ export class IdentifierCache {
         set.remove(node);
 
         // remove empty sets from cache
-        if (!set.length) {
-          this.cache.delete(id);
-        }
+        if (!set.length) this.cache.delete(id);
+
         this.updateLastCacheModificationPerId(node.identifier!);
       }
     }
@@ -111,9 +110,7 @@ export class IdentifierCache {
         }
       }
 
-      if (modified) {
-        this.updateLastCacheModificationPerId(id);
-      }
+      if (modified) this.updateLastCacheModificationPerId(id);
     });
 
     return res;

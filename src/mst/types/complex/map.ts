@@ -5,18 +5,18 @@ import {
     ObservableMap, observe, values,
 } from 'mobx';
 
-import { cannotDetermineSubtype } from '../../core/constants';
+import { cannotDetermineSubtype, DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import ComplexType from '../../core/type/ComplexType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { ExtractCSTWithSTN, isType } from '../../core/type/type-utils';
 import {
-    addHiddenFinalProp, addHiddenWritableProp, AnyNode, AnyObjectNode, asArray, createActionInvoker, devMode,
-    EMPTY_OBJECT, escapeJsonPath, fail, flattenTypeErrors, getContextForPath, getSnapshot, getStateTreeNode,
-    IAnyModelType, IAnyStateTreeNode, IChildNodesMap, IHooksGetter, IJsonPatch, isMutable, isPlainObject,
-    isStateTreeNode, isValidIdentifier, IValidationContext, IValidationResult, ModelType, normalizeIdentifier,
-    ObjectNode, typeCheckFailure, typecheckInternal,
+    AnyNode, AnyObjectNode, asArray, createActionInvoker, escapeJsonPath, fail, flattenTypeErrors, getContextForPath,
+    getSnapshot, getStateTreeNode, IAnyModelType, IAnyStateTreeNode, IChildNodesMap, IHooksGetter, IJsonPatch,
+    isMutable, isPlainObject, isStateTreeNode, isValidIdentifier, IValidationContext, IValidationResult, ModelType,
+    normalizeIdentifier, ObjectNode, typeCheckFailure, typecheckInternal,
 } from '../../internal';
+import { defineHiddenProperty } from '../../utils';
 
 export interface IMapType<IT extends IAnyType>
   extends IType<IKeyValueMap<IT['CreationType']> | undefined, IKeyValueMap<IT['SnapshotType']>, IMSTMap<IT>> {
@@ -104,7 +104,7 @@ class MSTMap<IT extends IAnyType> extends ObservableMap<string, any> {
     if (isStateTreeNode(value)) {
       const node = getStateTreeNode(value);
 
-      if (devMode()) {
+      if (DEV_MODE) {
         if (!node.identifierAttribute) throw fail(needsIdentifierError);
       }
 
@@ -295,10 +295,12 @@ export class MapType<IT extends IAnyType> extends ComplexType<
       const hooks = initializer(instance as unknown as IMSTMap<IT>);
 
       Object.keys(hooks).forEach(name => {
-        const hook = hooks[name as keyof typeof hooks]!;
-        const actionInvoker = createActionInvoker(instance as IAnyStateTreeNode, name, hook);
-
-        (!devMode() ? addHiddenFinalProp : addHiddenWritableProp)(instance, name, actionInvoker);
+        defineHiddenProperty(
+          instance,
+          name,
+          createActionInvoker(instance as IAnyStateTreeNode, name, hooks[name as keyof typeof hooks]!),
+          DEV_MODE
+        );
       });
     });
 
@@ -324,7 +326,7 @@ export class MapType<IT extends IAnyType> extends ComplexType<
   }
 
   getDefaultSnapshot(): this['C'] {
-    return EMPTY_OBJECT as this['C'];
+    return {} as this['C'];
   }
 
   getSnapshot(node: this['N']): this['S'] {

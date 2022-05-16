@@ -1,9 +1,10 @@
 import { action as mobxAction } from 'mobx';
 
 import {
-    AnyObjectNode, argsToArray, devMode, fail, getRoot, getStateTreeNode, Hook, IActionContext, IAnyStateTreeNode,
-    IDisposer, warnError,
+    AnyObjectNode, argsToArray, fail, getRoot, getStateTreeNode, Hook, IActionContext, IAnyStateTreeNode, IDisposer,
+    warnError,
 } from '../internal';
+import { DEV_MODE } from './constants';
 
 export type IMiddlewareEventType =
   | 'action'
@@ -121,7 +122,7 @@ export function createActionInvoker<T extends Function>(target: IAnyStateTreeNod
 export function addMiddleware(target: IAnyStateTreeNode, handler: IMiddlewareHandler, includeHooks = true): IDisposer {
   const node = getStateTreeNode(target);
 
-  if (devMode()) {
+  if (DEV_MODE) {
     if (!node.isProtectionEnabled) {
       warnError(
         // eslint-disable-next-line max-len
@@ -254,7 +255,7 @@ function runMiddleWares(node: AnyObjectNode, baseCall: IMiddlewareEvent, origina
 
     handler(call, next, abort);
 
-    if (devMode()) {
+    if (DEV_MODE) {
       if (!nextInvoked && !abortInvoked) {
         const node2 = getStateTreeNode(call.tree);
 

@@ -1,5 +1,5 @@
 import {
-    EMPTY_ARRAY, fail, getStateTreeNode, isPrimitive, isPrimitiveType, isStateTreeNode, isTypeCheckingEnabled,
+    fail, getStateTreeNode, isPrimitive, isPrimitiveType, isStateTreeNode, isTypeCheckingEnabled,
 } from '../../internal';
 import { IAnyType } from './Type';
 import { ExtractCSTWithSTN } from './type-utils';
@@ -95,7 +95,7 @@ export function getContextForPath(context: IValidationContext, path: string, typ
 }
 
 export function typeCheckSuccess(): IValidationResult {
-  return EMPTY_ARRAY as any;
+  return [];
 }
 
 export function typeCheckFailure(context: IValidationContext, value: any, message?: string): IValidationResult {

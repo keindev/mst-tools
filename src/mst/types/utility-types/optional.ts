@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
+import { DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import BaseType from '../../core/type/BaseType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { assertIsType, ExtractCSTWithSTN, isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, devMode, fail, isStateTreeNode, IValidationContext, IValidationResult, typecheckInternal,
-    typeCheckSuccess,
+    AnyObjectNode, fail, isStateTreeNode, IValidationContext, IValidationResult, typecheckInternal, typeCheckSuccess,
 } from '../../internal';
 
 type IFunctionReturn<T> = () => T;
@@ -124,7 +124,7 @@ function checkOptionalPreconditions<IT extends IAnyType>(
 
   assertIsType(type, 1);
 
-  if (devMode()) {
+  if (DEV_MODE) {
     // we only check default values if they are passed directly
     // if they are generator functions they will be checked once they are generated
     // we don't check generator function results here to avoid generating a node just for type-checking purposes

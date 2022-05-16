@@ -1,8 +1,8 @@
 import { createAtom, IAtom } from 'mobx';
 
-import {
-    AnyObjectNode, devMode, escapeJsonPath, EventHandlers, fail, Hook, IDisposer, NodeLifeCycle,
-} from '../../internal';
+import { AnyObjectNode, escapeJsonPath, EventHandlers, fail, Hook, IDisposer } from '../../internal';
+import { DEV_MODE } from '../constants';
+import { NodeLifeCycle } from '../enums';
 import { IAnyType } from '../type/Type';
 
 type IHookSubscribers = {
@@ -104,7 +104,7 @@ export abstract class BaseNode<S, T> {
   }
 
   protected baseFinalizeCreation(whenFinalized?: () => void): void {
-    if (devMode()) {
+    if (DEV_MODE) {
       if (!this.isAlive) throw fail('assertion failed: cannot finalize the creation of a node that is already dead');
     }
 

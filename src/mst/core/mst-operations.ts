@@ -3,10 +3,10 @@ import { isComputedProp, isObservableProp } from 'mobx';
 
 import {
     AnyObjectNode, asArray, assertArg, assertIsFunction, assertIsNumber, assertIsStateTreeNode, assertIsString,
-    assertIsValidIdentifier, EMPTY_OBJECT, fail, freeze, getRelativePathBetweenNodes, getRunningActionContext,
-    getStateTreeNode, IActionContext, IAnyModelType, IAnyStateTreeNode, IDisposer, IJsonPatch, InvalidReferenceError,
-    isModelType, isStateTreeNode, IStateTreeNode, normalizeIdentifier, ReferenceIdentifier, resolveNodeByPath,
-    splitJsonPath, TypeOfValue,
+    assertIsValidIdentifier, fail, freeze, getRelativePathBetweenNodes, getRunningActionContext, getStateTreeNode,
+    IActionContext, IAnyModelType, IAnyStateTreeNode, IDisposer, IJsonPatch, InvalidReferenceError, isModelType,
+    isStateTreeNode, IStateTreeNode, normalizeIdentifier, ReferenceIdentifier, resolveNodeByPath, splitJsonPath,
+    TypeOfValue,
 } from '../internal';
 import { IAnyComplexType } from './type/ComplexType';
 import { IAnyType, IType } from './type/Type';
@@ -750,7 +750,7 @@ export function getEnv<T = any>(target: IAnyStateTreeNode): T {
   const node = getStateTreeNode(target);
   const env = node.root.environment;
 
-  if (!env) return EMPTY_OBJECT as T;
+  if (!env) return {} as T;
 
   return env;
 }

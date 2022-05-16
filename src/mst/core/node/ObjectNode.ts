@@ -1,12 +1,14 @@
 import { _allowStateChangesInsideComputed, action, computed, IComputedValue, reaction } from 'mobx';
 
 import {
-    addHiddenFinalProp, AnyNode, ArgumentTypes, BaseNode, convertChildNodesToArray, createActionInvoker, devMode,
-    EMPTY_OBJECT, escapeJsonPath, EventHandlers, extend, fail, freeze, getCurrentActionContext, getLivelinessChecking,
-    getPath, Hook, IdentifierCache, IDisposer, IJsonPatch, IMiddleware, IMiddlewareEvent, IMiddlewareHandler,
-    IReversibleJsonPatch, IStateTreeNode, NodeLifeCycle, normalizeIdentifier, ReferenceIdentifier,
-    resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
+    AnyNode, ArgumentTypes, BaseNode, createActionInvoker, escapeJsonPath, EventHandlers, extend, fail, freeze,
+    getCurrentActionContext, getLivelinessChecking, getPath, Hook, IdentifierCache, IDisposer, IJsonPatch, IMiddleware,
+    IMiddlewareEvent, IMiddlewareHandler, IReversibleJsonPatch, IStateTreeNode, normalizeIdentifier,
+    ReferenceIdentifier, resolveNodeByPathParts, splitJsonPath, splitPatch, toJSON, warnError,
 } from '../../internal';
+import { defineHiddenProperty } from '../../utils';
+import { DEV_MODE } from '../constants';
+import { NodeLifeCycle } from '../enums';
 import ComplexType from '../type/ComplexType';
 import { IAnyType, IType } from '../type/Type';
 
@@ -227,7 +229,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
 
   // eslint-disable-next-line max-lines-per-function
   createObservableInstance(): void {
-    if (devMode()) {
+    if (DEV_MODE) {
       if (this.state !== NodeLifeCycle.INITIALIZING) {
         // istanbul ignore next
         throw fail('assertion failed: the creation of the observable instance must be done on the initializing phase');
@@ -283,7 +285,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
 
     if (this.isRoot) this._addSnapshotReaction();
 
-    this._childNodes = EMPTY_OBJECT;
+    this._childNodes = {};
 
     this.state = NodeLifeCycle.CREATED;
     this.fireHook(Hook.afterCreate);
@@ -365,13 +367,13 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
   }
 
   getChildren(): ReadonlyArray<AnyNode> {
-    this.assertAlive(EMPTY_OBJECT);
+    this.assertAlive({});
     this._autoUnbox = false;
 
     try {
       return this._observableInstanceState === ObservableInstanceLifecycle.CREATED
         ? this.type.getChildren(this)
-        : convertChildNodesToArray(this._childNodes);
+        : Object.values(this._childNodes);
     } finally {
       this._autoUnbox = true;
     }
@@ -421,7 +423,7 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
       return;
     }
 
-    if (devMode()) {
+    if (DEV_MODE) {
       if (!subpath) throw fail('assertion failed: subpath expected');
       if (!newParent) throw fail('assertion failed: new parent expected');
       if (this.parent && parentChanged) {
@@ -625,8 +627,8 @@ export class ObjectNode<C, S, T> extends BaseNode<S, T> {
       return this.type.applySnapshot(this, snapshot as any);
     });
 
-    addHiddenFinalProp(this.storedValue, '$treeNode', this);
-    addHiddenFinalProp(this.storedValue, 'toJSON', toJSON);
+    defineHiddenProperty(this.storedValue, '$treeNode', this);
+    defineHiddenProperty(this.storedValue, 'toJSON', toJSON);
   }
 
   private removeMiddleware(middleware: IMiddleware): void {

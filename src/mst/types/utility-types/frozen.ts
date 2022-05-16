@@ -3,8 +3,7 @@ import SimpleType from '../../core/type/SimpleType';
 import { IAnyType, IType } from '../../core/type/Type';
 import { isType } from '../../core/type/type-utils';
 import {
-    AnyObjectNode, deepFreeze, isSerializable, IValidationContext, IValidationResult, optional, typeCheckFailure,
-    typeCheckSuccess,
+    AnyObjectNode, deepFreeze, IValidationContext, IValidationResult, optional, typeCheckFailure, typeCheckSuccess,
 } from '../../internal';
 
 /**
@@ -29,7 +28,7 @@ export class Frozen<T> extends SimpleType<T, T, T> {
   }
 
   isValidSnapshot(value: this['C'], context: IValidationContext): IValidationResult {
-    if (!isSerializable(value)) {
+    if (typeof value === 'function') {
       return typeCheckFailure(context, value, 'Value is not serializable and cannot be frozen');
     }
 

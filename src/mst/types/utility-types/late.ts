@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/indent */
-import { cannotDetermineSubtype } from '../../core/constants';
+import { cannotDetermineSubtype, DEV_MODE } from '../../core/constants';
 import { TypeFlags } from '../../core/enums';
 import BaseType from '../../core/type/BaseType';
 import { IAnyType } from '../../core/type/Type';
 import { ExtractNodeType, isType } from '../../core/type/type-utils';
-import { AnyObjectNode, devMode, fail, IValidationContext, IValidationResult, typeCheckSuccess } from '../../internal';
+import { AnyObjectNode, fail, IValidationContext, IValidationResult, typeCheckSuccess } from '../../internal';
 
 class Late<IT extends IAnyType> extends BaseType<
   IT['CreationType'],
@@ -50,7 +50,7 @@ class Late<IT extends IAnyType> extends BaseType<
       }
 
       if (t) {
-        if (devMode() && !isType(t)) {
+        if (DEV_MODE && !isType(t)) {
           throw fail('Failed to determine subtype, make sure types.late returns a type definition.');
         }
 
@@ -121,7 +121,7 @@ export function late(nameOrType: any, maybeType?: () => IAnyType): IAnyType {
   const type = typeof nameOrType === 'string' ? maybeType : nameOrType;
 
   // checks that the type is actually a late type
-  if (devMode()) {
+  if (DEV_MODE) {
     if (!(typeof type === 'function' && type.length === 0)) {
       throw fail('Invalid late type, expected a function with zero arguments that returns a type, got: ' + type);
     }
